@@ -2,17 +2,15 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
-@Table(name = "solicitud", schema = "bancotaw", catalog = "")
-public class SolicitudEntity {
+public class Solicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private int id;
     @Basic
-    @Column(name = "fecha", nullable = false)
+    @Column(name = "fecha")
     private Timestamp fecha;
 
     public int getId() {
@@ -35,12 +33,19 @@ public class SolicitudEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SolicitudEntity that = (SolicitudEntity) o;
-        return id == that.id && Objects.equals(fecha, that.fecha);
+
+        Solicitud solicitud = (Solicitud) o;
+
+        if (id != solicitud.id) return false;
+        if (fecha != null ? !fecha.equals(solicitud.fecha) : solicitud.fecha != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fecha);
+        int result = id;
+        result = 31 * result + (fecha != null ? fecha.hashCode() : 0);
+        return result;
     }
 }

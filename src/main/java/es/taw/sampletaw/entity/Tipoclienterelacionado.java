@@ -1,19 +1,17 @@
 package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
-@Table(name = "tipoclienterelacionado", schema = "bancotaw", catalog = "")
-@IdClass(TipoclienterelacionadoEntityPK.class)
-public class TipoclienterelacionadoEntity {
+@IdClass(TipoclienterelacionadoPK.class)
+public class Tipoclienterelacionado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "cliente_id", nullable = false)
+    @Column(name = "cliente_id")
     private int clienteId;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "cuenta_id", nullable = false)
+    @Column(name = "cuenta_id")
     private int cuentaId;
 
     public int getClienteId() {
@@ -36,12 +34,19 @@ public class TipoclienterelacionadoEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TipoclienterelacionadoEntity that = (TipoclienterelacionadoEntity) o;
-        return clienteId == that.clienteId && cuentaId == that.cuentaId;
+
+        Tipoclienterelacionado that = (Tipoclienterelacionado) o;
+
+        if (clienteId != that.clienteId) return false;
+        if (cuentaId != that.cuentaId) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clienteId, cuentaId);
+        int result = clienteId;
+        result = 31 * result + cuentaId;
+        return result;
     }
 }
