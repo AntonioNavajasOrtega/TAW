@@ -3,20 +3,18 @@ package es.taw.sampletaw.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
-@Table(name = "transaccion", schema = "bancotaw", catalog = "")
-public class TransaccionEntity {
+public class Transaccion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private int id;
     @Basic
-    @Column(name = "cantidad", nullable = false, precision = 2)
+    @Column(name = "cantidad")
     private BigDecimal cantidad;
     @Basic
-    @Column(name = "fecha", nullable = false)
+    @Column(name = "fecha")
     private Timestamp fecha;
 
     public int getId() {
@@ -47,12 +45,21 @@ public class TransaccionEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TransaccionEntity that = (TransaccionEntity) o;
-        return id == that.id && Objects.equals(cantidad, that.cantidad) && Objects.equals(fecha, that.fecha);
+
+        Transaccion that = (Transaccion) o;
+
+        if (id != that.id) return false;
+        if (cantidad != null ? !cantidad.equals(that.cantidad) : that.cantidad != null) return false;
+        if (fecha != null ? !fecha.equals(that.fecha) : that.fecha != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cantidad, fecha);
+        int result = id;
+        result = 31 * result + (cantidad != null ? cantidad.hashCode() : 0);
+        result = 31 * result + (fecha != null ? fecha.hashCode() : 0);
+        return result;
     }
 }

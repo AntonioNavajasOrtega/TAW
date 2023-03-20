@@ -2,26 +2,24 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @Entity
-@Table(name = "cuenta", schema = "bancotaw", catalog = "")
-public class CuentaEntity {
+public class Cuenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private int id;
     @Basic
-    @Column(name = "iban", nullable = false, length = 34)
+    @Column(name = "iban")
     private String iban;
     @Basic
-    @Column(name = "saldo", nullable = false, precision = 2)
+    @Column(name = "saldo")
     private BigDecimal saldo;
     @Basic
-    @Column(name = "swift", nullable = false, length = 11)
+    @Column(name = "swift")
     private String swift;
     @Basic
-    @Column(name = "pais", nullable = false, length = 50)
+    @Column(name = "pais")
     private String pais;
 
     public int getId() {
@@ -68,12 +66,25 @@ public class CuentaEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CuentaEntity that = (CuentaEntity) o;
-        return id == that.id && Objects.equals(iban, that.iban) && Objects.equals(saldo, that.saldo) && Objects.equals(swift, that.swift) && Objects.equals(pais, that.pais);
+
+        Cuenta cuenta = (Cuenta) o;
+
+        if (id != cuenta.id) return false;
+        if (iban != null ? !iban.equals(cuenta.iban) : cuenta.iban != null) return false;
+        if (saldo != null ? !saldo.equals(cuenta.saldo) : cuenta.saldo != null) return false;
+        if (swift != null ? !swift.equals(cuenta.swift) : cuenta.swift != null) return false;
+        if (pais != null ? !pais.equals(cuenta.pais) : cuenta.pais != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, iban, saldo, swift, pais);
+        int result = id;
+        result = 31 * result + (iban != null ? iban.hashCode() : 0);
+        result = 31 * result + (saldo != null ? saldo.hashCode() : 0);
+        result = 31 * result + (swift != null ? swift.hashCode() : 0);
+        result = 31 * result + (pais != null ? pais.hashCode() : 0);
+        return result;
     }
 }

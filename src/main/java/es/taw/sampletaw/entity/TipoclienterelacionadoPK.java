@@ -5,14 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Objects;
 
-public class TipoclienterelacionadoEntityPK implements Serializable {
-    @Column(name = "cliente_id", nullable = false)
+public class TipoclienterelacionadoPK implements Serializable {
+    @Column(name = "cliente_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int clienteId;
-    @Column(name = "cuenta_id", nullable = false)
+    @Column(name = "cuenta_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cuentaId;
@@ -37,12 +36,19 @@ public class TipoclienterelacionadoEntityPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TipoclienterelacionadoEntityPK that = (TipoclienterelacionadoEntityPK) o;
-        return clienteId == that.clienteId && cuentaId == that.cuentaId;
+
+        TipoclienterelacionadoPK that = (TipoclienterelacionadoPK) o;
+
+        if (clienteId != that.clienteId) return false;
+        if (cuentaId != that.cuentaId) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clienteId, cuentaId);
+        int result = clienteId;
+        result = 31 * result + cuentaId;
+        return result;
     }
 }

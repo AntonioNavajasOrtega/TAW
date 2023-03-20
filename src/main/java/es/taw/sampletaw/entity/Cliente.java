@@ -1,32 +1,30 @@
 package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
-@Table(name = "cliente", schema = "bancotaw", catalog = "")
-public class ClienteEntity {
+public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private int id;
     @Basic
-    @Column(name = "nombre", nullable = false, length = 50)
+    @Column(name = "nombre")
     private String nombre;
     @Basic
-    @Column(name = "apellido", nullable = false, length = 50)
+    @Column(name = "apellido")
     private String apellido;
     @Basic
-    @Column(name = "direccion", nullable = true, length = 100)
+    @Column(name = "direccion")
     private String direccion;
     @Basic
-    @Column(name = "telefono", nullable = true, length = 20)
+    @Column(name = "telefono")
     private String telefono;
     @Basic
-    @Column(name = "email", nullable = true, length = 50)
+    @Column(name = "email")
     private String email;
     @Basic
-    @Column(name = "contrasena", nullable = true, length = 50)
+    @Column(name = "contrasena")
     private String contrasena;
 
     public int getId() {
@@ -89,12 +87,29 @@ public class ClienteEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ClienteEntity that = (ClienteEntity) o;
-        return id == that.id && Objects.equals(nombre, that.nombre) && Objects.equals(apellido, that.apellido) && Objects.equals(direccion, that.direccion) && Objects.equals(telefono, that.telefono) && Objects.equals(email, that.email) && Objects.equals(contrasena, that.contrasena);
+
+        Cliente cliente = (Cliente) o;
+
+        if (id != cliente.id) return false;
+        if (nombre != null ? !nombre.equals(cliente.nombre) : cliente.nombre != null) return false;
+        if (apellido != null ? !apellido.equals(cliente.apellido) : cliente.apellido != null) return false;
+        if (direccion != null ? !direccion.equals(cliente.direccion) : cliente.direccion != null) return false;
+        if (telefono != null ? !telefono.equals(cliente.telefono) : cliente.telefono != null) return false;
+        if (email != null ? !email.equals(cliente.email) : cliente.email != null) return false;
+        if (contrasena != null ? !contrasena.equals(cliente.contrasena) : cliente.contrasena != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, apellido, direccion, telefono, email, contrasena);
+        int result = id;
+        result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
+        result = 31 * result + (apellido != null ? apellido.hashCode() : 0);
+        result = 31 * result + (direccion != null ? direccion.hashCode() : 0);
+        result = 31 * result + (telefono != null ? telefono.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (contrasena != null ? contrasena.hashCode() : 0);
+        return result;
     }
 }

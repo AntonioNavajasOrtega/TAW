@@ -1,17 +1,15 @@
 package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
-@Table(name = "conversacion", schema = "bancotaw", catalog = "")
-public class ConversacionEntity {
+public class Conversacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private int id;
     @Basic
-    @Column(name = "abierta", nullable = false)
+    @Column(name = "abierta")
     private byte abierta;
 
     public int getId() {
@@ -34,12 +32,19 @@ public class ConversacionEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ConversacionEntity that = (ConversacionEntity) o;
-        return id == that.id && abierta == that.abierta;
+
+        Conversacion that = (Conversacion) o;
+
+        if (id != that.id) return false;
+        if (abierta != that.abierta) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, abierta);
+        int result = id;
+        result = 31 * result + (int) abierta;
+        return result;
     }
 }
