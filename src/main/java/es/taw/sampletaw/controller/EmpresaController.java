@@ -1,7 +1,7 @@
 package es.taw.sampletaw.controller;
 
-import es.taw.sampletaw.dao.ClienteRepository;
-import es.taw.sampletaw.entity.ClienteEntity;
+import es.taw.sampletaw.dao.EmpresaRepository;
+import es.taw.sampletaw.entity.EmpresaEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,18 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@RequestMapping("Cliente")
 @Controller
-public class ClienteController {
+@RequestMapping("Empresa")
+public class EmpresaController {
 
     @Autowired
-    protected ClienteRepository clienteRepository;
+    protected EmpresaRepository empresaRepository;
 
-    @GetMapping("/")
+    @GetMapping("/inicioSesion")
     public String doListar(Model model){
-        List<ClienteEntity> lista = this.clienteRepository.findAll();
-        model.addAttribute("clientes", lista);
-        return "adios";
+        List<EmpresaEntity> listaEmpresas = this.empresaRepository.findAll();
+        model.addAttribute("empresas", listaEmpresas);
+        return "inicioSesion";
     }
+
 
 }
