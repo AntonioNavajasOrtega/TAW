@@ -7,17 +7,24 @@ import java.sql.Timestamp;
 public class Mensaje {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     private Timestamp fecha;
     @Basic
-    @Column(name = "contenido")
+    @Column(name = "contenido", nullable = false, length = 400)
     private String contenido;
+    @ManyToOne
+    @JoinColumn(name = "conversacion", referencedColumnName = "id", nullable = false)
+    private Conversacion conversacionByConversacion;
 
     public int getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setId(int id) {
@@ -60,5 +67,13 @@ public class Mensaje {
         result = 31 * result + (fecha != null ? fecha.hashCode() : 0);
         result = 31 * result + (contenido != null ? contenido.hashCode() : 0);
         return result;
+    }
+
+    public Conversacion getConversacionByConversacion() {
+        return conversacionByConversacion;
+    }
+
+    public void setConversacionByConversacion(Conversacion conversacionByConversacion) {
+        this.conversacionByConversacion = conversacionByConversacion;
     }
 }

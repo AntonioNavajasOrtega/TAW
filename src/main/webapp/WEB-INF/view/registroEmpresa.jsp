@@ -19,9 +19,9 @@
     <h3>Datos de la empresa:</h3>
     Nombre: <input size="50" maxlength="50"  /><br/>
     Dirección: <input  size="100" maxlength="100" />
-    Teléfono: <input type="telefono" maxlength="12" size="12" /><br/>
-    Usuario:  <input type="text" maxlength="" size=""> <br/>
-    Contraseña: <input type="password" size="50" maxlength="50" /><br/>
+    Teléfono: <input type="telefono" maxlength="20" size="20" /><br/>
+    Usuario:  <input type="text" maxlength="20" size="20"> <br/>
+    Contraseña: <input type="password" size="20" maxlength="20" /><br/>
 
     <h3>Datos del cliente a autorizar:</h3>
     Nombre: <input size="50" maxlength="50"  /><br/>

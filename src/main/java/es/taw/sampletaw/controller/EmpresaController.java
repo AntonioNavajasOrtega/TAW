@@ -1,7 +1,7 @@
 package es.taw.sampletaw.controller;
 
 import es.taw.sampletaw.dao.EmpresaRepository;
-import es.taw.sampletaw.entity.EmpresaEntity;
+import es.taw.sampletaw.entity.Empresa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +19,7 @@ public class EmpresaController {
 
     @GetMapping("/inicioSesion")
     public String doListar(Model model){
-        List<EmpresaEntity> listaEmpresas = this.empresaRepository.findAll();
+        List<Empresa> listaEmpresas = this.empresaRepository.findAll();
         model.addAttribute("empresas", listaEmpresas);
         return "inicioSesion";
     }

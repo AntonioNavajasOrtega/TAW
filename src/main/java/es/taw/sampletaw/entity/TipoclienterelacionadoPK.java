@@ -7,11 +7,11 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 public class TipoclienterelacionadoPK implements Serializable {
-    @Column(name = "cliente_id")
+    @Column(name = "cliente_id", nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int clienteId;
-    @Column(name = "cuenta_id")
+    @Column(name = "cuenta_id", nullable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cuentaId;

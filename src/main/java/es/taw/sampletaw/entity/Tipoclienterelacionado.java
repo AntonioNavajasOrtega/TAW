@@ -7,15 +7,28 @@ import javax.persistence.*;
 public class Tipoclienterelacionado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "cliente_id")
+    @Column(name = "cliente_id", nullable = false)
     private int clienteId;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "cuenta_id")
+    @Column(name = "cuenta_id", nullable = false)
     private int cuentaId;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id", nullable = false)
+    private Cliente clienteByClienteId;
+    @ManyToOne
+    @JoinColumn(name = "cuenta_id", referencedColumnName = "id", nullable = false)
+    private Cuenta cuentaByCuentaId;
+    @ManyToOne
+    @JoinColumn(name = "tipo", referencedColumnName = "id", nullable = false)
+    private TipoCliente tipoClienteByTipo;
 
     public int getClienteId() {
         return clienteId;
+    }
+
+    public void setClienteId(Integer clienteId) {
+        this.clienteId = clienteId;
     }
 
     public void setClienteId(int clienteId) {
@@ -24,6 +37,10 @@ public class Tipoclienterelacionado {
 
     public int getCuentaId() {
         return cuentaId;
+    }
+
+    public void setCuentaId(Integer cuentaId) {
+        this.cuentaId = cuentaId;
     }
 
     public void setCuentaId(int cuentaId) {
@@ -48,5 +65,29 @@ public class Tipoclienterelacionado {
         int result = clienteId;
         result = 31 * result + cuentaId;
         return result;
+    }
+
+    public Cliente getClienteByClienteId() {
+        return clienteByClienteId;
+    }
+
+    public void setClienteByClienteId(Cliente clienteByClienteId) {
+        this.clienteByClienteId = clienteByClienteId;
+    }
+
+    public Cuenta getCuentaByCuentaId() {
+        return cuentaByCuentaId;
+    }
+
+    public void setCuentaByCuentaId(Cuenta cuentaByCuentaId) {
+        this.cuentaByCuentaId = cuentaByCuentaId;
+    }
+
+    public TipoCliente getTipoClienteByTipo() {
+        return tipoClienteByTipo;
+    }
+
+    public void setTipoClienteByTipo(TipoCliente tipoClienteByTipo) {
+        this.tipoClienteByTipo = tipoClienteByTipo;
     }
 }

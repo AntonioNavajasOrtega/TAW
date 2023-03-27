@@ -1,20 +1,27 @@
 package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "tipo_solicitud", schema = "bancotaw", catalog = "")
 public class TipoSolicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "tipo")
+    @Column(name = "tipo", nullable = true, length = 15)
     private String tipo;
+    @OneToMany(mappedBy = "tipoSolicitudByTipo")
+    private Collection<Solicitud> solicitudsById;
 
     public int getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setId(int id) {
@@ -47,5 +54,13 @@ public class TipoSolicitud {
         int result = id;
         result = 31 * result + (tipo != null ? tipo.hashCode() : 0);
         return result;
+    }
+
+    public Collection<Solicitud> getSolicitudsById() {
+        return solicitudsById;
+    }
+
+    public void setSolicitudsById(Collection<Solicitud> solicitudsById) {
+        this.solicitudsById = solicitudsById;
     }
 }

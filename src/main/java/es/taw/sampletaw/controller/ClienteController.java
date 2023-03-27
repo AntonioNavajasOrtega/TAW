@@ -1,7 +1,7 @@
 package es.taw.sampletaw.controller;
 
 import es.taw.sampletaw.dao.ClienteRepository;
-import es.taw.sampletaw.entity.ClienteEntity;
+import es.taw.sampletaw.entity.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +19,7 @@ public class ClienteController {
 
     @GetMapping("/")
     public String doListar(Model model){
-        List<ClienteEntity> lista = this.clienteRepository.findAll();
+        List<Cliente> lista = this.clienteRepository.findAll();
         model.addAttribute("clientes", lista);
         return "adios";
     }

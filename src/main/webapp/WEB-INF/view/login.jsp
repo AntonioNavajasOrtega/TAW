@@ -27,7 +27,7 @@
         </tr>
     </table>
 </form>
-<button><a href="/registrarse">Registrarse</a></button>
+<button><a href="/registroCliente">Registrarse</a></button>
 
 </body>
 </html>

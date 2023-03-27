@@ -1,6 +1,6 @@
 package es.taw.sampletaw.controller;
 import es.taw.sampletaw.dao.ClienteRepository;
-import es.taw.sampletaw.entity.ClienteEntity;
+import es.taw.sampletaw.entity.Cliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +24,7 @@ public class LoginController {
                                 @RequestParam("contrasena") String contrasena,
                                 Model model) {
         String urlTo = "redirect:/customer/";
-        ClienteEntity admin = this.clienteRepository.autenticar(email, contrasena);
+        Cliente admin = this.clienteRepository.autenticar(email, contrasena);
         if (admin == null) {
             model.addAttribute("error", "Credenciales incorrectas");
             urlTo = "login";

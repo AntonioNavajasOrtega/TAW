@@ -8,17 +8,30 @@ import java.sql.Timestamp;
 public class Transaccion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "cantidad")
+    @Column(name = "cantidad", nullable = false, precision = 2)
     private BigDecimal cantidad;
     @Basic
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     private Timestamp fecha;
+    @ManyToOne
+    @JoinColumn(name = "tipo", referencedColumnName = "id", nullable = false)
+    private TipoTransaccion tipoTransaccionByTipo;
+    @ManyToOne
+    @JoinColumn(name = "cuenta_origen_id", referencedColumnName = "id")
+    private Cuenta cuentaByCuentaOrigenId;
+    @ManyToOne
+    @JoinColumn(name = "cuenta_destino_id", referencedColumnName = "id")
+    private Cuenta cuentaByCuentaDestinoId;
 
     public int getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setId(int id) {
@@ -61,5 +74,29 @@ public class Transaccion {
         result = 31 * result + (cantidad != null ? cantidad.hashCode() : 0);
         result = 31 * result + (fecha != null ? fecha.hashCode() : 0);
         return result;
+    }
+
+    public TipoTransaccion getTipoTransaccionByTipo() {
+        return tipoTransaccionByTipo;
+    }
+
+    public void setTipoTransaccionByTipo(TipoTransaccion tipoTransaccionByTipo) {
+        this.tipoTransaccionByTipo = tipoTransaccionByTipo;
+    }
+
+    public Cuenta getCuentaByCuentaOrigenId() {
+        return cuentaByCuentaOrigenId;
+    }
+
+    public void setCuentaByCuentaOrigenId(Cuenta cuentaByCuentaOrigenId) {
+        this.cuentaByCuentaOrigenId = cuentaByCuentaOrigenId;
+    }
+
+    public Cuenta getCuentaByCuentaDestinoId() {
+        return cuentaByCuentaDestinoId;
+    }
+
+    public void setCuentaByCuentaDestinoId(Cuenta cuentaByCuentaDestinoId) {
+        this.cuentaByCuentaDestinoId = cuentaByCuentaDestinoId;
     }
 }

@@ -1,34 +1,50 @@
 package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
     @Basic
-    @Column(name = "apellido")
+    @Column(name = "apellido", nullable = false, length = 50)
     private String apellido;
     @Basic
-    @Column(name = "direccion")
+    @Column(name = "direccion", nullable = true, length = 100)
     private String direccion;
     @Basic
-    @Column(name = "telefono")
+    @Column(name = "telefono", nullable = true, length = 12)
     private String telefono;
     @Basic
-    @Column(name = "email")
+    @Column(name = "email", nullable = true, length = 50)
     private String email;
     @Basic
-    @Column(name = "contrasena")
+    @Column(name = "contrasena", nullable = true, length = 50)
     private String contrasena;
+    @ManyToOne
+    @JoinColumn(name = "empresa_id", referencedColumnName = "id")
+    private Empresa empresaByEmpresaId;
+    @OneToMany(mappedBy = "clienteByCliente")
+    private Collection<Conversacion> conversacionsById;
+    @OneToMany(mappedBy = "clienteByClienteId")
+    private Collection<Cuenta> cuentasById;
+    @OneToMany(mappedBy = "clienteByClienteId")
+    private Collection<Solicitud> solicitudsById;
+    @OneToMany(mappedBy = "clienteByClienteId")
+    private Collection<Tipoclienterelacionado> tipoclienterelacionadosById;
 
     public int getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setId(int id) {
@@ -111,5 +127,45 @@ public class Cliente {
         result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (contrasena != null ? contrasena.hashCode() : 0);
         return result;
+    }
+
+    public Empresa getEmpresaByEmpresaId() {
+        return empresaByEmpresaId;
+    }
+
+    public void setEmpresaByEmpresaId(Empresa empresaByEmpresaId) {
+        this.empresaByEmpresaId = empresaByEmpresaId;
+    }
+
+    public Collection<Conversacion> getConversacionsById() {
+        return conversacionsById;
+    }
+
+    public void setConversacionsById(Collection<Conversacion> conversacionsById) {
+        this.conversacionsById = conversacionsById;
+    }
+
+    public Collection<Cuenta> getCuentasById() {
+        return cuentasById;
+    }
+
+    public void setCuentasById(Collection<Cuenta> cuentasById) {
+        this.cuentasById = cuentasById;
+    }
+
+    public Collection<Solicitud> getSolicitudsById() {
+        return solicitudsById;
+    }
+
+    public void setSolicitudsById(Collection<Solicitud> solicitudsById) {
+        this.solicitudsById = solicitudsById;
+    }
+
+    public Collection<Tipoclienterelacionado> getTipoclienterelacionadosById() {
+        return tipoclienterelacionadosById;
+    }
+
+    public void setTipoclienterelacionadosById(Collection<Tipoclienterelacionado> tipoclienterelacionadosById) {
+        this.tipoclienterelacionadosById = tipoclienterelacionadosById;
     }
 }

@@ -1,31 +1,42 @@
 package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 public class Empresa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "nombre")
+    @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
     @Basic
-    @Column(name = "direccion")
+    @Column(name = "direccion", nullable = false, length = 100)
     private String direccion;
     @Basic
-    @Column(name = "telefono")
+    @Column(name = "telefono", nullable = false, length = 20)
     private String telefono;
     @Basic
-    @Column(name = "usuario")
+    @Column(name = "usuario", nullable = false, length = 20)
     private String usuario;
     @Basic
-    @Column(name = "contrasena")
+    @Column(name = "contrasena", nullable = false, length = 20)
     private String contrasena;
+    @OneToMany(mappedBy = "empresaByEmpresaId")
+    private Collection<Cliente> clientesById;
+    @OneToMany(mappedBy = "empresaByEmpresaId")
+    private Collection<Cuenta> cuentasById;
+    @OneToMany(mappedBy = "empresaByEmpresaId")
+    private Collection<Solicitud> solicitudsById;
 
     public int getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setId(int id) {
@@ -98,5 +109,29 @@ public class Empresa {
         result = 31 * result + (usuario != null ? usuario.hashCode() : 0);
         result = 31 * result + (contrasena != null ? contrasena.hashCode() : 0);
         return result;
+    }
+
+    public Collection<Cliente> getClientesById() {
+        return clientesById;
+    }
+
+    public void setClientesById(Collection<Cliente> clientesById) {
+        this.clientesById = clientesById;
+    }
+
+    public Collection<Cuenta> getCuentasById() {
+        return cuentasById;
+    }
+
+    public void setCuentasById(Collection<Cuenta> cuentasById) {
+        this.cuentasById = cuentasById;
+    }
+
+    public Collection<Solicitud> getSolicitudsById() {
+        return solicitudsById;
+    }
+
+    public void setSolicitudsById(Collection<Solicitud> solicitudsById) {
+        this.solicitudsById = solicitudsById;
     }
 }
