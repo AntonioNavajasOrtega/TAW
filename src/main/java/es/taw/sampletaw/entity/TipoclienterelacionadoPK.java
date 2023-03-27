@@ -6,8 +6,21 @@ import java.io.Serializable;
 @Embeddable
 public class TipoclienterelacionadoPK implements Serializable {
 
+    @Basic(optional = false)
+    @Column(name = "cliente_id", nullable = false)
     private int clienteId;
+
+    @Basic(optional = false)
+    @Column(name = "cuenta_id", nullable = false)    
     private int cuentaId;
+
+    public TipoclienterelacionadoPK() {
+    }
+
+    public TipoclienterelacionadoPK(int clienteId, int cuentaId) {
+        this.clienteId = clienteId;
+        this.cuentaId = cuentaId;
+    }
 
     public int getClienteId() {
         return clienteId;

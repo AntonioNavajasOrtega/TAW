@@ -9,12 +9,12 @@ public class Tipoclienterelacionado {
     private TipoclienterelacionadoPK tipoclienterelacionadoPK;
 
     @ManyToOne
-    @JoinColumn(name = "clienteId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Cliente clienteByClienteId;
-    @ManyToOne
-    @JoinColumn(name = "cuentaId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "cuenta_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Cuenta cuentaByCuentaId;
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "tipo", referencedColumnName = "id", nullable = false)
     private TipoCliente tipoClienteByTipo;
 
