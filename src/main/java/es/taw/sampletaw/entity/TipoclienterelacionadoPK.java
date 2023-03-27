@@ -1,19 +1,12 @@
 package es.taw.sampletaw.entity;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
+@Embeddable
 public class TipoclienterelacionadoPK implements Serializable {
-    @Column(name = "cliente_id", nullable = false)
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private int clienteId;
-    @Column(name = "cuenta_id", nullable = false)
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cuentaId;
 
     public int getClienteId() {

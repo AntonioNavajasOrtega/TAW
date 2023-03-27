@@ -8,6 +8,7 @@ import es.taw.sampletaw.entity.Empleado;
 import es.taw.sampletaw.entity.Mensaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@RequestMapping("/chat")
+@RequestMapping("/Chat")
 @Controller
 public class ChatController {
     @Autowired
@@ -27,8 +28,8 @@ public class ChatController {
     @Autowired
     private MensajeRepository mensajeRepository;
 
-    @PostMapping("/")
-    public String doConectarChat(){
+    @GetMapping("/")
+    public String doConectarChat(Model model){
 
         return "chatCliente";
     }
@@ -50,6 +51,5 @@ public class ChatController {
         Empleado receptorEmpleado = empleadoRepository.findById(receptor).orElse(null);
         return mensajeRepository.findByEmisorAndReceptor(emisorUsuario, receptorUsuario);
     }*/
-
 
 }

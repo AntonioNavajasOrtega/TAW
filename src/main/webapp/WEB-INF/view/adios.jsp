@@ -1,4 +1,4 @@
-<%@ page import="es.taw.sampletaw.entity.ClienteEntity" %>
+<%@ page import="es.taw.sampletaw.entity.Cliente" %>
 <%@ page import="com.mysql.cj.xdevapi.Client" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
@@ -10,7 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<ClienteEntity> lista = (List<ClienteEntity>) request.getAttribute("clientes");
+    List<Cliente> lista = (List<Cliente>) request.getAttribute("clientes");
 %>
 
 
@@ -29,7 +29,7 @@
         <th></th>
     </tr>
     <%
-        for (ClienteEntity cliente : lista){
+        for (Cliente cliente : lista){
     %>
     <tr>
         <td><%= cliente.getId() %></td>
