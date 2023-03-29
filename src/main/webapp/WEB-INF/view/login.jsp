@@ -23,11 +23,10 @@
             <td>Contraseña:</td> <td><input type="password" maxlength="50" size="50" name="contrasena"> </td>
         </tr>
         <tr>
-            <td colspan="2"> <button>Continuar</button></td>
+            <td colspan="2"> <button>Enviar</button></td>
         </tr>
     </table>
 </form>
-<button><a href="/registroCliente">Registrarse</a></button>
-
+<a href="/cliente/nuevo" >Nuevo cliente ...</a>
 </body>
 </html>
