@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@RequestMapping("/Chat")
+@RequestMapping("/chat")
 @Controller
 public class ChatController {
     @Autowired
@@ -28,10 +28,16 @@ public class ChatController {
     @Autowired
     private MensajeRepository mensajeRepository;
 
-    @GetMapping("/")
+    @GetMapping("/cliente")
     public String doConectarChat(Model model){
 
         return "chatCliente";
+    }
+
+    @GetMapping("/asistente")
+    public String doConectarChatAsistente(@RequestParam("idConversacion") Integer idConversacion ,Model model){
+
+        return "chatAsistente";
     }
 
     /*@PostMapping("/enviarMensaje")

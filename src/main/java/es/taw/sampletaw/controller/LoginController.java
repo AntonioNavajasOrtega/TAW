@@ -1,6 +1,8 @@
 package es.taw.sampletaw.controller;
 import es.taw.sampletaw.dao.ClienteRepository;
+import es.taw.sampletaw.dao.EmpleadoRepository;
 import es.taw.sampletaw.entity.Cliente;
+import es.taw.sampletaw.entity.Empleado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,9 @@ public class LoginController {
     @Autowired
     protected ClienteRepository clienteRepository;
 
+    @Autowired
+    protected EmpleadoRepository empleadoRepository;
+
     @GetMapping("/")
     public String doLogin() {
         return "login";
@@ -27,10 +32,16 @@ public class LoginController {
                                 Model model, HttpSession session) {
         String urlTo = "redirect:/cliente/";
         Cliente cliente = this.clienteRepository.autenticar(email, contrasena);
-        if (cliente == null) {
+        Empleado empleado = this.empleadoRepository.autenticar(email, contrasena);
+        if (cliente == null && empleado == null) {
             model.addAttribute("error", "Credenciales incorrectas");
             urlTo = "login";
-        }else{
+        }else if (empleado != null) {
+            if(empleado.getTipoEmpleadoByTipo().getTipo().equalsIgnoreCase("asistente")){
+                urlTo = "redirect:/asistente/";
+            }
+
+        } else{
             session.setAttribute("cliente",cliente);
             urlTo += "?id=" + cliente.getId();
         }

@@ -59,5 +59,8 @@
     }
     %>
 </table>
+
+<h2>Chats:</h2>
+
 </body>
 </html>

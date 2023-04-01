@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-@RequestMapping("/Empleado")
+@RequestMapping("/asistente")
 @Controller
-public class EmpleadoController {
+public class AsistenteController {
     @Autowired
     private ConversacionRepository conversacionRepository;
 
-    @GetMapping("/conversaciones")
+    @GetMapping("/chat/asistente/?cliente=${idCliente}")
     public String doListarConversaciones(Model model){
         List<Conversacion> conversaciones = conversacionRepository.findAll();
         model.addAttribute("conversaciones", conversaciones);
