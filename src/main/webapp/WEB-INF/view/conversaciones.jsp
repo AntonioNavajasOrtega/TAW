@@ -40,9 +40,9 @@
         %>
         <td><%=estado%></td>
         <td><%=conversacion.getMensajesById().size()%></td>
-        <td><a href="/chat">Ir a la conversación</a></td>
         <td><%="no sé"%></td>
         <td><%="no sé"%></td>
+        <td><a href="/chat/asistente?idConversacion=<%=conversacion.getId()%>">Ir a la conversación</a></td>
     </tr>
     <%
         }

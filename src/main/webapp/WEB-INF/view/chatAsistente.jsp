@@ -6,6 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%
+
+%>
 <html>
 <head>
     <title>Chateando con cliente</title>
@@ -14,7 +18,7 @@
 <body>
 
 <h1>Esto es el chat de asistencia desde asistente</h1>
-Conversando con el cliente "nombre del cliente" <br/>
+Conversando con el cliente  <br/>
 
 
 <input type="text"> <button>Enviar mensaje</button> <br/>

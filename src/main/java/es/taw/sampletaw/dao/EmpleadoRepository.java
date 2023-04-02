@@ -11,4 +11,5 @@ public interface EmpleadoRepository extends JpaRepository<Empleado , Integer> {
     @Query("select a from Empleado a where a.nombreUsuario = :email and a.contrasena = :contrasena")
     public Empleado autenticar (@Param("email") String email, @Param("contrasena")String contrasena);
 
+
 }

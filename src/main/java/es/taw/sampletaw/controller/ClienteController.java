@@ -1,17 +1,23 @@
 package es.taw.sampletaw.controller;
 
 import es.taw.sampletaw.dao.ClienteRepository;
+import es.taw.sampletaw.dao.ConversacionRepository;
 import es.taw.sampletaw.entity.Cliente;
+import es.taw.sampletaw.entity.Conversacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("/cliente")
 @Controller
 public class ClienteController {
+
+
 
     @Autowired
     protected ClienteRepository clienteRepository;
@@ -19,7 +25,9 @@ public class ClienteController {
     @GetMapping("/")
     public String doListar(@RequestParam("id") Integer idcliente, Model model){
         Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
+        List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
         model.addAttribute("cliente", cliente);
+        model.addAttribute("conversaciones", conversaciones);
         return "cliente";
     }
 
