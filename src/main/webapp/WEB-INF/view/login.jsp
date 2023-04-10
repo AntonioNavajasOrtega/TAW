@@ -28,5 +28,7 @@
     </table>
 </form>
 <a href="/cliente/nuevo" >Nuevo cliente ...</a>
+</br>
+<a href="/empresa/nuevo" >Nueva empresa ...</a>
 </body>
 </html>

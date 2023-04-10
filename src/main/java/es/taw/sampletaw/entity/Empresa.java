@@ -18,12 +18,6 @@ public class Empresa {
     @Basic
     @Column(name = "telefono", nullable = false, length = 20)
     private String telefono;
-    @Basic
-    @Column(name = "usuario", nullable = false, length = 20)
-    private String usuario;
-    @Basic
-    @Column(name = "contrasena", nullable = false, length = 20)
-    private String contrasena;
     @OneToMany(mappedBy = "empresaByEmpresaId")
     private Collection<Cliente> clientesById;
     @OneToMany(mappedBy = "empresaByEmpresaId")
@@ -66,23 +60,6 @@ public class Empresa {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -94,8 +71,6 @@ public class Empresa {
         if (nombre != null ? !nombre.equals(empresa.nombre) : empresa.nombre != null) return false;
         if (direccion != null ? !direccion.equals(empresa.direccion) : empresa.direccion != null) return false;
         if (telefono != null ? !telefono.equals(empresa.telefono) : empresa.telefono != null) return false;
-        if (usuario != null ? !usuario.equals(empresa.usuario) : empresa.usuario != null) return false;
-        if (contrasena != null ? !contrasena.equals(empresa.contrasena) : empresa.contrasena != null) return false;
 
         return true;
     }
@@ -106,8 +81,7 @@ public class Empresa {
         result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
         result = 31 * result + (direccion != null ? direccion.hashCode() : 0);
         result = 31 * result + (telefono != null ? telefono.hashCode() : 0);
-        result = 31 * result + (usuario != null ? usuario.hashCode() : 0);
-        result = 31 * result + (contrasena != null ? contrasena.hashCode() : 0);
+
         return result;
     }
 

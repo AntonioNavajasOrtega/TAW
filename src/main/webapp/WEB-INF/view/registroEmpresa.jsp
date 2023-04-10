@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ page import="es.taw.sampletaw.entity.Empresa" %>
 <%--
   Created by IntelliJ IDEA.
   User: juanj
@@ -15,23 +16,18 @@
 
 <h1>Formulario de registro de una empresa</h1>
 
-<form method="post" action="/Empresa">
-    <h3>Datos de la empresa:</h3>
-    Nombre: <input size="50" maxlength="50"  /><br/>
-    Dirección: <input  size="100" maxlength="100" />
-    Teléfono: <input type="telefono" maxlength="20" size="20" /><br/>
-    Usuario:  <input type="text" maxlength="20" size="20"> <br/>
-    Contraseña: <input type="password" size="20" maxlength="20" /><br/>
 
-    <h3>Datos del cliente a autorizar:</h3>
-    Nombre: <input size="50" maxlength="50"  /><br/>
-    Apellido: <input size="50" maxlength="50" /><br/>
-    Email: <input size="50"  maxlength="50"/> <br/>
-    Dirección: <input  size="100" maxlength="100" />
-    Teléfono: <input type="telefono" maxlength="12" size="12" /><br/>
-    Contraseña: <input type="password" size="50" maxlength="50" /><br/>
-    <button>Guardar</button>
-</form>
+<form:form action="/empresa/guardar" modelAttribute="empresa" method="get">
+    <h3>Datos de la empresa:</h3>
+    <form:hidden path="id"/>
+    Nombre: <form:input path="nombre" size="50" maxlength="50" /><br/>
+    Dirección: <form:input path="direccion"  size="100" maxlength="100" /><br/>
+
+    Teléfono: <form:input type="telefono" path="telefono" maxlength="12" size="12" /><br/>
+    <form:button>Guardar</form:button>
+</form:form>
+
+
 
 </body>
 </html>
