@@ -17,6 +17,7 @@
 <%
     Cliente cliente = (Cliente) request.getAttribute("cliente");
     List<Conversacion> conversaciones = (List<Conversacion>) request.getAttribute("conversaciones");
+    List<Cliente> listaSocios = (List<Cliente>) request.getAttribute("clientesSocios");
 %>
 
 
@@ -49,7 +50,7 @@
     </tr>
 </table>
 <a href="/empresa/editarEmpresa?id=<%=cliente.getId() %>">Editar Empresa</a>
-<a href="/empresa/editarCliente?id=<%=cliente.getId() %>">Editar Cliente</a>
+<a href="/empresa/anadirCliente?id=<%=cliente.getId() %>">Añadir Cliente</a>
 <br/>
 
 <h2>Cuentas:</h2>
@@ -126,6 +127,32 @@
         </div>
     </div>
 </form>
+
+<table border="1">
+    <tr>
+        <th>NOMBRE</th>
+        <th>APELLIDO</th>
+        <th>EMAIL</th>
+        <th>DIRECCION</th>
+        <th>TELEFONO</th>
+        <th>EMPRESA</th>
+    </tr>
+    <%
+        for(Cliente clienteSocio : listaSocios){
+    %>
+
+    <tr>
+        <td><%= clienteSocio.getNombre() %></td>
+        <td><%=clienteSocio.getApellido() %> <br></td>
+        <td><%=clienteSocio.getEmail() %></td>
+        <td><%=clienteSocio.getDireccion() %></td>
+        <td><%=clienteSocio.getTelefono() %></td>
+        <td><%=clienteSocio.getEmpresaByEmpresaId().getId() %></td>
+    </tr>
+    <%
+        }
+    %>
+</table>
 
 </body>
 </html>

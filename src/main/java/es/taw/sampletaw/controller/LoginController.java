@@ -30,6 +30,7 @@ public class LoginController {
     public String doAutenticar (@RequestParam("email") String email,
                                 @RequestParam("contrasena") String contrasena,
                                 Model model, HttpSession session) {
+
         String urlTo = "redirect:/cliente/";
         Cliente cliente = this.clienteRepository.autenticar(email, contrasena);
         Empleado empleado = this.empleadoRepository.autenticar(email, contrasena);
@@ -43,7 +44,17 @@ public class LoginController {
 
         } else{
             session.setAttribute("cliente",cliente);
-            urlTo += "?id=" + cliente.getId();
+            if(cliente.getEmpresaByEmpresaId() == null)
+            {
+
+                urlTo += "?id=" + cliente.getId();
+            }
+            else
+            {
+                 urlTo = "redirect:/empresa/";
+                urlTo += "?id=" + cliente.getId();
+            }
+
         }
 
         return urlTo;

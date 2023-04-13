@@ -2,14 +2,17 @@ package es.taw.sampletaw.controller;
 
 import es.taw.sampletaw.dao.ClienteRepository;
 import es.taw.sampletaw.dao.EmpresaRepository;
+import es.taw.sampletaw.dao.TipoclienterelacionadoRepository;
 import es.taw.sampletaw.entity.Cliente;
 import es.taw.sampletaw.entity.Conversacion;
 import es.taw.sampletaw.entity.Empresa;
+import es.taw.sampletaw.entity.Tipoclienterelacionado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,13 +28,17 @@ public class EmpresaController {
     @Autowired
     protected ClienteRepository clienteRepository;
 
+
+
     @GetMapping("/")
     public String doListar(@RequestParam("id") Integer idcliente, Model model){
         Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
         List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
         model.addAttribute("cliente", cliente);
         model.addAttribute("conversaciones", conversaciones);
-
+        Empresa empresa = cliente.getEmpresaByEmpresaId();
+        List<Cliente> lista =  empresa.getClientesById().stream().collect(Collectors.toList());
+        model.addAttribute("clientesSocios",lista);
         return "empresa";
     }
 
@@ -44,7 +51,7 @@ public class EmpresaController {
         return "editarEmpresa";
     }
 
-    @GetMapping("/editarCliente")
+    @GetMapping("/anadirCliente")
     public String doEditarCliente(@RequestParam("id") Integer idcliente,Model modelo){
         Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
         modelo.addAttribute("empresaID",cliente.getEmpresaByEmpresaId());
@@ -110,4 +117,8 @@ public class EmpresaController {
         this.clienteRepository.save(cliente);
         return "redirect:/empresa/?id=" + cliente.getId();
     }
+
+
+
+
 }
