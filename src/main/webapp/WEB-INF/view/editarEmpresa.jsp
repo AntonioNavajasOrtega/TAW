@@ -15,13 +15,14 @@
 <h1>Formulario de registro de una empresa</h1>
 
 
-<form method="get" action="/empresa/guardar2">
+<form:form action="/empresa/guardar2" modelAttribute="empresa" method="get">
     <h3>Datos de la empresa:</h3>
-    Nombre: <input name="nombre"size="50" maxlength="50"  /><br/>
-    Dirección: <input  name="direccion"size="100" maxlength="100" />
-    Teléfono: <input name="telefono"type="telefono" maxlength="20" size="20" /><br/>
-        <input type="hidden" name="id"value="<%=cliente.getId() %>">
-    <button>Guardar</button>
-</form>
+    <form:hidden path="id"/>
+    Nombre: <form:input path="nombre" size="50" maxlength="50" /><br/>
+    Dirección: <form:input path="direccion"  size="100" maxlength="100" /><br/>
+
+    Teléfono: <form:input type="telefono" path="telefono" maxlength="12" size="12" /><br/>
+    <form:button>Guardar</form:button>
+</form:form>
 </body>
 </html>

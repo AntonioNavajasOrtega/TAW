@@ -29,20 +29,17 @@
 
 </form:form>
 --%>
-<form:form method="get" action="/empresa/guardarClienteEditado" modelAttribute="cliente">
-    Nombre: <form:input path="nombre" size="50"></form:input> <br/>
-    Apellido: <form:input path="apellido" size="50"></form:input> <br/>
-    Email:<form:input path="email" size="50"></form:input>  <br/>
-    Dirección: <form:input path="direccion" size="100"></form:input> <br/>
-    Teléfono: <form:input path="telefono" size="12"></form:input> <br/>
-    Contraseña: <form:password path="contrasena" size="50"></form:password> <br/>
-    <form:hidden path="id"></form:hidden>
-    <form:hidden path="empresaByEmpresaId"></form:hidden>
-    <form:button>Guardar</form:button>
+<form method="get" action="/empresa/guardarCliente2">
 
-
-
-</form:form>
+    Nombre: <input name="nombre" size="50" maxlength="50"  /><br/>
+    Apellido: <input name="apellido" size="50" maxlength="50" /><br/>
+    Email: <input name="email" size="50"  maxlength="50"/> <br/>
+    Dirección: <input  name="direccion" size="100" maxlength="100" />
+    Teléfono: <input name="telefono" type="telefono" maxlength="12" size="12" /><br/>
+    Contraseña: <input name="contrasena" type="password" size="50" maxlength="50" /><br/>
+    <input name="empresa_id" type="hidden" value="<%=empresa.getId() %>" />
+    <button>Guardar</button>
+</form>
 
 </body>
 </html>

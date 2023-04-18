@@ -52,6 +52,14 @@ public class EmpresaController {
     }
 
     @GetMapping("/anadirCliente")
+    public String doAnadirCliente(@RequestParam("id") Integer idcliente,Model modelo){
+        Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
+        modelo.addAttribute("empresaID",cliente.getEmpresaByEmpresaId());
+        modelo.addAttribute("cliente",cliente);
+        return "anadirCliente";
+    }
+
+    @GetMapping("/editarCliente")
     public String doEditarCliente(@RequestParam("id") Integer idcliente,Model modelo){
         Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
         modelo.addAttribute("empresaID",cliente.getEmpresaByEmpresaId());
@@ -74,17 +82,14 @@ public class EmpresaController {
 
     @GetMapping("/guardar")
     public String doGuardar(@ModelAttribute("empresa") Empresa empresa){
-
         this.empresaRepository.save(empresa);
-
         return "redirect:/empresa/nuevoCliente/?id=" + empresa.getId();
     }
     @GetMapping("/guardar2")
-    public String doGuardar2(@ModelAttribute("empresa") Empresa empresa, @RequestParam("id") int id){
+    public String doGuardar2(@ModelAttribute("empresa") Empresa empresa){
 
         this.empresaRepository.save(empresa);
-        Cliente cliente = this.clienteRepository.findById(id).orElse(null);
-        return "redirect:/empresa/?id=" + cliente.getId();
+        return "redirect:/";
 
     }
     @GetMapping("/nuevoCliente")
@@ -118,6 +123,12 @@ public class EmpresaController {
         return "redirect:/empresa/?id=" + cliente.getId();
     }
 
+    @GetMapping("/guardarClienteEditado")
+    public String guardarClienteEditado(@ModelAttribute("cliente") Cliente cliente)
+    {
+        this.clienteRepository.save(cliente);
+        return "redirect:/empresa/?id=" + cliente.getId();
+    }
 
 
 

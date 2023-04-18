@@ -49,8 +49,9 @@
         <td><%=cliente.getEmpresaByEmpresaId().getId() %></td>
     </tr>
 </table>
-<a href="/empresa/editarEmpresa?id=<%=cliente.getId() %>">Editar Empresa</a>
-<a href="/empresa/anadirCliente?id=<%=cliente.getId() %>">Añadir Cliente</a>
+<a href="/empresa/editarEmpresa?id=<%=cliente.getId() %>">Editar Empresa</a> </br>
+<a href="/empresa/editarCliente?id=<%=cliente.getId() %>">Editar Cliente</a> </br>
+<a href="/empresa/anadirCliente?id=<%=cliente.getId() %>">Añadir Cliente</a> </br>
 <br/>
 
 <h2>Cuentas:</h2>
