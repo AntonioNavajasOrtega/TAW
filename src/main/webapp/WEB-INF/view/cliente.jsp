@@ -64,7 +64,8 @@
         <td><%= cuenta.getId()%></td>
         <td><%= cuenta.getSaldo()%></td>
         <td><%= cuenta.getEstadoCuentaByEstado().getTipo()%></td>
-        <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa")){%><a href="">Desbloquear cuenta</a><%}else{%>
+        <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa")){%><a href="/cliente/solicitar?id=<%=
+        cuenta.getId()%>">Solicitar desbloqueo</a><%}else{%>
             <a href="/cliente/transaccion?id=<%=cuenta.getId()%>">Realizar transacción</a><%}%></td>
     </tr>
     <%
