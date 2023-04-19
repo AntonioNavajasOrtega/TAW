@@ -4,7 +4,8 @@
 <%@ page import="es.taw.sampletaw.entity.Cuenta" %>
 <%@ page import="java.util.ConcurrentModificationException" %>
 <%@ page import="es.taw.sampletaw.entity.Conversacion" %>
-<%@ page import="java.util.Collection" %><%--
+<%@ page import="java.util.Collection" %>
+<%@ page import="es.taw.sampletaw.entity.Transaccion" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -54,6 +55,7 @@
         <td>NºCuenta</td>
         <td>Saldo</td>
         <td>Estado</td>
+        <td></td>
     </tr>
     <%
         for (Cuenta cuenta: cliente.getCuentasById()) {
@@ -62,11 +64,37 @@
         <td><%= cuenta.getId()%></td>
         <td><%= cuenta.getSaldo()%></td>
         <td><%= cuenta.getEstadoCuentaByEstado().getTipo()%></td>
+        <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa")){%><a href="">Desbloquear cuenta</a><%}else{%>
+            <a href="/cliente/transaccion?id=<%=cuenta.getId()%>">Realizar transacción</a><%}%></td>
     </tr>
     <%
     }
     %>
 </table>
+
+<br/>
+<h2>Operaciones:</h2>
+<table border="1">
+    <tr>
+        <td>Fecha</td>
+        <td>Cantidad</td>
+        <td>Destino</td>
+    </tr>
+    <%
+        for (Cuenta cuenta: cliente.getCuentasById()) {
+            for(Transaccion transaccion : cuenta.getTransaccionsById()){
+    %>
+    <tr>
+        <td><%= transaccion.getFecha()%></td>
+        <td><%if(transaccion.getCuentaByCuentaOrigenId().equals(cuenta)){%>-<%}%><%= transaccion.getCantidad()%></td>
+        <td><%= transaccion.getCuentaByCuentaDestinoId().getIban()%></td>
+    </tr>
+    <%
+            }
+        }
+    %>
+</table>
+<br/>
 
 <h2>Chats:</h2>
 <table border="1">

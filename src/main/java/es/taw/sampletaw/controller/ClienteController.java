@@ -1,14 +1,13 @@
 package es.taw.sampletaw.controller;
 
-import es.taw.sampletaw.dao.ClienteRepository;
-import es.taw.sampletaw.dao.ConversacionRepository;
-import es.taw.sampletaw.entity.Cliente;
-import es.taw.sampletaw.entity.Conversacion;
+import es.taw.sampletaw.dao.*;
+import es.taw.sampletaw.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,10 +16,17 @@ import java.util.stream.Collectors;
 @Controller
 public class ClienteController {
 
-
-
     @Autowired
     protected ClienteRepository clienteRepository;
+
+    @Autowired
+    protected CuentaRepository cuentaRepository;
+
+    @Autowired
+    protected TipoTransaccionRepository tipoTransaccionRepository;
+
+    @Autowired
+    protected TransaccionRepository transaccionRepository;
 
     @GetMapping("/")
     public String doListar(@RequestParam("id") Integer idcliente, Model model){
@@ -51,6 +57,36 @@ public class ClienteController {
     public String doEditar(@RequestParam("id") Integer idcliente,Model modelo){
         Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
         return this.mostrarEditarONuevo(cliente,modelo);
+    }
+
+    @GetMapping("/transaccion")
+    public String doTransaccion(@RequestParam("id") Integer idcuenta, Model model){
+        Cuenta cuenta = this.cuentaRepository.findById(idcuenta).orElse(null);
+        model.addAttribute("cuenta",cuenta);
+        List<Cuenta> cuentas = this.cuentaRepository.findCuentas(cuenta.getId());
+        model.addAttribute("cuentas",cuentas);
+        Transaccion transaccion = new Transaccion();
+        transaccion.setCuentaByCuentaOrigenId(cuenta);
+        model.addAttribute("trans",transaccion);
+        List<TipoTransaccion> tipos = this.tipoTransaccionRepository.findAll();
+        model.addAttribute("tipos",tipos);
+        return "operacion";
+    }
+
+    @PostMapping("/realizar")
+    public String doRealizar(@ModelAttribute("trans") Transaccion transaccion){
+        Timestamp date = new Timestamp(System.currentTimeMillis());
+        transaccion.setFecha(date);
+        Cuenta orig = transaccion.getCuentaByCuentaOrigenId();
+        Cuenta dest = transaccion.getCuentaByCuentaDestinoId();
+        orig.getTransaccionsById().add(transaccion);
+        dest.getTransaccionsById().add(transaccion);
+        orig.setSaldo(orig.getSaldo().subtract(transaccion.getCantidad()));
+        dest.setSaldo(dest.getSaldo().add(transaccion.getCantidad()));
+        this.cuentaRepository.save(orig);
+        this.cuentaRepository.save(dest);
+        this.transaccionRepository.save(transaccion);
+        return "redirect:/cliente/?id=" + orig.getClienteByClienteId().getId();
     }
 
 }
