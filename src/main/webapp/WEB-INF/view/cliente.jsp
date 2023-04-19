@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.sampletaw.entity.Cliente" %>
 <%@ page import="com.mysql.cj.xdevapi.Client" %>
 <%@ page import="java.util.List" %>
@@ -5,7 +6,8 @@
 <%@ page import="java.util.ConcurrentModificationException" %>
 <%@ page import="es.taw.sampletaw.entity.Conversacion" %>
 <%@ page import="java.util.Collection" %>
-<%@ page import="es.taw.sampletaw.entity.Transaccion" %><%--
+<%@ page import="es.taw.sampletaw.entity.Transaccion" %>
+<%@ page import="java.math.BigDecimal" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -17,6 +19,7 @@
 <%
     Cliente cliente = (Cliente) request.getAttribute("cliente");
     List<Conversacion> conversaciones = (List<Conversacion>) request.getAttribute("conversaciones");
+    List<Transaccion> transacciones = (List<Transaccion>) request.getAttribute("transacciones");
 %>
 
 
@@ -53,6 +56,7 @@
 <table border="1">
     <tr>
         <td>NºCuenta</td>
+        <td>Iban</td>
         <td>Saldo</td>
         <td>Estado</td>
         <td></td>
@@ -62,6 +66,7 @@
     %>
     <tr>
         <td><%= cuenta.getId()%></td>
+        <td><%=cuenta.getIban()%></td>
         <td><%= cuenta.getSaldo()%></td>
         <td><%= cuenta.getEstadoCuentaByEstado().getTipo()%></td>
         <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa")){%><a href="/cliente/solicitar?id=<%=
@@ -75,6 +80,19 @@
 
 <br/>
 <h2>Operaciones:</h2>
+<form:form action="/cliente/filtrarop" method="post" modelAttribute="filtro">
+    <form:hidden path="clienteid" value="${cliente.id}"></form:hidden>
+    Filtrar por: <form:select path="cuentadestino">
+        <form:option value="" label=""></form:option>
+        <form:option value="YES" label="Origen operación"></form:option>
+    </form:select>
+    Ordenar por: <form:select path="date">
+    <form:option value="" label=""></form:option>
+    <form:option value="YES" label="Fecha"></form:option>
+</form:select>
+    <form:button>Filtrar</form:button>
+</form:form>
+<br/>
 <table border="1">
     <tr>
         <td>Fecha</td>
@@ -82,16 +100,15 @@
         <td>Destino</td>
     </tr>
     <%
-        for (Cuenta cuenta: cliente.getCuentasById()) {
-            for(Transaccion transaccion : cuenta.getTransaccionsById()){
+        for(Transaccion transaccion : transacciones){
     %>
     <tr>
         <td><%= transaccion.getFecha()%></td>
-        <td><%if(transaccion.getCuentaByCuentaOrigenId().equals(cuenta)){%>-<%}%><%= transaccion.getCantidad()%></td>
+        <td><%= transaccion.getCantidad()%></td>
         <td><%= transaccion.getCuentaByCuentaDestinoId().getIban()%></td>
     </tr>
     <%
-            }
+
         }
     %>
 </table>

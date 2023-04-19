@@ -2,6 +2,7 @@ package es.taw.sampletaw.controller;
 
 import es.taw.sampletaw.dao.*;
 import es.taw.sampletaw.entity.*;
+import es.taw.sampletaw.ui.FiltroOperaciones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
@@ -40,11 +41,7 @@ public class ClienteController {
 
     @GetMapping("/")
     public String doListar(@RequestParam("id") Integer idcliente, Model model){
-        Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
-        List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
-        model.addAttribute("cliente", cliente);
-        model.addAttribute("conversaciones", conversaciones);
-        return "cliente";
+        return this.procesarFiltrado(null,idcliente,model);
     }
 
     @GetMapping("/nuevo")
@@ -53,6 +50,15 @@ public class ClienteController {
     }
 
     private String mostrarEditarONuevo(Cliente cliente, Model model) {
+        /*Solicitud solicitud = new Solicitud();
+        solicitud.setClienteByClienteId(cliente);
+        solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
+        solicitud.setEmpleadoByEmpleadoId();//Nose como sacar el gestor
+        TipoSolicitud tipo = this.tipoSolicitudRepository.findSolicitarCuent();
+        solicitud.setTipoSolicitudByTipo(tipo);
+
+        cliente.getSolicitudsById().add(solicitud);
+        this.solicitudRepository.save(solicitud);*/
         model.addAttribute("cliente",cliente);
         return "registroCliente";
     }
@@ -86,16 +92,25 @@ public class ClienteController {
     @PostMapping("/realizar")
     public String doRealizar(@ModelAttribute("trans") Transaccion transaccion){
         Timestamp date = new Timestamp(System.currentTimeMillis());
+        Cuenta orig = this.cuentaRepository.getById(transaccion.getCuentaByCuentaOrigenId().getId());
+        Cuenta dest = this.cuentaRepository.getById(transaccion.getCuentaByCuentaDestinoId().getId());
+
+        Transaccion transaccion1 = new Transaccion();
         transaccion.setFecha(date);
-        Cuenta orig = transaccion.getCuentaByCuentaOrigenId();
-        Cuenta dest = transaccion.getCuentaByCuentaDestinoId();
-        orig.getTransaccionsById().add(transaccion);
+        transaccion1.setFecha(date);
+        transaccion1.setCantidad(transaccion.getCantidad().negate());
+        transaccion1.setCuentaByCuentaOrigenId(orig);
+        transaccion1.setCuentaByCuentaDestinoId(dest);
+        transaccion1.setTipoTransaccionByTipo(transaccion.getTipoTransaccionByTipo());
+
+        orig.getTransaccionsById().add(transaccion1);
         dest.getTransaccionsById().add(transaccion);
         orig.setSaldo(orig.getSaldo().subtract(transaccion.getCantidad()));
         dest.setSaldo(dest.getSaldo().add(transaccion.getCantidad()));
         this.cuentaRepository.save(orig);
         this.cuentaRepository.save(dest);
         this.transaccionRepository.save(transaccion);
+        this.transaccionRepository.save(transaccion1);
         return "redirect:/cliente/?id=" + orig.getClienteByClienteId().getId();
     }
 
@@ -123,6 +138,37 @@ public class ClienteController {
         this.empleadoRepository.save(empleado);
         this.solicitudRepository.save(solicitud);
         return "redirect:/cliente/?id=" + cliente.getId();
+    }
+
+    @PostMapping("/filtrarop")
+    public String doFiltrar(@ModelAttribute("filtro")FiltroOperaciones filtro,Model model){
+        Integer idcliente = filtro.getClienteid();
+        return procesarFiltrado(filtro,idcliente,model);
+    }
+
+    protected String procesarFiltrado(FiltroOperaciones filtro, Integer idcliente,Model model) {
+        Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
+        List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
+        List<Transaccion> transacciones;
+
+        if(filtro == null || (filtro.getCuentadestino().isEmpty() && filtro.getDate().isEmpty())){
+            transacciones = this.cuentaRepository.findClienteTrans(cliente.getId());
+            filtro = new FiltroOperaciones();
+        }else{
+            if(filtro.getCuentadestino().isEmpty()){
+                transacciones = this.cuentaRepository.findDateTrans(cliente.getId());
+            }else if(filtro.getDate().isEmpty()){
+                transacciones = this.cuentaRepository.findDestTrans(cliente.getId());
+            }else{
+                transacciones = this.cuentaRepository.findDestDateTrans(cliente.getId());
+            }
+        }
+
+        model.addAttribute("transacciones",transacciones);
+        model.addAttribute("filtro",filtro);
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("conversaciones", conversaciones);
+        return "cliente";
     }
 
 }

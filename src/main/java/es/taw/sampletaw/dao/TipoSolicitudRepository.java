@@ -9,4 +9,7 @@ public interface TipoSolicitudRepository extends JpaRepository<TipoSolicitud,Int
     @Query("select t from TipoSolicitud t where t.tipo = 'Activacion' ")
     TipoSolicitud findActivar();
 
+    @Query("select t from TipoSolicitud t where t.tipo != 'Activacion' ")
+    TipoSolicitud findSolicitarCuent();
+
 }
