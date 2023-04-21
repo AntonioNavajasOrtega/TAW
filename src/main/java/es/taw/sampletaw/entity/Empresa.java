@@ -2,7 +2,6 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 public class Empresa {
@@ -19,12 +18,6 @@ public class Empresa {
     @Basic
     @Column(name = "telefono", nullable = false, length = 20)
     private String telefono;
-    @Basic
-    @Column(name = "usuario", nullable = false, length = 20)
-    private String usuario;
-    @Basic
-    @Column(name = "contrasena", nullable = false, length = 20)
-    private String contrasena;
     @OneToMany(mappedBy = "empresaByEmpresaId")
     private Collection<Cliente> clientesById;
     @OneToMany(mappedBy = "empresaByEmpresaId")
@@ -64,33 +57,28 @@ public class Empresa {
         this.telefono = telefono;
     }
 
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Empresa empresa = (Empresa) o;
-        return Objects.equals(id, empresa.id) && Objects.equals(nombre, empresa.nombre) && Objects.equals(direccion, empresa.direccion) && Objects.equals(telefono, empresa.telefono) && Objects.equals(usuario, empresa.usuario) && Objects.equals(contrasena, empresa.contrasena);
+
+        if (id != null ? !id.equals(empresa.id) : empresa.id != null) return false;
+        if (nombre != null ? !nombre.equals(empresa.nombre) : empresa.nombre != null) return false;
+        if (direccion != null ? !direccion.equals(empresa.direccion) : empresa.direccion != null) return false;
+        if (telefono != null ? !telefono.equals(empresa.telefono) : empresa.telefono != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, direccion, telefono, usuario, contrasena);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
+        result = 31 * result + (direccion != null ? direccion.hashCode() : 0);
+        result = 31 * result + (telefono != null ? telefono.hashCode() : 0);
+        return result;
     }
 
     public Collection<Cliente> getClientesById() {

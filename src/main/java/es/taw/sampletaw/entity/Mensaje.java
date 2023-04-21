@@ -2,7 +2,6 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 public class Mensaje {
@@ -60,13 +59,22 @@ public class Mensaje {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Mensaje mensaje = (Mensaje) o;
-        return Objects.equals(id, mensaje.id) && Objects.equals(fecha, mensaje.fecha) && Objects.equals(contenido, mensaje.contenido);
+
+        if (id != null ? !id.equals(mensaje.id) : mensaje.id != null) return false;
+        if (fecha != null ? !fecha.equals(mensaje.fecha) : mensaje.fecha != null) return false;
+        if (contenido != null ? !contenido.equals(mensaje.contenido) : mensaje.contenido != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fecha, contenido);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (fecha != null ? fecha.hashCode() : 0);
+        result = 31 * result + (contenido != null ? contenido.hashCode() : 0);
+        return result;
     }
 
     public Conversacion getConversacionByConversacion() {

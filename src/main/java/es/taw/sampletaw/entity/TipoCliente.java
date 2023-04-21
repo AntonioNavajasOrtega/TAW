@@ -2,7 +2,6 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 @Table(name = "tipo_cliente", schema = "bancotaw", catalog = "")
@@ -37,13 +36,20 @@ public class TipoCliente {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         TipoCliente that = (TipoCliente) o;
-        return Objects.equals(id, that.id) && Objects.equals(tipo, that.tipo);
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (tipo != null ? !tipo.equals(that.tipo) : that.tipo != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, tipo);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (tipo != null ? tipo.hashCode() : 0);
+        return result;
     }
 
     public Collection<Tipoclienterelacionado> getTipoclienterelacionadosById() {

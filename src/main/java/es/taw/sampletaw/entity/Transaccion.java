@@ -3,7 +3,6 @@ package es.taw.sampletaw.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 public class Transaccion {
@@ -66,13 +65,24 @@ public class Transaccion {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Transaccion that = (Transaccion) o;
-        return Objects.equals(id, that.id) && Objects.equals(cantidad, that.cantidad) && Objects.equals(fecha, that.fecha) && Objects.equals(moneda, that.moneda);
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (cantidad != null ? !cantidad.equals(that.cantidad) : that.cantidad != null) return false;
+        if (fecha != null ? !fecha.equals(that.fecha) : that.fecha != null) return false;
+        if (moneda != null ? !moneda.equals(that.moneda) : that.moneda != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, cantidad, fecha, moneda);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (cantidad != null ? cantidad.hashCode() : 0);
+        result = 31 * result + (fecha != null ? fecha.hashCode() : 0);
+        result = 31 * result + (moneda != null ? moneda.hashCode() : 0);
+        return result;
     }
 
     public TipoTransaccion getTipoTransaccionByTipo() {

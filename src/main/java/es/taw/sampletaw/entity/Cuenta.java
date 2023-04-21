@@ -3,7 +3,6 @@ package es.taw.sampletaw.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 public class Cuenta {
@@ -88,13 +87,26 @@ public class Cuenta {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Cuenta cuenta = (Cuenta) o;
-        return Objects.equals(id, cuenta.id) && Objects.equals(iban, cuenta.iban) && Objects.equals(saldo, cuenta.saldo) && Objects.equals(swift, cuenta.swift) && Objects.equals(pais, cuenta.pais);
+
+        if (id != null ? !id.equals(cuenta.id) : cuenta.id != null) return false;
+        if (iban != null ? !iban.equals(cuenta.iban) : cuenta.iban != null) return false;
+        if (saldo != null ? !saldo.equals(cuenta.saldo) : cuenta.saldo != null) return false;
+        if (swift != null ? !swift.equals(cuenta.swift) : cuenta.swift != null) return false;
+        if (pais != null ? !pais.equals(cuenta.pais) : cuenta.pais != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, iban, saldo, swift, pais);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (iban != null ? iban.hashCode() : 0);
+        result = 31 * result + (saldo != null ? saldo.hashCode() : 0);
+        result = 31 * result + (swift != null ? swift.hashCode() : 0);
+        result = 31 * result + (pais != null ? pais.hashCode() : 0);
+        return result;
     }
 
     public EstadoCuenta getEstadoCuentaByEstado() {

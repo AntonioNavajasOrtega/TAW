@@ -3,7 +3,6 @@ package es.taw.sampletaw.entity;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 public class Conversacion {
@@ -76,13 +75,27 @@ public class Conversacion {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Conversacion that = (Conversacion) o;
-        return Objects.equals(id, that.id) && Objects.equals(abierta, that.abierta) && Objects.equals(asunto, that.asunto) && Objects.equals(fechaApertura, that.fechaApertura) && Objects.equals(fechaCierre, that.fechaCierre);
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        if (abierta != null ? !abierta.equals(that.abierta) : that.abierta != null) return false;
+        if (asunto != null ? !asunto.equals(that.asunto) : that.asunto != null) return false;
+        if (fechaApertura != null ? !fechaApertura.equals(that.fechaApertura) : that.fechaApertura != null)
+            return false;
+        if (fechaCierre != null ? !fechaCierre.equals(that.fechaCierre) : that.fechaCierre != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, abierta, asunto, fechaApertura, fechaCierre);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (abierta != null ? abierta.hashCode() : 0);
+        result = 31 * result + (asunto != null ? asunto.hashCode() : 0);
+        result = 31 * result + (fechaApertura != null ? fechaApertura.hashCode() : 0);
+        result = 31 * result + (fechaCierre != null ? fechaCierre.hashCode() : 0);
+        return result;
     }
 
     public Empleado getEmpleadoByEmpleado() {

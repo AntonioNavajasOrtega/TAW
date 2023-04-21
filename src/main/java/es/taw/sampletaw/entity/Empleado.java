@@ -2,7 +2,6 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 public class Empleado {
@@ -58,13 +57,23 @@ public class Empleado {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Empleado empleado = (Empleado) o;
-        return Objects.equals(id, empleado.id) && Objects.equals(nombreUsuario, empleado.nombreUsuario) && Objects.equals(contrasena, empleado.contrasena);
+
+        if (id != null ? !id.equals(empleado.id) : empleado.id != null) return false;
+        if (nombreUsuario != null ? !nombreUsuario.equals(empleado.nombreUsuario) : empleado.nombreUsuario != null)
+            return false;
+        if (contrasena != null ? !contrasena.equals(empleado.contrasena) : empleado.contrasena != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombreUsuario, contrasena);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (nombreUsuario != null ? nombreUsuario.hashCode() : 0);
+        result = 31 * result + (contrasena != null ? contrasena.hashCode() : 0);
+        return result;
     }
 
     public Collection<Conversacion> getConversacionsById() {

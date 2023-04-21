@@ -2,7 +2,6 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
 public class Solicitud {
@@ -49,13 +48,20 @@ public class Solicitud {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Solicitud solicitud = (Solicitud) o;
-        return Objects.equals(id, solicitud.id) && Objects.equals(fecha, solicitud.fecha);
+
+        if (id != null ? !id.equals(solicitud.id) : solicitud.id != null) return false;
+        if (fecha != null ? !fecha.equals(solicitud.fecha) : solicitud.fecha != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, fecha);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (fecha != null ? fecha.hashCode() : 0);
+        return result;
     }
 
     public TipoSolicitud getTipoSolicitudByTipo() {

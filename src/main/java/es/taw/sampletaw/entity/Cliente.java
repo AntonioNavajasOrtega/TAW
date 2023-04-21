@@ -2,7 +2,6 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
 public class Cliente {
@@ -23,10 +22,13 @@ public class Cliente {
     @Column(name = "telefono", nullable = true, length = 12)
     private String telefono;
     @Basic
-    @Column(name = "email", nullable = true, length = 50)
+    @Column(name = "nif", nullable = false, length = 9)
+    private String nif;
+    @Basic
+    @Column(name = "email", nullable = false, length = 50)
     private String email;
     @Basic
-    @Column(name = "contrasena", nullable = true, length = 50)
+    @Column(name = "contrasena", nullable = false, length = 50)
     private String contrasena;
     @ManyToOne
     @JoinColumn(name = "empresa_id", referencedColumnName = "id")
@@ -84,6 +86,14 @@ public class Cliente {
         this.telefono = telefono;
     }
 
+    public String getNif() {
+        return nif;
+    }
+
+    public void setNif(String nif) {
+        this.nif = nif;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -104,13 +114,32 @@ public class Cliente {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         Cliente cliente = (Cliente) o;
-        return Objects.equals(id, cliente.id) && Objects.equals(nombre, cliente.nombre) && Objects.equals(apellido, cliente.apellido) && Objects.equals(direccion, cliente.direccion) && Objects.equals(telefono, cliente.telefono) && Objects.equals(email, cliente.email) && Objects.equals(contrasena, cliente.contrasena);
+
+        if (id != null ? !id.equals(cliente.id) : cliente.id != null) return false;
+        if (nombre != null ? !nombre.equals(cliente.nombre) : cliente.nombre != null) return false;
+        if (apellido != null ? !apellido.equals(cliente.apellido) : cliente.apellido != null) return false;
+        if (direccion != null ? !direccion.equals(cliente.direccion) : cliente.direccion != null) return false;
+        if (telefono != null ? !telefono.equals(cliente.telefono) : cliente.telefono != null) return false;
+        if (nif != null ? !nif.equals(cliente.nif) : cliente.nif != null) return false;
+        if (email != null ? !email.equals(cliente.email) : cliente.email != null) return false;
+        if (contrasena != null ? !contrasena.equals(cliente.contrasena) : cliente.contrasena != null) return false;
+
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nombre, apellido, direccion, telefono, email, contrasena);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
+        result = 31 * result + (apellido != null ? apellido.hashCode() : 0);
+        result = 31 * result + (direccion != null ? direccion.hashCode() : 0);
+        result = 31 * result + (telefono != null ? telefono.hashCode() : 0);
+        result = 31 * result + (nif != null ? nif.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (contrasena != null ? contrasena.hashCode() : 0);
+        return result;
     }
 
     public Empresa getEmpresaByEmpresaId() {
