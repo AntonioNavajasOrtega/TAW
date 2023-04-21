@@ -3,19 +3,23 @@ package es.taw.sampletaw.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 public class Transaccion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
     @Basic
     @Column(name = "cantidad", nullable = false, precision = 2)
     private BigDecimal cantidad;
     @Basic
     @Column(name = "fecha", nullable = false)
     private Timestamp fecha;
+    @Basic
+    @Column(name = "moneda", nullable = true, length = 10)
+    private String moneda;
     @ManyToOne
     @JoinColumn(name = "tipo", referencedColumnName = "id", nullable = false)
     private TipoTransaccion tipoTransaccionByTipo;
@@ -26,15 +30,11 @@ public class Transaccion {
     @JoinColumn(name = "cuenta_destino_id", referencedColumnName = "id")
     private Cuenta cuentaByCuentaDestinoId;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setId(int id) {
         this.id = id;
     }
 
@@ -54,26 +54,25 @@ public class Transaccion {
         this.fecha = fecha;
     }
 
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Transaccion that = (Transaccion) o;
-
-        if (id != that.id) return false;
-        if (cantidad != null ? !cantidad.equals(that.cantidad) : that.cantidad != null) return false;
-        if (fecha != null ? !fecha.equals(that.fecha) : that.fecha != null) return false;
-
-        return true;
+        return Objects.equals(id, that.id) && Objects.equals(cantidad, that.cantidad) && Objects.equals(fecha, that.fecha) && Objects.equals(moneda, that.moneda);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (cantidad != null ? cantidad.hashCode() : 0);
-        result = 31 * result + (fecha != null ? fecha.hashCode() : 0);
-        return result;
+        return Objects.hash(id, cantidad, fecha, moneda);
     }
 
     public TipoTransaccion getTipoTransaccionByTipo() {

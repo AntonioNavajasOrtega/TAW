@@ -1,3 +1,4 @@
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.sampletaw.entity.Conversacion" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
@@ -18,11 +19,28 @@
 </head>
 <body>
 
+<h3>Filtros:</h3>
+<form:form action="/asistente/filtrar" method="post" modelAttribute="filtro">
+    Ordenar por numero de mensajes: <form:select path="numeroMensajes" >
+                                            <form:option value="" label=" "/>
+                                            <form:option value="asc" label="ascendente"/>
+                                            <form:option value="desc" label="descendente"/>
+                                    </form:select>
+    Ordenar por fecha de apertura:  <form:select path="fechaApertura" >
+                                        <form:option value="" label=" "/>
+                                        <form:option value="asc" label="ascendente"/>
+                                        <form:option value="desc" label="descendente"/>
+                                    </form:select>
+    Buscar usuario: <form:input path="usuario"></form:input>
+    <form:button>Filtrar</form:button>
+</form:form>
+
 <table border="1">
     <tr>
         <th>ID</th>
         <th>Cliente</th>
         <th>Estado</th>
+        <th>Asunto</th>
         <th>Numero de mensajes</th>
         <th>Fecha apertura</th>
         <th>Fecha cierre</th>
@@ -39,9 +57,10 @@
             if(conversacion.getAbierta()!=1){estado="Cerrada";}
         %>
         <td><%=estado%></td>
+        <td><%=conversacion.getAsunto() == null ? "" : conversacion.getAsunto()%></td>
         <td><%=conversacion.getMensajesById().size()%></td>
-        <td><%="no sé"%></td>
-        <td><%="no sé"%></td>
+        <td><%=conversacion.getFechaApertura()%></td>
+        <td><%=conversacion.getFechaCierre() == null ? "" : conversacion.getFechaCierre()%></td>
         <td><a href="/chat/asistente?idConversacion=<%=conversacion.getId()%>">Ir a la conversación</a></td>
     </tr>
     <%

@@ -33,12 +33,13 @@ public class LoginController {
 
         String urlTo = "redirect:/cliente/";
         Cliente cliente = this.clienteRepository.autenticar(email, contrasena);
-        Empleado empleado = this.empleadoRepository.autenticar(email, contrasena);
-        if (cliente == null && empleado == null) {
+        Empleado asistente = this.empleadoRepository.autenticar(email, contrasena);
+        if (cliente == null && asistente == null) {
             model.addAttribute("error", "Credenciales incorrectas");
             urlTo = "login";
-        }else if (empleado != null) {
-            if(empleado.getTipoEmpleadoByTipo().getTipo().equalsIgnoreCase("asistente")){
+        }else if (asistente != null) {
+            if(asistente.getTipoEmpleadoByTipo().getTipo().equalsIgnoreCase("asistente")){
+                session.setAttribute("asistente", asistente);
                 urlTo = "redirect:/asistente/";
             }
 

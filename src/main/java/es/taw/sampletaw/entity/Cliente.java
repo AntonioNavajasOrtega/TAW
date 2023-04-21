@@ -2,13 +2,14 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
     @Basic
     @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
@@ -34,20 +35,20 @@ public class Cliente {
     private Collection<Conversacion> conversacionsById;
     @OneToMany(mappedBy = "clienteByClienteId")
     private Collection<Cuenta> cuentasById;
+    @OneToMany(mappedBy = "clienteByEmisorCliente")
+    private Collection<Mensaje> mensajesById;
+    @OneToMany(mappedBy = "clienteByReceptorCliente")
+    private Collection<Mensaje> mensajesById_0;
     @OneToMany(mappedBy = "clienteByClienteId")
     private Collection<Solicitud> solicitudsById;
     @OneToMany(mappedBy = "clienteByClienteId")
     private Collection<Tipoclienterelacionado> tipoclienterelacionadosById;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setId(int id) {
         this.id = id;
     }
 
@@ -103,30 +104,13 @@ public class Cliente {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Cliente cliente = (Cliente) o;
-
-        if (id != cliente.id) return false;
-        if (nombre != null ? !nombre.equals(cliente.nombre) : cliente.nombre != null) return false;
-        if (apellido != null ? !apellido.equals(cliente.apellido) : cliente.apellido != null) return false;
-        if (direccion != null ? !direccion.equals(cliente.direccion) : cliente.direccion != null) return false;
-        if (telefono != null ? !telefono.equals(cliente.telefono) : cliente.telefono != null) return false;
-        if (email != null ? !email.equals(cliente.email) : cliente.email != null) return false;
-        if (contrasena != null ? !contrasena.equals(cliente.contrasena) : cliente.contrasena != null) return false;
-
-        return true;
+        return Objects.equals(id, cliente.id) && Objects.equals(nombre, cliente.nombre) && Objects.equals(apellido, cliente.apellido) && Objects.equals(direccion, cliente.direccion) && Objects.equals(telefono, cliente.telefono) && Objects.equals(email, cliente.email) && Objects.equals(contrasena, cliente.contrasena);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
-        result = 31 * result + (apellido != null ? apellido.hashCode() : 0);
-        result = 31 * result + (direccion != null ? direccion.hashCode() : 0);
-        result = 31 * result + (telefono != null ? telefono.hashCode() : 0);
-        result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (contrasena != null ? contrasena.hashCode() : 0);
-        return result;
+        return Objects.hash(id, nombre, apellido, direccion, telefono, email, contrasena);
     }
 
     public Empresa getEmpresaByEmpresaId() {
@@ -151,6 +135,22 @@ public class Cliente {
 
     public void setCuentasById(Collection<Cuenta> cuentasById) {
         this.cuentasById = cuentasById;
+    }
+
+    public Collection<Mensaje> getMensajesById() {
+        return mensajesById;
+    }
+
+    public void setMensajesById(Collection<Mensaje> mensajesById) {
+        this.mensajesById = mensajesById;
+    }
+
+    public Collection<Mensaje> getMensajesById_0() {
+        return mensajesById_0;
+    }
+
+    public void setMensajesById_0(Collection<Mensaje> mensajesById_0) {
+        this.mensajesById_0 = mensajesById_0;
     }
 
     public Collection<Solicitud> getSolicitudsById() {

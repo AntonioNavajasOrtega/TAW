@@ -120,6 +120,7 @@
         <th>ID</th>
         <th>Cliente</th>
         <th>Estado</th>
+        <th>Asunto</th>
         <th>Numero de mensajes</th>
         <th>Fecha apertura</th>
         <th>Fecha cierre</th>
@@ -136,10 +137,11 @@
             if(conversacion.getAbierta()!=1){estado="Cerrada";}
         %>
         <td><%=estado%></td>
+        <td><%=conversacion.getAsunto() == null ? "" : conversacion.getAsunto()%></td>
         <td><%=conversacion.getMensajesById().size()%></td>
-        <td><%="no sé"%></td>
-        <td><%="no sé"%></td>
-        <td><a href="">Ir a la conversación</a></td>
+        <td><%=conversacion.getFechaApertura()%></td>
+        <td><%=conversacion.getFechaCierre() == null ? "" : conversacion.getFechaCierre()%></td>
+        <td><a href="/chat/listar?idCliente=<%=cliente.getId()%>&idChat=<%=conversacion.getId()%>">Ir a la conversación</a></td>
     </tr>
     <%
         }

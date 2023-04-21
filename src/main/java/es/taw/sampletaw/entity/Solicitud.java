@@ -2,13 +2,14 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Objects;
 
 @Entity
 public class Solicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
     @Basic
     @Column(name = "fecha", nullable = false)
     private Timestamp fecha;
@@ -28,15 +29,11 @@ public class Solicitud {
     @JoinColumn(name = "empresa_id", referencedColumnName = "id")
     private Empresa empresaByEmpresaId;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setId(int id) {
         this.id = id;
     }
 
@@ -52,20 +49,13 @@ public class Solicitud {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Solicitud solicitud = (Solicitud) o;
-
-        if (id != solicitud.id) return false;
-        if (fecha != null ? !fecha.equals(solicitud.fecha) : solicitud.fecha != null) return false;
-
-        return true;
+        return Objects.equals(id, solicitud.id) && Objects.equals(fecha, solicitud.fecha);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (fecha != null ? fecha.hashCode() : 0);
-        return result;
+        return Objects.hash(id, fecha);
     }
 
     public TipoSolicitud getTipoSolicitudByTipo() {

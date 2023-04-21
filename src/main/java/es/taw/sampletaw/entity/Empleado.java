@@ -2,13 +2,14 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 public class Empleado {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
     @Basic
     @Column(name = "nombre_usuario", nullable = false, length = 50)
     private String nombreUsuario;
@@ -22,18 +23,18 @@ public class Empleado {
     @ManyToOne
     @JoinColumn(name = "tipo", referencedColumnName = "id", nullable = false)
     private TipoEmpleado tipoEmpleadoByTipo;
+    @OneToMany(mappedBy = "empleadoByEmisorEmpleado")
+    private Collection<Mensaje> mensajesById;
+    @OneToMany(mappedBy = "empleadoByReceptorEmpleado")
+    private Collection<Mensaje> mensajesById_0;
     @OneToMany(mappedBy = "empleadoByEmpleadoId")
     private Collection<Solicitud> solicitudsById;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setId(int id) {
         this.id = id;
     }
 
@@ -57,23 +58,13 @@ public class Empleado {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Empleado empleado = (Empleado) o;
-
-        if (id != empleado.id) return false;
-        if (nombreUsuario != null ? !nombreUsuario.equals(empleado.nombreUsuario) : empleado.nombreUsuario != null)
-            return false;
-        if (contrasena != null ? !contrasena.equals(empleado.contrasena) : empleado.contrasena != null) return false;
-
-        return true;
+        return Objects.equals(id, empleado.id) && Objects.equals(nombreUsuario, empleado.nombreUsuario) && Objects.equals(contrasena, empleado.contrasena);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (nombreUsuario != null ? nombreUsuario.hashCode() : 0);
-        result = 31 * result + (contrasena != null ? contrasena.hashCode() : 0);
-        return result;
+        return Objects.hash(id, nombreUsuario, contrasena);
     }
 
     public Collection<Conversacion> getConversacionsById() {
@@ -98,6 +89,22 @@ public class Empleado {
 
     public void setTipoEmpleadoByTipo(TipoEmpleado tipoEmpleadoByTipo) {
         this.tipoEmpleadoByTipo = tipoEmpleadoByTipo;
+    }
+
+    public Collection<Mensaje> getMensajesById() {
+        return mensajesById;
+    }
+
+    public void setMensajesById(Collection<Mensaje> mensajesById) {
+        this.mensajesById = mensajesById;
+    }
+
+    public Collection<Mensaje> getMensajesById_0() {
+        return mensajesById_0;
+    }
+
+    public void setMensajesById_0(Collection<Mensaje> mensajesById_0) {
+        this.mensajesById_0 = mensajesById_0;
     }
 
     public Collection<Solicitud> getSolicitudsById() {

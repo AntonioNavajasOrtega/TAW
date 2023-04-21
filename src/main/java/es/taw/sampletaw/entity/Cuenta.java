@@ -3,13 +3,14 @@ package es.taw.sampletaw.entity;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 public class Cuenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
     @Basic
     @Column(name = "iban", nullable = false, length = 34)
     private String iban;
@@ -43,15 +44,11 @@ public class Cuenta {
     @OneToMany(mappedBy = "cuentaByCuentaDestinoId")
     private Collection<Transaccion> transaccionsById_0;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setId(int id) {
         this.id = id;
     }
 
@@ -91,26 +88,13 @@ public class Cuenta {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Cuenta cuenta = (Cuenta) o;
-
-        if (id != cuenta.id) return false;
-        if (iban != null ? !iban.equals(cuenta.iban) : cuenta.iban != null) return false;
-        if (saldo != null ? !saldo.equals(cuenta.saldo) : cuenta.saldo != null) return false;
-        if (swift != null ? !swift.equals(cuenta.swift) : cuenta.swift != null) return false;
-        if (pais != null ? !pais.equals(cuenta.pais) : cuenta.pais != null) return false;
-
-        return true;
+        return Objects.equals(id, cuenta.id) && Objects.equals(iban, cuenta.iban) && Objects.equals(saldo, cuenta.saldo) && Objects.equals(swift, cuenta.swift) && Objects.equals(pais, cuenta.pais);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (iban != null ? iban.hashCode() : 0);
-        result = 31 * result + (saldo != null ? saldo.hashCode() : 0);
-        result = 31 * result + (swift != null ? swift.hashCode() : 0);
-        result = 31 * result + (pais != null ? pais.hashCode() : 0);
-        return result;
+        return Objects.hash(id, iban, saldo, swift, pais);
     }
 
     public EstadoCuenta getEstadoCuentaByEstado() {

@@ -2,13 +2,14 @@ package es.taw.sampletaw.entity;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 public class Empresa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
     @Basic
     @Column(name = "nombre", nullable = false, length = 50)
     private String nombre;
@@ -18,6 +19,12 @@ public class Empresa {
     @Basic
     @Column(name = "telefono", nullable = false, length = 20)
     private String telefono;
+    @Basic
+    @Column(name = "usuario", nullable = false, length = 20)
+    private String usuario;
+    @Basic
+    @Column(name = "contrasena", nullable = false, length = 20)
+    private String contrasena;
     @OneToMany(mappedBy = "empresaByEmpresaId")
     private Collection<Cliente> clientesById;
     @OneToMany(mappedBy = "empresaByEmpresaId")
@@ -25,15 +32,11 @@ public class Empresa {
     @OneToMany(mappedBy = "empresaByEmpresaId")
     private Collection<Solicitud> solicitudsById;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setId(int id) {
         this.id = id;
     }
 
@@ -60,29 +63,34 @@ public class Empresa {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         Empresa empresa = (Empresa) o;
-
-        if (id != empresa.id) return false;
-        if (nombre != null ? !nombre.equals(empresa.nombre) : empresa.nombre != null) return false;
-        if (direccion != null ? !direccion.equals(empresa.direccion) : empresa.direccion != null) return false;
-        if (telefono != null ? !telefono.equals(empresa.telefono) : empresa.telefono != null) return false;
-
-        return true;
+        return Objects.equals(id, empresa.id) && Objects.equals(nombre, empresa.nombre) && Objects.equals(direccion, empresa.direccion) && Objects.equals(telefono, empresa.telefono) && Objects.equals(usuario, empresa.usuario) && Objects.equals(contrasena, empresa.contrasena);
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (nombre != null ? nombre.hashCode() : 0);
-        result = 31 * result + (direccion != null ? direccion.hashCode() : 0);
-        result = 31 * result + (telefono != null ? telefono.hashCode() : 0);
-
-        return result;
+        return Objects.hash(id, nombre, direccion, telefono, usuario, contrasena);
     }
 
     public Collection<Cliente> getClientesById() {
