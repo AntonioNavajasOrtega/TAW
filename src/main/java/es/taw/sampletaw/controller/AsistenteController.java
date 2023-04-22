@@ -1,8 +1,12 @@
 package es.taw.sampletaw.controller;
 
+import es.taw.sampletaw.dao.ClienteRepository;
 import es.taw.sampletaw.dao.ConversacionRepository;
+import es.taw.sampletaw.dao.MensajeRepository;
+import es.taw.sampletaw.entity.Cliente;
 import es.taw.sampletaw.entity.Conversacion;
 import es.taw.sampletaw.entity.Empleado;
+import es.taw.sampletaw.entity.Mensaje;
 import es.taw.sampletaw.ui.FiltroAsistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Collection;
 import java.util.List;
 
 @RequestMapping("/asistente")
@@ -17,6 +22,12 @@ import java.util.List;
 public class AsistenteController {
     @Autowired
     private ConversacionRepository conversacionRepository;
+
+    @Autowired
+    private ClienteRepository clienteRepository;
+
+    @Autowired
+    private MensajeRepository mensajeRepository;
 
     @GetMapping("/")
     public String doListarConversaciones(Model model, HttpSession session){
@@ -85,9 +96,19 @@ public class AsistenteController {
 
             model.addAttribute("filtro", filtro);
             model.addAttribute("conversaciones", conversaciones);
+            List<Cliente> usuarios = this.clienteRepository.findAll();
+            model.addAttribute("usuarios", usuarios);
         }
 
         return urlTo;
+    }
+
+    @GetMapping("/mensajesUsuario")
+    public String doListarMensajesIntercambiados(@RequestParam("idUsuario") Integer idCliente, Model model, HttpSession session){
+        Cliente usuario = this.clienteRepository.findById(idCliente).orElse(null);
+        List<Mensaje> mensajeList = this.mensajeRepository.mensajesCuyoUsuarioEsEmisorOReceptor(usuario);
+        model.addAttribute("mensajes", mensajeList);
+        return "mensajes";
     }
 
 

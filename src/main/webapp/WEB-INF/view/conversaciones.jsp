@@ -1,6 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.sampletaw.entity.Conversacion" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.List" %>
+<%@ page import="es.taw.sampletaw.entity.Cliente" %><%--
   Created by IntelliJ IDEA.
   User: juanj
   Date: 27/03/2023
@@ -10,6 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+    List<Cliente> usuarios = (List<Cliente>) request.getAttribute("usuarios");
     List<Conversacion> conversacionList = (List<Conversacion>) request.getAttribute("conversaciones");
 %>
 
@@ -68,7 +70,28 @@
     %>
 </table>
 
+<h1>Usuarios del sistema</h1>
+<table border="1">
+    <th>Nombre</th>
+    <th>Apellidos</th>
+    <th>Nif</th>
+    <th>Ver mensajes</th>
 
+    <%
+        for(Cliente usuario : usuarios){
+            if(!usuario.getMensajesById().isEmpty()){
+    %>
+    <tr>
+        <td><%=usuario.getNombre()%></td>
+        <td><%=usuario.getApellido()%></td>
+        <td><%=usuario.getNif()%></td>
+        <td><a href="/asistente/mensajesUsuario?idUsuario=<%=usuario.getId()%>">Ver mensajes</a></td>
+    </tr>
+    <%
+            }
+        }
+    %>
+</table>
 
 </body>
 </html>
