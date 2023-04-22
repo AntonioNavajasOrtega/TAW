@@ -12,4 +12,7 @@ public interface EmpleadoRepository extends JpaRepository<Empleado , Integer> {
     public Empleado autenticar (@Param("email") String email, @Param("contrasena")String contrasena);
 
 
+    @Query("select e from Empleado e where e.tipoEmpleadoByTipo.tipo = 'Gestor'")
+    Empleado findGestor();
+
 }

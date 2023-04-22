@@ -38,14 +38,14 @@
         <th>NOMBRE</th>
         <th>APELLIDO</th>
         <th>EMAIL</th>
-        <th>DIRECCION</th>
+        <th>DNI</th>
         <th>TELEFONO</th>
     </tr>
     <tr>
         <td><%= cliente.getNombre() %></td>
         <td><%=cliente.getApellido() %> <br></td>
         <td><%=cliente.getEmail() %></td>
-        <td><%=cliente.getDireccion() %></td>
+        <td><%=cliente.getNif() %></td>
         <td><%=cliente.getTelefono() %></td>
     </tr>
 </table>
@@ -71,7 +71,8 @@
         <td><%= cuenta.getEstadoCuentaByEstado().getTipo()%></td>
         <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa")){%><a href="/cliente/solicitar?id=<%=
         cuenta.getId()%>">Solicitar desbloqueo</a><%}else{%>
-            <a href="/cliente/transaccion?id=<%=cuenta.getId()%>">Realizar transacción</a><%}%></td>
+            <a href="/cliente/transaccion?id=<%=cuenta.getId()%>">Realizar transacción</a>
+            <a href="/cliente/cambio?id=<%=cuenta.getId()%>">Cambio de divisas</a><%}%></td>
     </tr>
     <%
     }
@@ -95,6 +96,7 @@
 <br/>
 <table border="1">
     <tr>
+        <td>Tipo</td>
         <td>Fecha</td>
         <td>Cantidad</td>
         <td>Destino</td>
@@ -103,6 +105,7 @@
         for(Transaccion transaccion : transacciones){
     %>
     <tr>
+        <td><%=transaccion.getTipoTransaccionByTipo().getTipo()%></td>
         <td><%= transaccion.getFecha()%></td>
         <td><%= transaccion.getCantidad()%></td>
         <td><%= transaccion.getCuentaByCuentaDestinoId().getIban()%></td>

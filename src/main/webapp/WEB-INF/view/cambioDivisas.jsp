@@ -15,7 +15,6 @@
 
 <%
     List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
-    List<TipoTransaccion> tipos = (List<TipoTransaccion>) request.getAttribute("tipos");
 %>
 
 
@@ -30,17 +29,17 @@
 <body>
 
     <h1>Información de operación</h1>
-
-    <form:form action="/cliente/realizar" method="post" modelAttribute="trans">
+    <form:form action="/cliente/cambiarmoneda" method="post" modelAttribute="trans">
         <form:hidden path="id"></form:hidden>
         <form:hidden path="cuentaByCuentaOrigenId"></form:hidden>
-        Tipos de opración:<form:select path="tipoTransaccionByTipo">
-            <form:options items="${tipos}" itemLabel="tipo"></form:options>
+        <form:hidden path="tipoTransaccionByTipo"></form:hidden>
+        <form:hidden path="cuentaByCuentaDestinoId"></form:hidden>
+        <form:hidden path="cantidad"></form:hidden>
+        Monedas: <form:select path="moneda">
+        <form:option value="" label=""></form:option>
+        <form:option value="eur" label="EUR"></form:option>
+        <form:option value="usd" label="USD"></form:option>
         </form:select><br/>
-        Cuenta Destino: <form:select path="cuentaByCuentaDestinoId">
-            <form:options items="${cuentas}" itemLabel="iban"></form:options>
-        </form:select><br/>
-        Cantidad:<form:input path="cantidad"></form:input><br/>
         <form:button>Realizar</form:button>
     </form:form>
 </body>

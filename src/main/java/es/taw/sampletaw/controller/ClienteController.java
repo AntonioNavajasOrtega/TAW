@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,6 +41,9 @@ public class ClienteController {
     @Autowired
     protected TipoSolicitudRepository tipoSolicitudRepository;
 
+    @Autowired
+    protected EstadoCuentaRepository estadoCuentaRepository;
+
     @GetMapping("/")
     public String doListar(@RequestParam("id") Integer idcliente, Model model){
         return this.procesarFiltrado(null,idcliente,model);
@@ -50,21 +55,38 @@ public class ClienteController {
     }
 
     private String mostrarEditarONuevo(Cliente cliente, Model model) {
-        /*Solicitud solicitud = new Solicitud();
-        solicitud.setClienteByClienteId(cliente);
-        solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
-        solicitud.setEmpleadoByEmpleadoId();//Nose como sacar el gestor
-        TipoSolicitud tipo = this.tipoSolicitudRepository.findSolicitarCuent();
-        solicitud.setTipoSolicitudByTipo(tipo);
-
-        cliente.getSolicitudsById().add(solicitud);
-        this.solicitudRepository.save(solicitud);*/
         model.addAttribute("cliente",cliente);
         return "registroCliente";
     }
 
     @PostMapping("/guardar")
     public String doGuardar(@ModelAttribute("cliente") Cliente cliente){
+        if(cliente.getCuentasById() == null){
+            this.clienteRepository.save(cliente);
+            Solicitud solicitud = new Solicitud();
+            solicitud.setClienteByClienteId(cliente);
+            solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
+            Empleado gestor = this.empleadoRepository.findGestor();
+            solicitud.setEmpleadoByEmpleadoId(gestor);
+            TipoSolicitud tipo = this.tipoSolicitudRepository.findSolicitarCuent();
+            solicitud.setTipoSolicitudByTipo(tipo);
+            Cuenta c = new Cuenta();
+            c.setIban("00000000");
+            c.setSaldo(BigDecimal.valueOf(0));
+            c.setClienteByClienteId(cliente);
+            EstadoCuenta estado = this.estadoCuentaRepository.findBloq();
+            c.setEstadoCuentaByEstado(estado);
+            c.setSwift("342");
+            c.setPais("-----");
+            c.setEmpleadoByEmpleadoId(gestor);
+            this.cuentaRepository.save(c);
+            solicitud.setCuentaByCuentaId(c);
+
+            List<Solicitud> sol = new ArrayList<Solicitud>();
+            sol.add(solicitud);
+            cliente.setSolicitudsById(sol);
+            this.solicitudRepository.save(solicitud);
+        }
         this.clienteRepository.save(cliente);
         return "redirect:/cliente/?id=" + cliente.getId();
     }
@@ -75,18 +97,35 @@ public class ClienteController {
         return this.mostrarEditarONuevo(cliente,modelo);
     }
 
-    @GetMapping("/transaccion")
-    public String doTransaccion(@RequestParam("id") Integer idcuenta, Model model){
+    protected String pasarAOperacion(Integer idcuenta,Model model, Transaccion transaccion){
         Cuenta cuenta = this.cuentaRepository.findById(idcuenta).orElse(null);
         model.addAttribute("cuenta",cuenta);
         List<Cuenta> cuentas = this.cuentaRepository.findCuentas(cuenta.getId());
         model.addAttribute("cuentas",cuentas);
-        Transaccion transaccion = new Transaccion();
         transaccion.setCuentaByCuentaOrigenId(cuenta);
         model.addAttribute("trans",transaccion);
-        List<TipoTransaccion> tipos = this.tipoTransaccionRepository.findAll();
-        model.addAttribute("tipos",tipos);
-        return "operacion";
+
+        if(transaccion.getTipoTransaccionByTipo().getTipo().equals("Pago")){
+            return "transaccion";
+        }else{
+            return "cambioDivisas";
+        }
+    }
+
+    @GetMapping("/transaccion")
+    public String doTransaccion(@RequestParam("id") Integer idcuenta, Model model){
+        Transaccion transaccion = new Transaccion();
+        TipoTransaccion tipo = this.tipoTransaccionRepository.findTrans();
+        transaccion.setTipoTransaccionByTipo(tipo);
+        return this.pasarAOperacion(idcuenta,model,transaccion);
+    }
+
+    @GetMapping("/cambio")
+    public String doCambio(@RequestParam("id") Integer idcuenta, Model model){
+        Transaccion transaccion = new Transaccion();
+        TipoTransaccion tipo = this.tipoTransaccionRepository.findCambio();
+        transaccion.setTipoTransaccionByTipo(tipo);
+        return this.pasarAOperacion(idcuenta,model,transaccion);
     }
 
     @PostMapping("/realizar")
@@ -112,6 +151,28 @@ public class ClienteController {
         this.transaccionRepository.save(transaccion);
         this.transaccionRepository.save(transaccion1);
         return "redirect:/cliente/?id=" + orig.getClienteByClienteId().getId();
+    }
+
+    @PostMapping("/cambiarmoneda")
+    public String doCambiarMoneda(@ModelAttribute("trans") Transaccion transaccion){
+        Cuenta cuenta = this.cuentaRepository.getById(transaccion.getCuentaByCuentaOrigenId().getId());
+
+
+        Timestamp date = new Timestamp(System.currentTimeMillis());
+        transaccion.setFecha(date);
+        transaccion.setCantidad(cuenta.getSaldo());
+        transaccion.setCuentaByCuentaDestinoId(cuenta);
+
+
+        cuenta.getTransaccionsById().add(transaccion);
+        if(transaccion.getMoneda().equals("usd")){
+            cuenta.setSaldo(transaccion.getCantidad().multiply(BigDecimal.valueOf(1.09708)));
+        }else if(transaccion.getMoneda().equals("eur")){
+            cuenta.setSaldo(transaccion.getCantidad().divide(BigDecimal.valueOf(1.09708)));
+        }
+        this.cuentaRepository.save(cuenta);
+        this.transaccionRepository.save(transaccion);
+        return "redirect:/cliente/?id=" + cuenta.getClienteByClienteId().getId();
     }
 
     @GetMapping("/solicitar")

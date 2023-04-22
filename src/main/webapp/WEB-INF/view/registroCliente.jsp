@@ -21,6 +21,7 @@
     Nombre: <form:input path="nombre" size="50" maxlength="50" /><br/>
     Apellido: <form:input path="apellido" size="50" maxlength="50" /><br/>
     Email: <form:input path="email" size="50"  maxlength="50"/> <br/>
+    DNI: <form:input path="nif" size="10" maxlength="9" /><br/>
     Dirección: <form:input path="direccion"  size="100" maxlength="100" />
     Teléfono: <form:input type="telefono" path="telefono" maxlength="12" size="12" /><br/>
     Contraseña: <form:input path="contrasena" size="50" maxlength="50" /><br/>
