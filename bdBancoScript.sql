@@ -1,4 +1,3 @@
-
 CREATE TABLE estado_cuenta(
     id INT PRIMARY KEY,    
     tipo VARCHAR(15)

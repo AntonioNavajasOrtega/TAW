@@ -1,6 +1,7 @@
 package es.taw.sampletaw.dao;
 
 import es.taw.sampletaw.entity.Cuenta;
+import es.taw.sampletaw.entity.Empresa;
 import es.taw.sampletaw.entity.Transaccion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +25,7 @@ public interface CuentaRepository extends JpaRepository<Cuenta,Integer> {
 
     @Query("select t from Transaccion t where (t.cuentaByCuentaDestinoId in(select c from Cuenta c where c.clienteByClienteId.id = :id) and t.cantidad > 0) or (t.cuentaByCuentaOrigenId in(select c from Cuenta c where c.clienteByClienteId.id = :id) and t.cantidad < 0) order by t.fecha desc")
     List<Transaccion> findDateTrans(@Param("id") Integer id);
+
+    @Query("select t from Transaccion t where (t.cuentaByCuentaDestinoId in(select c from Cuenta c where c.empresaByEmpresaId = :empresa) and t.cantidad > 0) or (t.cuentaByCuentaOrigenId in(select c from Cuenta c where c.empresaByEmpresaId = :empresa) and t.cantidad < 0)")
+    List<Transaccion> findEmpresaTrans(Empresa empresa);
 }

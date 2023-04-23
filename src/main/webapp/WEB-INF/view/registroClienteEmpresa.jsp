@@ -32,6 +32,7 @@
 <form method="get" action="/empresa/guardarCliente">
 
     Nombre: <input name="nombre" size="50" maxlength="50"  /><br/>
+    DNI: <input name="nif" size="10" maxlength="9" /><br/>
     Apellido: <input name="apellido" size="50" maxlength="50" /><br/>
     Email: <input name="email" size="50"  maxlength="50"/> <br/>
     Dirección: <input  name="direccion" size="100" maxlength="100" />

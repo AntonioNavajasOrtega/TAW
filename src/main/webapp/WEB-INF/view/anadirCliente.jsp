@@ -32,12 +32,14 @@
 <form method="get" action="/empresa/guardarCliente2">
 
     Nombre: <input name="nombre" size="50" maxlength="50"  /><br/>
+    DNI: <input name="nif" size="10" maxlength="9" /><br/>
     Apellido: <input name="apellido" size="50" maxlength="50" /><br/>
     Email: <input name="email" size="50"  maxlength="50"/> <br/>
     Dirección: <input  name="direccion" size="100" maxlength="100" />
     Teléfono: <input name="telefono" type="telefono" maxlength="12" size="12" /><br/>
     Contraseña: <input name="contrasena" type="password" size="50" maxlength="50" /><br/>
     <input name="empresa_id" type="hidden" value="<%=empresa.getId() %>" />
+    <input type="hidden" name="volver" value="${cliente.id}"/>
     <button>Guardar</button>
 </form>
 

@@ -1,11 +1,9 @@
-<%@ page import="es.taw.sampletaw.entity.Cliente" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.mysql.cj.xdevapi.Client" %>
-<%@ page import="java.util.List" %>
-<%@ page import="es.taw.sampletaw.entity.Cuenta" %>
-<%@ page import="java.util.ConcurrentModificationException" %>
-<%@ page import="es.taw.sampletaw.entity.Conversacion" %>
-<%@ page import="java.util.Collection" %>
-<%@ page import="es.taw.sampletaw.entity.Empresa" %><%--
+<%@ page import="es.taw.sampletaw.entity.*" %>
+<%@ page import="java.util.stream.Collectors" %>
+<%@ page import="java.util.*" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -16,8 +14,12 @@
 
 <%
     Cliente cliente = (Cliente) request.getAttribute("cliente");
+    Empresa empresa = (Empresa) request.getAttribute("empresa");
     List<Conversacion> conversaciones = (List<Conversacion>) request.getAttribute("conversaciones");
     List<Cliente> listaSocios = (List<Cliente>) request.getAttribute("clientesSocios");
+    List<Transaccion> transacciones = (List<Transaccion>) request.getAttribute("transacciones");
+    List<String> lista = (List<String>) request.getAttribute("lista");
+
 %>
 
 
@@ -54,25 +56,74 @@
 <a href="/empresa/anadirCliente?id=<%=cliente.getId() %>">Añadir Cliente</a> </br>
 <br/>
 
+
 <h2>Cuentas:</h2>
 <table border="1">
     <tr>
         <td>NºCuenta</td>
+        <td>Iban</td>
         <td>Saldo</td>
         <td>Estado</td>
+        <td></td>
     </tr>
     <%
         for (Cuenta cuenta: cliente.getCuentasById()) {
     %>
     <tr>
         <td><%= cuenta.getId()%></td>
+        <td><%=cuenta.getIban()%></td>
         <td><%= cuenta.getSaldo()%></td>
         <td><%= cuenta.getEstadoCuentaByEstado().getTipo()%></td>
+        <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa")){%><a href="/empresa/solicitar?id=<%=
+        cuenta.getId()%>">Solicitar desbloqueo</a><%}else{%>
+            <a href="/empresa/transaccion?id=<%=cuenta.getId()%>">Realizar transacción</a>
+            <a href="/empresa/cambio?id=<%=cuenta.getId()%>">Cambio de divisas</a>
+            <a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>">Bloquear</a>
+            <%}%></td>
     </tr>
     <%
         }
     %>
 </table>
+
+
+<br/>
+<h2>Operaciones:</h2>
+<form:form action="/empresa/filtrarop" method="post" modelAttribute="filtro">
+    <form:hidden path="clienteid" value="${cliente.id}"></form:hidden>
+    Filtrar por: <form:select path="cuentadestino">
+    <form:option value="" label=""></form:option>
+    <form:option value="YES" label="Origen operación"></form:option>
+</form:select>
+    Ordenar por: <form:select path="date">
+    <form:option value="" label=""></form:option>
+    <form:option value="YES" label="Fecha"></form:option>
+</form:select>
+    <form:button>Filtrar</form:button>
+</form:form>
+<br/>
+<table border="1">
+    <tr>
+        <td>Tipo</td>
+        <td>Fecha</td>
+        <td>Cantidad</td>
+        <td>Destino</td>
+    </tr>
+    <%
+        for(Transaccion transaccion : transacciones){
+    %>
+    <tr>
+        <td><%=transaccion.getTipoTransaccionByTipo().getTipo()%></td>
+        <td><%= transaccion.getFecha()%></td>
+        <td><%= transaccion.getCantidad()%></td>
+        <td><%= transaccion.getCuentaByCuentaDestinoId().getIban()%></td>
+    </tr>
+    <%
+
+        }
+    %>
+</table>
+
 
 <h2>Chats:</h2>
 <table border="1">
@@ -129,6 +180,24 @@
     </div>
 </form>
 
+Lista de clientes asociados a esta Empresa.
+</br>
+</br>
+
+
+<form:form  action="/empresa/filtradoSocios" method="post" modelAttribute="filtroApellido">
+
+    <form:hidden path="idEmpresa" value="${empresa.id}"></form:hidden>
+    <input type="hidden" name="volver" value="${cliente.id}"/>
+    Filtrar por Apellido: <form:select path="apellido">
+        <form:option value="NONE" label=""></form:option>
+        <form:options items="${lista}" ></form:options>
+
+    </form:select>
+    <form:button>Filtrar</form:button>
+</form:form>
+
+
 <table border="1">
     <tr>
         <th>NOMBRE</th>
@@ -137,9 +206,18 @@
         <th>DIRECCION</th>
         <th>TELEFONO</th>
         <th>EMPRESA</th>
+        <th>CUENTA</th>
     </tr>
     <%
         for(Cliente clienteSocio : listaSocios){
+            String str = "";
+           List<Cuenta> listaCuentas = clienteSocio.getCuentasById().stream().filter(cuenta -> cuenta.getEmpresaByEmpresaId() != null).collect(Collectors.toList());
+           Cuenta cuenta = listaCuentas.get(0);
+
+            if(!clienteSocio.equals(cliente) && cuenta.getEstadoCuentaByEstado().getId() == 1)
+            {
+                str = "Bloquear";
+            }
     %>
 
     <tr>
@@ -149,6 +227,7 @@
         <td><%=clienteSocio.getDireccion() %></td>
         <td><%=clienteSocio.getTelefono() %></td>
         <td><%=clienteSocio.getEmpresaByEmpresaId().getId() %></td>
+        <td><a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>"><%=str%></a></td>
     </tr>
     <%
         }

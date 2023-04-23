@@ -22,6 +22,7 @@
     Dirección: <form:input path="direccion"  size="100" maxlength="100" /><br/>
 
     Teléfono: <form:input type="telefono" path="telefono" maxlength="12" size="12" /><br/>
+    <input type="hidden" name="volver" value="${cliente.id}"/>
     <form:button>Guardar</form:button>
 </form:form>
 </body>
