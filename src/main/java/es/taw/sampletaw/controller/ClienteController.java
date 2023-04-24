@@ -150,7 +150,15 @@ public class ClienteController {
         this.cuentaRepository.save(dest);
         this.transaccionRepository.save(transaccion);
         this.transaccionRepository.save(transaccion1);
-        return "redirect:/cliente/?id=" + orig.getClienteByClienteId().getId();
+        if(orig.getClienteByClienteId().getEmpresaByEmpresaId() == null)
+        {
+            return "redirect:/cliente/?id=" + orig.getClienteByClienteId().getId();
+        }
+        else
+        {
+            return "redirect:/empresa/?id=" + orig.getClienteByClienteId().getId();
+        }
+
     }
 
     @PostMapping("/cambiarmoneda")
@@ -172,7 +180,14 @@ public class ClienteController {
         }
         this.cuentaRepository.save(cuenta);
         this.transaccionRepository.save(transaccion);
-        return "redirect:/cliente/?id=" + cuenta.getClienteByClienteId().getId();
+        if(cuenta.getClienteByClienteId().getEmpresaByEmpresaId() == null)
+        {
+            return "redirect:/cliente/?id=" + cuenta.getClienteByClienteId().getId();
+        }else
+        {
+            return "redirect:/empresa/?id=" + cuenta.getClienteByClienteId().getId();
+        }
+
     }
 
     @GetMapping("/solicitar")

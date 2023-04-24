@@ -31,6 +31,7 @@
 --%>
 <form:form method="get" action="/empresa/guardarClienteEditado" modelAttribute="cliente">
     Nombre: <form:input path="nombre" size="50"></form:input> <br/>
+    DNI: <form:input path="nif" size="10" maxlength="9" ></form:input> <br/>
     Apellido: <form:input path="apellido" size="50"></form:input> <br/>
     Email:<form:input path="email" size="50"></form:input>  <br/>
     Dirección: <form:input path="direccion" size="100"></form:input> <br/>
