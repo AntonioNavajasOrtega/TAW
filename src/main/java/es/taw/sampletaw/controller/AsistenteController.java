@@ -52,7 +52,7 @@ public class AsistenteController {
                 filtro = new FiltroAsistente();
             } else if (filtro.getNumeroMensajes().equals("asc") && filtro.getUsuario().isEmpty() && filtro.getFechaApertura().isEmpty()) {
                 conversaciones = this.conversacionRepository.ordenPorNumeroMensajesAsc();
-            } else if (filtro.getNumeroMensajes().equals("des") && filtro.getUsuario().isEmpty() && filtro.getFechaApertura().isEmpty()) {
+            } else if (filtro.getNumeroMensajes().equals("desc") && filtro.getUsuario().isEmpty() && filtro.getFechaApertura().isEmpty()) {
                 conversaciones = this.conversacionRepository.ordenPorNumeroMensajesDesc();
             } else if (filtro.getNumeroMensajes().isEmpty() && !filtro.getUsuario().isEmpty() && filtro.getFechaApertura().isEmpty()) {
                 conversaciones = this.conversacionRepository.buscaPorUsuario(filtro.getUsuario());

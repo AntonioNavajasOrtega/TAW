@@ -63,7 +63,7 @@
         <td><%=conversacion.getMensajesById().size()%></td>
         <td><%=conversacion.getFechaApertura()%></td>
         <td><%=conversacion.getFechaCierre() == null ? "" : conversacion.getFechaCierre()%></td>
-        <td><a href="/chat/asistente?idConversacion=<%=conversacion.getId()%>">Ir a la conversación</a></td>
+        <td><a href="/chat/listar?idChat=<%=conversacion.getId()%>&soyAsistente=<%=1%>">Ir a la conversación</a></td>
     </tr>
     <%
         }

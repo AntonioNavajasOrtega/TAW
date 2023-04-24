@@ -143,8 +143,8 @@
         <td><%=conversacion.getAsunto() == null ? "" : conversacion.getAsunto()%></td>
         <td><%=conversacion.getMensajesById().size()%></td>
         <td><%=conversacion.getFechaApertura()%></td>
-        <td><%=conversacion.getFechaCierre() == null ? "" : conversacion.getFechaCierre()%></td>
-        <td><a href="/chat/listar?idCliente=<%=cliente.getId()%>&idChat=<%=conversacion.getId()%>">Ir a la conversación</a></td>
+        <td><%=conversacion.getFechaCierre() == null ? "---" : conversacion.getFechaCierre()%></td>
+        <td><a href="/chat/listar?idCliente=<%=cliente.getId()%>&idChat=<%=conversacion.getId()%>&soyAsistente=<%=0%>">Ir a la conversación</a></td>
     </tr>
     <%
         }
