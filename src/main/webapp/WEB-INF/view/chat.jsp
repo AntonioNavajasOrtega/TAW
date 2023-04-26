@@ -14,36 +14,48 @@
 
 <%
     Conversacion chat = (Conversacion) request.getAttribute("chat");
+    Byte soyAsistente = (Byte) request.getAttribute("soyAsistente");
 %>
 
 <html>
 <head>
-    <title>Chateando con soporte</title>
+    <title>Chateando con <%=soyAsistente == 1 ? "Asistente" : "Cliente" %></title>
 </head>
 <body>
 
-    <h1>Esto es el chat de asistencia desde cliente</h1>
+    <h1>Chateando con <%=soyAsistente == 1 ? chat.getClienteByCliente().getNombre() : "Asistente" %></h1>
     <h3>Asunto: <%=chat.getAsunto()%></h3>
-    Conversando con Asistente: <br/>
-
     <%
         for(Mensaje m : chat.getMensajesById()){
     %>
     <table>
         <tr>
-            <td><%=m.getEmpleadoByEmisorEmpleado() != null ? "Asistente: ": m.getClienteByEmisorCliente().getNombre() + ":" + m.getContenido()%></td>
+            <td><%=m.getEmpleadoByEmisorEmpleado() != null ? "Asistente": m.getClienteByEmisorCliente().getNombre()%> <%=":\t " + m.getContenido()%></td>
         </tr>
     </table>
     <%
         }
     %>
 
-    <form method="post" action="/chat/clienteEnviaMensaje">
-        <input type="hidden" name="idCliente" value="<%=chat.getClienteByCliente().getId()%>">
+    <form method="post" action="/chat/enviarMensaje">
+        <input type="hidden" name="soyAsistente" value="<%=soyAsistente%>">
         <input type="hidden" name="idChat" value="<%=chat.getId()%>">
         <input type="text" name="mensaje"> <button>Enviar mensaje</button> <br/>
     </form>
+        <%
+            if(soyAsistente == 0){
+        %>
         <button onclick="location.href='/chat/cerrar?idConversacion=<%=chat.getId()%>'">Cerrar conversacion</button>
+        <a href="/cliente/?id=<%=chat.getClienteByCliente().getId()%>">Volver al perfil</a>
+        <br/>
+    <%
+            }else{
+        %>
+    <a href="/asistente/">Volver al perfil</a>
+
+    <%
+            }
+        %>
 
 </body>
 </html>
