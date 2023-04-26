@@ -1,3 +1,14 @@
+CREATE TABLE TipoClienteRelacionado(
+	cliente_id INT NOT NULL,
+    cuenta_id INT NOT NULL,    
+	tipo INT NOT NULL,
+    bloqueado BOOLEAN NOT NULL,
+	FOREIGN KEY (tipo) REFERENCES tipo_cliente(id),
+    FOREIGN KEY (cliente_id) REFERENCES cliente(id),
+    FOREIGN KEY (cuenta_id) REFERENCES cuenta(id),
+    PRIMARY KEY (cliente_id, cuenta_id)
+);
+
 CREATE TABLE estado_cuenta(
     id INT PRIMARY KEY,    
     tipo VARCHAR(15)
@@ -87,15 +98,6 @@ CREATE TABLE transaccion (
     FOREIGN KEY (cuenta_destino_id) REFERENCES cuenta(id)
 );
 
-CREATE TABLE TipoClienteRelacionado(
-	cliente_id INT NOT NULL,
-    cuenta_id INT NOT NULL,    
-	tipo INT NOT NULL,
-	FOREIGN KEY (tipo) REFERENCES tipo_cliente(id),
-    FOREIGN KEY (cliente_id) REFERENCES cliente(id),
-    FOREIGN KEY (cuenta_id) REFERENCES cuenta(id),
-    PRIMARY KEY (cliente_id, cuenta_id)
-);
 
 CREATE TABLE solicitud (
   id INT AUTO_INCREMENT PRIMARY KEY,

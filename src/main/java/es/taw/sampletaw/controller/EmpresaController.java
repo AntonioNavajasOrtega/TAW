@@ -80,6 +80,7 @@ public class EmpresaController {
 
 
 
+
         return "empresa";
     }
 
@@ -286,6 +287,7 @@ public class EmpresaController {
             tablaIntermedia.setTipoclienterelacionadoPK(pk);
             tablaIntermedia.setCuentaByCuentaId(c);
             tablaIntermedia.setClienteByClienteId(cliente);
+
             TipoCliente tipocliente = tipoClienteRepository.findTipo(tipoCliente);
             tablaIntermedia.setTipoClienteByTipo(tipocliente);
 

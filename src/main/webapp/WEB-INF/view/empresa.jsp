@@ -22,6 +22,7 @@
     List<String> lista = (List<String>) request.getAttribute("lista");
     Tipoclienterelacionado tablaIntermedia = (Tipoclienterelacionado) request.getAttribute("tablaIntermedia");
     int tipo = tablaIntermedia.getTipoClienteByTipo().getId();
+
 %>
 
 
@@ -77,7 +78,8 @@
         <td></td>
     </tr>
     <%
-       Cuenta cuenta = tablaIntermedia.getCuentaByCuentaId();
+        Cliente y = (Cliente) empresa.getClientesById().toArray()[0];
+       Cuenta cuenta = (Cuenta) y.getCuentasById().toArray()[0];
 
 
     %>
@@ -86,7 +88,7 @@
         <td><%=cuenta.getIban()%></td>
         <td><%= cuenta.getSaldo()%></td>
         <td><%= cuenta.getEstadoCuentaByEstado().getTipo()%></td>
-        <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa")){%><a href="/empresa/solicitar?id=<%=
+        <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa") ){%><a href="/empresa/solicitar?id=<%=
         cuenta.getId()%>&idcliente=<%=cliente.getId()%>">Solicitar desbloqueo</a>
             <%}else{%>
             <a href="/empresa/transaccion?id=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>">Realizar transacción</a>
