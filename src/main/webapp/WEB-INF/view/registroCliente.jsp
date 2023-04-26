@@ -25,6 +25,7 @@
     Dirección: <form:input path="direccion"  size="100" maxlength="100" />
     Teléfono: <form:input type="telefono" path="telefono" maxlength="12" size="12" /><br/>
     Contraseña: <form:input path="contrasena" size="50" maxlength="50" /><br/>
+
     <form:button>Guardar</form:button>
 
 </form:form>

@@ -104,6 +104,7 @@ public class ClienteController {
         model.addAttribute("cuentas",cuentas);
         transaccion.setCuentaByCuentaOrigenId(cuenta);
         model.addAttribute("trans",transaccion);
+        model.addAttribute("volver",idcuenta);
 
         if(transaccion.getTipoTransaccionByTipo().getTipo().equals("Pago")){
             return "transaccion";
@@ -129,7 +130,8 @@ public class ClienteController {
     }
 
     @PostMapping("/realizar")
-    public String doRealizar(@ModelAttribute("trans") Transaccion transaccion){
+    public String doRealizar(@ModelAttribute("trans") Transaccion transaccion
+    ,@RequestParam("volver") int volver){
         Timestamp date = new Timestamp(System.currentTimeMillis());
         Cuenta orig = this.cuentaRepository.getById(transaccion.getCuentaByCuentaOrigenId().getId());
         Cuenta dest = this.cuentaRepository.getById(transaccion.getCuentaByCuentaDestinoId().getId());
@@ -156,13 +158,14 @@ public class ClienteController {
         }
         else
         {
-            return "redirect:/empresa/?id=" + orig.getClienteByClienteId().getId();
+            return "redirect:/empresa/?id=" + volver;
         }
 
     }
 
     @PostMapping("/cambiarmoneda")
-    public String doCambiarMoneda(@ModelAttribute("trans") Transaccion transaccion){
+    public String doCambiarMoneda(@ModelAttribute("trans") Transaccion transaccion
+            ,@RequestParam("volver") int volver){
         Cuenta cuenta = this.cuentaRepository.getById(transaccion.getCuentaByCuentaOrigenId().getId());
 
 
@@ -185,7 +188,7 @@ public class ClienteController {
             return "redirect:/cliente/?id=" + cuenta.getClienteByClienteId().getId();
         }else
         {
-            return "redirect:/empresa/?id=" + cuenta.getClienteByClienteId().getId();
+            return "redirect:/empresa/?id=" + volver;
         }
 
     }

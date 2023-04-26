@@ -6,7 +6,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    Empresa empresa = (Empresa) request.getAttribute("empresaID");
+    Empresa empresa = (Empresa) request.getAttribute("empresa");
+    Cliente cliente = (Cliente) request.getAttribute("volver");
 %>
 
 <html>
@@ -29,19 +30,26 @@
 
 </form:form>
 --%>
-<form method="get" action="/empresa/guardarCliente2">
+<form:form modelAttribute="cliente" method="get" action="/empresa/guardarCliente2">
+    <form:hidden path="id"/>
+    Nombre: <form:input path="nombre" size="50" maxlength="50" /><br/>
+    Apellido: <form:input path="apellido" size="50" maxlength="50" /><br/>
+    Email: <form:input path="email" size="50"  maxlength="50"/> <br/>
+    DNI: <form:input path="nif" size="10" maxlength="9" /><br/>
+    Dirección: <form:input path="direccion"  size="100" maxlength="100" />
+    Teléfono: <form:input type="telefono" path="telefono" maxlength="12" size="12" /><br/>
+    Contraseña: <form:password path="contrasena" size="50" maxlength="50" /><br/>
+    <input name="empresa_id" type="hidden" value="${empresa.id}" />
+    <input type="hidden" name="volver" value="${volver.id}"/>
+    Rol : <select name="tipoCliente" >
+    <option value="Socio">Socio</option>
+    <option value="Autorizado">Autorizado</option>
+</select>
+    <br/>
+    <form:button>Guardar</form:button>
 
-    Nombre: <input name="nombre" size="50" maxlength="50"  /><br/>
-    DNI: <input name="nif" size="10" maxlength="9" /><br/>
-    Apellido: <input name="apellido" size="50" maxlength="50" /><br/>
-    Email: <input name="email" size="50"  maxlength="50"/> <br/>
-    Dirección: <input  name="direccion" size="100" maxlength="100" />
-    Teléfono: <input name="telefono" type="telefono" maxlength="12" size="12" /><br/>
-    Contraseña: <input name="contrasena" type="password" size="50" maxlength="50" /><br/>
-    <input name="empresa_id" type="hidden" value="<%=empresa.getId() %>" />
-    <input type="hidden" name="volver" value="${cliente.id}"/>
-    <button>Guardar</button>
-</form>
+</form:form>
+
 
 </body>
 </html>

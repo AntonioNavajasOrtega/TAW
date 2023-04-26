@@ -37,6 +37,7 @@
         <form:options items="${cuentas}" itemLabel="iban"></form:options>
     </form:select><br/>
         Cantidad:<form:input path="cantidad"></form:input><br/>
+        <input type="hidden" name="volver" value="${volver}">
         <form:button>Realizar</form:button>
     </form:form>
 </body>
