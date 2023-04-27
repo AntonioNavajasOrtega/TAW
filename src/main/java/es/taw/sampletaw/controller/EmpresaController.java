@@ -368,7 +368,7 @@ public class EmpresaController {
         List<Cliente> lista =  empresa.getClientesById().stream().collect(Collectors.toList());
         model.addAttribute("clientesSocios",lista);
         model.addAttribute("empresa",empresa);
-        transacciones = this.cuentaRepository.findEmpresaTrans(empresa);
+        
         model.addAttribute("transacciones",transacciones);
         model.addAttribute("filtro",filtro);
         model.addAttribute("cliente", cliente);
