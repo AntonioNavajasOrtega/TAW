@@ -16,7 +16,6 @@
 <%
     Cliente cliente = (Cliente) request.getAttribute("cliente");
     Empresa empresa = (Empresa) request.getAttribute("empresa");
-    List<Conversacion> conversaciones = (List<Conversacion>) request.getAttribute("conversaciones");
     List<Cliente> listaSocios = (List<Cliente>) request.getAttribute("clientesSocios");
     List<Transaccion> transacciones = (List<Transaccion>) request.getAttribute("transacciones");
     List<String> lista = (List<String>) request.getAttribute("lista");
@@ -150,60 +149,8 @@
     {
 %>
 
-<h2>Chats:</h2>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Cliente</th>
-        <th>Estado</th>
-        <th>Numero de mensajes</th>
-        <th>Fecha apertura</th>
-        <th>Fecha cierre</th>
-        <th>Ver conversacion</th>
-    </tr>
-    <%
-        for(Conversacion conversacion : conversaciones){
-    %>
-    <tr>
-        <td><%=conversacion.getId()%></td>
-        <td><%=conversacion.getClienteByCliente().getNombre()%></td>
-        <%
-            String estado = "Abierta";
-            if(conversacion.getAbierta()!=1){estado="Cerrada";}
-        %>
-        <td><%=estado%></td>
-        <td><%=conversacion.getMensajesById().size()%></td>
-        <td><%="no sé"%></td>
-        <td><%="no sé"%></td>
-        <td><a href="">Ir a la conversación</a></td>
-    </tr>
-    <%
-        }
-    %>
-</table>
-<br/>
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Crear nuevo chat</button>
+<%@ include file = "conversacionesClientes.jsp" %>
 
-
-<form action="/chat/nuevo" method="get">
-    <input type="hidden" name="idCliente" value="<%=cliente.getId()%>">
-    <div class="modal fade" id="myModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Introduce el asunto de la conversación</h4>
-                </div>
-                <div class="modal-body">
-                    <input type="text" name="asunto">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Crear</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
 
 Lista de clientes asociados a esta Empresa.
 </br>
