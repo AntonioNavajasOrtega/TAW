@@ -17,6 +17,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
+    Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
+    if (clienteSession == null) {
+        System.out.println("CLIENTE ES NULL ---------------------------------------------------------");
+        %> 
+
+<jsp:forward page="/"></jsp:forward>
+<%
+    }
+    System.out.println("CLIENTE NO ES NULL ---------------------------------------------------------");
     Cliente cliente = (Cliente) request.getAttribute("cliente");
     List<Conversacion> conversaciones = (List<Conversacion>) request.getAttribute("conversaciones");
     List<Transaccion> transacciones = (List<Transaccion>) request.getAttribute("transacciones");
@@ -32,7 +41,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<h1>Bienvenido <%= cliente.getNombre() %></h1>
+
+
+<h1>Bienvenido <%= cliente.getNombre() %></h1> <p><a href="/logout">Salir</a></p>
 <table border="1">
     <tr>
         <th>NOMBRE</th>

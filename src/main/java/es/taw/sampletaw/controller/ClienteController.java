@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -45,8 +46,8 @@ public class ClienteController {
     protected EstadoCuentaRepository estadoCuentaRepository;
 
     @GetMapping("/")
-    public String doListar(@RequestParam("id") Integer idcliente, Model model){
-        return this.procesarFiltrado(null,idcliente,model);
+    public String doListar(@RequestParam("id") Integer idcliente, Model model,HttpSession session){
+        return this.procesarFiltrado(null,idcliente,model,session);
     }
 
     @GetMapping("/nuevo")
@@ -217,34 +218,41 @@ public class ClienteController {
     }
 
     @PostMapping("/filtrarop")
-    public String doFiltrar(@ModelAttribute("filtro")FiltroOperaciones filtro,Model model){
+    public String doFiltrar(@ModelAttribute("filtro")FiltroOperaciones filtro, Model model,
+                            HttpSession session){
         Integer idcliente = filtro.getClienteid();
-        return procesarFiltrado(filtro,idcliente,model);
+        return procesarFiltrado(filtro,idcliente,model,session);
     }
 
-    protected String procesarFiltrado(FiltroOperaciones filtro, Integer idcliente,Model model) {
-        Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
-        List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
+    protected String procesarFiltrado(FiltroOperaciones filtro, Integer idcliente,Model model,HttpSession session) {
+        Cliente cliente = this.clienteRepository.getById(idcliente);
+        Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
         List<Transaccion> transacciones;
 
-        if(filtro == null || (filtro.getCuentadestino().isEmpty() && filtro.getDate().isEmpty())){
-            transacciones = this.cuentaRepository.findClienteTrans(cliente.getId());
-            filtro = new FiltroOperaciones();
+        String urlTo = "cliente";
+        if(clienteSession == null || cliente.getId() != clienteSession.getId()){
+            urlTo = "redirect:/logout";
         }else{
-            if(filtro.getCuentadestino().isEmpty()){
-                transacciones = this.cuentaRepository.findDateTrans(cliente.getId());
-            }else if(filtro.getDate().isEmpty()){
-                transacciones = this.cuentaRepository.findDestTrans(cliente.getId());
+            List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
+            if(filtro == null || (filtro.getCuentadestino().isEmpty() && filtro.getDate().isEmpty())){
+                transacciones = this.cuentaRepository.findClienteTrans(cliente.getId());
+                filtro = new FiltroOperaciones();
             }else{
-                transacciones = this.cuentaRepository.findDestDateTrans(cliente.getId());
+                if(filtro.getCuentadestino().isEmpty()){
+                    transacciones = this.cuentaRepository.findDateTrans(cliente.getId());
+                }else if(filtro.getDate().isEmpty()){
+                    transacciones = this.cuentaRepository.findDestTrans(cliente.getId());
+                }else{
+                    transacciones = this.cuentaRepository.findDestDateTrans(cliente.getId());
+                }
             }
+            model.addAttribute("transacciones",transacciones);
+            model.addAttribute("conversaciones", conversaciones);
         }
 
-        model.addAttribute("transacciones",transacciones);
         model.addAttribute("filtro",filtro);
         model.addAttribute("cliente", cliente);
-        model.addAttribute("conversaciones", conversaciones);
-        return "cliente";
+        return urlTo;
     }
 
 }

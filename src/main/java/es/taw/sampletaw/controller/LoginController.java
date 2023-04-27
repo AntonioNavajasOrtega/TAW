@@ -44,10 +44,9 @@ public class LoginController {
             }
 
         } else{
-            session.setAttribute("cliente",cliente);
+            session.setAttribute("clienteSession",cliente);
             if(cliente.getEmpresaByEmpresaId() == null)
             {
-
                 urlTo += "?id=" + cliente.getId();
             }
             else
