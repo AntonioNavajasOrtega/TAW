@@ -3,7 +3,8 @@
 <%@ page import="com.mysql.cj.xdevapi.Client" %>
 <%@ page import="es.taw.sampletaw.entity.*" %>
 <%@ page import="java.util.stream.Collectors" %>
-<%@ page import="java.util.*" %><%--
+<%@ page import="java.util.*" %>
+<%@ page import="es.taw.sampletaw.dao.TipoclienterelacionadoRepository" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -12,14 +13,16 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+
 <%
     Cliente cliente = (Cliente) request.getAttribute("cliente");
     Empresa empresa = (Empresa) request.getAttribute("empresa");
-    List<Conversacion> conversaciones = (List<Conversacion>) request.getAttribute("conversaciones");
     List<Cliente> listaSocios = (List<Cliente>) request.getAttribute("clientesSocios");
     List<Transaccion> transacciones = (List<Transaccion>) request.getAttribute("transacciones");
     List<String> lista = (List<String>) request.getAttribute("lista");
-
+    Tipoclienterelacionado tablaIntermedia = (Tipoclienterelacionado) request.getAttribute("tablaIntermedia");
+    int tipo = tablaIntermedia.getTipoClienteByTipo().getId();
+    List<Tipoclienterelacionado> all = (List<Tipoclienterelacionado>) request.getAttribute("all");
 %>
 
 
@@ -51,9 +54,17 @@
         <td><%=cliente.getEmpresaByEmpresaId().getId() %></td>
     </tr>
 </table>
+<%
+    if(tipo == 2)
+    {
+        %>
 <a href="/empresa/editarEmpresa?id=<%=cliente.getId() %>">Editar Empresa</a> </br>
 <a href="/empresa/editarCliente?id=<%=cliente.getId() %>">Editar Cliente</a> </br>
 <a href="/empresa/anadirCliente?id=<%=cliente.getId() %>">Añadir Cliente</a> </br>
+<%
+    }
+%>
+
 <br/>
 
 
@@ -67,23 +78,32 @@
         <td></td>
     </tr>
     <%
-        for (Cuenta cuenta: cliente.getCuentasById()) {
+
+       Cuenta cuenta = tablaIntermedia.getCuentaByCuentaId();
+
     %>
     <tr>
         <td><%= cuenta.getId()%></td>
         <td><%=cuenta.getIban()%></td>
         <td><%= cuenta.getSaldo()%></td>
         <td><%= cuenta.getEstadoCuentaByEstado().getTipo()%></td>
-        <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa")){%><a href="/empresa/solicitar?id=<%=
-        cuenta.getId()%>">Solicitar desbloqueo</a><%}else{%>
-            <a href="/empresa/transaccion?id=<%=cuenta.getId()%>">Realizar transacción</a>
-            <a href="/empresa/cambio?id=<%=cuenta.getId()%>">Cambio de divisas</a>
-            <a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>">Bloquear</a>
+        <td><%if(tablaIntermedia.getBloqueado() == 1 ){%><a href="/empresa/solicitar?id=<%=
+        cuenta.getId()%>&idcliente=<%=cliente.getId()%>">Solicitar desbloqueo</a>
+            <%}else{%>
+            <a href="/empresa/transaccion?id=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>">Realizar transacción</a>
+            <a href="/empresa/cambio?id=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>">Cambio de divisas</a>
+            <%
+            if(tipo == 2)
+            {
+            %>
+            <a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>&bloquear=<%=cliente.getId()%>">Bloquear</a>
+            <%
+                }
+            %>
+
             <%}%></td>
     </tr>
-    <%
-        }
-    %>
+
 </table>
 
 
@@ -124,61 +144,12 @@
     %>
 </table>
 
+<%
+    if(tipo == 2)
+    {
+%>
 
-<h2>Chats:</h2>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Cliente</th>
-        <th>Estado</th>
-        <th>Numero de mensajes</th>
-        <th>Fecha apertura</th>
-        <th>Fecha cierre</th>
-        <th>Ver conversacion</th>
-    </tr>
-    <%
-        for(Conversacion conversacion : conversaciones){
-    %>
-    <tr>
-        <td><%=conversacion.getId()%></td>
-        <td><%=conversacion.getClienteByCliente().getNombre()%></td>
-        <%
-            String estado = "Abierta";
-            if(conversacion.getAbierta()!=1){estado="Cerrada";}
-        %>
-        <td><%=estado%></td>
-        <td><%=conversacion.getMensajesById().size()%></td>
-        <td><%="no sé"%></td>
-        <td><%="no sé"%></td>
-        <td><a href="">Ir a la conversación</a></td>
-    </tr>
-    <%
-        }
-    %>
-</table>
-<br/>
-<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal">Crear nuevo chat</button>
-
-
-<form action="/chat/nuevo" method="get">
-    <input type="hidden" name="idCliente" value="<%=cliente.getId()%>">
-    <div class="modal fade" id="myModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Introduce el asunto de la conversación</h4>
-                </div>
-                <div class="modal-body">
-                    <input type="text" name="asunto">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Crear</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+<%@ include file = "conversacionesClientes.jsp" %>
 
 Lista de clientes asociados a esta Empresa.
 </br>
@@ -211,10 +182,20 @@ Lista de clientes asociados a esta Empresa.
     <%
         for(Cliente clienteSocio : listaSocios){
             String str = "";
-           List<Cuenta> listaCuentas = clienteSocio.getCuentasById().stream().filter(cuenta -> cuenta.getEmpresaByEmpresaId() != null).collect(Collectors.toList());
-           Cuenta cuenta = listaCuentas.get(0);
 
-            if(!clienteSocio.equals(cliente) && cuenta.getEstadoCuentaByEstado().getId() == 1)
+            cuenta = tablaIntermedia.getCuentaByCuentaId();
+
+            Tipoclienterelacionado aux = tablaIntermedia;
+
+            for(Tipoclienterelacionado t : all)
+            {
+                if(t.getClienteByClienteId() == clienteSocio)
+                {
+                    aux = t;
+                }
+            }
+
+            if(aux.getBloqueado() == 0 && clienteSocio != cliente)
             {
                 str = "Bloquear";
             }
@@ -227,12 +208,17 @@ Lista de clientes asociados a esta Empresa.
         <td><%=clienteSocio.getDireccion() %></td>
         <td><%=clienteSocio.getTelefono() %></td>
         <td><%=clienteSocio.getEmpresaByEmpresaId().getId() %></td>
-        <td><a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>"><%=str%></a></td>
+        <td><a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>&bloquear=<%=clienteSocio.getId()%>"><%=str%></a></td>
     </tr>
     <%
         }
     %>
 </table>
+
+<%
+    }
+%>
+
 
 </body>
 </html>

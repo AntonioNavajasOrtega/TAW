@@ -34,20 +34,18 @@ public class ChatController {
     private MensajeRepository mensajeRepository;
 
     @GetMapping("/listar")
-    public String doListarChat(@RequestParam("idCliente") Integer idCliente, @RequestParam("idChat") Integer idChat, Model model){
+    public String doListarChat(@RequestParam("idChat") Integer idChat,
+                               @RequestParam("soyAsistente") Byte soyAsistente , Model model){
         Conversacion conversacion = this.conversacionRepository.findById(idChat).orElse(null);
         model.addAttribute("chat", conversacion);
-
-        return "chatCliente";
+        model.addAttribute("soyAsistente", soyAsistente);
+        return "chat";
     }
     @GetMapping("/nuevo")
     public String crearNuevoChat(@RequestParam("idCliente") Integer idCliente,@RequestParam("asunto") String asunto, Model model){
         Conversacion chat = new Conversacion();
         Cliente cliente = this.clienteRepository.findById(idCliente).orElse(null);
-
-        TipoEmpleado tipoAsistente = this.tipoEmpleadoRepository.findTipoEmpleado("Asistente");
-        Empleado asistente = this.empleadoRepository.findById(1).orElse(null);
-        asistente.setTipoEmpleadoByTipo(tipoAsistente);
+        Empleado asistente = this.empleadoRepository.findById(2).orElse(null);
         chat.setAbierta((byte)1);
         chat.setClienteByCliente(cliente);
         chat.setEmpleadoByEmpleado(asistente);
@@ -57,7 +55,8 @@ public class ChatController {
 
         this.conversacionRepository.save(chat);
         model.addAttribute("chat", chat);
-        return "redirect:/chat/listar?idCliente=" + cliente.getId() + "&idChat=" + chat.getId();
+        model.addAttribute("soyAsistente", 0);
+        return "redirect:/chat/listar?idChat=" + chat.getId() + "&soyAsistente=" + 0;
     }
 
     @GetMapping("/cerrar")
@@ -70,44 +69,36 @@ public class ChatController {
         this.conversacionRepository.save(conv);
         this.clienteRepository.save(conv.getClienteByCliente());
 
-        return "redirect:/cliente/?id="+conv.getClienteByCliente().getId();
+        if(conv.getClienteByCliente().getEmpresaByEmpresaId() == null)
+        {
+            return "redirect:/cliente/?id="+conv.getClienteByCliente().getId();
+        }
+        else
+        {
+            return "redirect:/empresa/?id="+conv.getClienteByCliente().getId();
+        }
+
     }
 
-    @GetMapping("/asistente")
-    public String doConectarChatAsistente(@RequestParam("idConversacion") Integer idConversacion , Model model, HttpSession session){
-        Conversacion conv = this.conversacionRepository.findById(idConversacion).orElse(null);
-        model.addAttribute("conversacion", conv);
-
-        return "chatAsistente";
-    }
-
-    @PostMapping("/clienteEnviaMensaje")
-    public String enviarMensaje(@RequestParam("idCliente") Integer idCliente, @RequestParam("idChat") Integer idChat, @RequestParam("mensaje") String textoMensaje) {
-        Cliente cliente = this.clienteRepository.findById(idCliente).orElse(null);
+    @PostMapping("/enviarMensaje")
+    public String enviarMensaje(@RequestParam("idChat") Integer idChat, @RequestParam("mensaje") String textoMensaje,
+                                @RequestParam("soyAsistente") Byte soyAsistente) {
         Conversacion conversacion = this.conversacionRepository.findById(idChat).orElse(null);
         Mensaje mensaje = new Mensaje();
         mensaje.setContenido(textoMensaje);
         Timestamp fechaMsg = new Timestamp(System.currentTimeMillis());
         mensaje.setFecha(fechaMsg);
-        mensaje.setClienteByEmisorCliente(cliente);
-        mensaje.setEmpleadoByReceptorEmpleado(conversacion.getEmpleadoByEmpleado());
+        if(soyAsistente == 0){
+            mensaje.setClienteByEmisorCliente(conversacion.getClienteByCliente());
+            mensaje.setEmpleadoByReceptorEmpleado(conversacion.getEmpleadoByEmpleado());
+        }else{
+            mensaje.setClienteByReceptorCliente(conversacion.getClienteByCliente());
+            mensaje.setEmpleadoByEmisorEmpleado(conversacion.getEmpleadoByEmpleado());
+        }
         mensaje.setConversacionByConversacion(conversacion);
         mensajeRepository.save(mensaje);
-        return "redirect:/chat/listar?idCliente=" + cliente.getId() + "&idChat=" + idChat;
-    }
 
-    @PostMapping("/asistenteEnviaMensaje")
-    public String AsistenteEnviarMensaje(@RequestParam("idCliente") Integer idCliente, @RequestParam("idChat") Integer idChat, @RequestParam("mensaje") String textoMensaje) {
-        Conversacion conversacion = this.conversacionRepository.findById(idChat).orElse(null);
-        Mensaje mensaje = new Mensaje();
-        mensaje.setContenido(textoMensaje);
-        Timestamp fechaMsg = new Timestamp(System.currentTimeMillis());
-        mensaje.setClienteByReceptorCliente(conversacion.getClienteByCliente());
-        mensaje.setEmpleadoByEmisorEmpleado(conversacion.getEmpleadoByEmpleado());
-        mensaje.setFecha(fechaMsg);
-        mensaje.setConversacionByConversacion(conversacion);
-        mensajeRepository.save(mensaje);
-        return "redirect:/chat/asistente?idConversacion=" + idChat;
+        return "redirect:/chat/listar?idChat=" + idChat + "&soyAsistente=" + (soyAsistente == 0 ? 0 : 1) ;
     }
 
 

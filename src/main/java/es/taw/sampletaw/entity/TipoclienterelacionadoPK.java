@@ -11,7 +11,7 @@ public class TipoclienterelacionadoPK implements Serializable {
     private int clienteId;
 
     @Basic(optional = false)
-    @Column(name = "cuenta_id", nullable = false)    
+    @Column(name = "cuenta_id", nullable = false)
     private int cuentaId;
 
     public TipoclienterelacionadoPK() {

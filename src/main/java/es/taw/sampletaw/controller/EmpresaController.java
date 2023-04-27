@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -47,6 +48,11 @@ public class EmpresaController {
     @Autowired
     protected EstadoCuentaRepository estadoCuentaRepository;
 
+    @Autowired
+    protected  TipoclienterelacionadoRepository tipoclienterelacionadoRepository;
+
+    @Autowired
+    protected  TipoClienteRepository tipoClienteRepository;
 
 
     @GetMapping("/")
@@ -69,6 +75,12 @@ public class EmpresaController {
         transacciones = this.cuentaRepository.findEmpresaTrans(empresa);
         model.addAttribute("transacciones",transacciones);
         model.addAttribute("lista",clienteRepository.clientesSocios(empresa));
+        Tipoclienterelacionado x = tipoclienterelacionadoRepository.findByCliente(cliente.getId());
+        model.addAttribute("tablaIntermedia",x);
+        model.addAttribute("all",tipoclienterelacionadoRepository.findAll());
+
+
+
         return "empresa";
     }
 
@@ -84,8 +96,9 @@ public class EmpresaController {
     @GetMapping("/anadirCliente")
     public String doAnadirCliente(@RequestParam("id") Integer idcliente,Model modelo){
         Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
-        modelo.addAttribute("empresaID",cliente.getEmpresaByEmpresaId());
-        modelo.addAttribute("cliente",cliente);
+        modelo.addAttribute("empresa",cliente.getEmpresaByEmpresaId());
+        modelo.addAttribute("cliente",new Cliente());
+        modelo.addAttribute("volver",cliente);
         return "anadirCliente";
     }
 
@@ -138,22 +151,24 @@ public class EmpresaController {
     }
 
     @GetMapping("/guardarCliente")
-    public String doGuardarCliente(@ModelAttribute("cliente") Cliente cliente,@RequestParam("empresa_id") int idempresa)
+    public String doGuardarCliente(@ModelAttribute("cliente") Cliente cliente,@RequestParam("empresa_id") int idempresa
+    ,@RequestParam("tipoCliente") String str)
     {
         Empresa empresa = this.empresaRepository.findById(idempresa).get();
         cliente.setEmpresaByEmpresaId(empresa);
-        crearCuenta(cliente);
+        asociarCuenta(cliente,str);
         this.clienteRepository.save(cliente);
         return "redirect:/empresa/?id=" + cliente.getId();
     }
 
     @GetMapping("/guardarCliente2")
     public String doGuardarCliente2(@ModelAttribute("cliente") Cliente cliente,@RequestParam("empresa_id") int idempresa
-    ,@RequestParam("volver") int volver)
+    ,@RequestParam("volver") int volver,@RequestParam("tipoCliente") String str)
     {
         Empresa empresa = this.empresaRepository.findById(idempresa).get();
         cliente.setEmpresaByEmpresaId(empresa);
-        crearCuenta(cliente);
+
+        asociarCuenta(cliente,str);
         this.clienteRepository.save(cliente);
         return "redirect:/empresa/?id=" + volver;
     }
@@ -195,14 +210,18 @@ public class EmpresaController {
         FiltroOperaciones filtro = new FiltroOperaciones();
         model.addAttribute("filtro",filtro);
         model.addAttribute("lista",clienteRepository.clientesSocios(empresa));
+        Tipoclienterelacionado x = tipoclienterelacionadoRepository.findByCliente(cliente.getId());
+        model.addAttribute("tablaIntermedia",x);
+        model.addAttribute("all",tipoclienterelacionadoRepository.findAll());
 
         return "empresa";
     }
 
     @GetMapping("/solicitar")
-    public String doSolicitar(@RequestParam("id") Integer idcuenta,Model model){
+    public String doSolicitar(@RequestParam("id") Integer idcuenta,Model model
+            , @RequestParam("idcliente") Integer id){
         Cuenta cuenta = this.cuentaRepository.findById(idcuenta).orElse(null);
-        Cliente cliente = cuenta.getClienteByClienteId();
+        Cliente cliente = clienteRepository.findById(id).orElse(null);
         Empleado empleado = cuenta.getEmpleadoByEmpleadoId();
         TipoSolicitud tipo = this.tipoSolicitudRepository.findActivar();
 
@@ -225,60 +244,85 @@ public class EmpresaController {
         return "redirect:/empresa/?id=" + cliente.getId();
     }
 
-    private void crearCuenta(Cliente cliente)
+    private void asociarCuenta(Cliente cliente, String tipoCliente)
     {
-        if(cliente.getCuentasById() == null){
-            this.clienteRepository.save(cliente);
-            Solicitud solicitud = new Solicitud();
-            solicitud.setClienteByClienteId(cliente);
-            solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
-            Empleado gestor = this.empleadoRepository.findGestor();
-            solicitud.setEmpleadoByEmpleadoId(gestor);
-            TipoSolicitud tipo = this.tipoSolicitudRepository.findSolicitarCuent();
-            solicitud.setTipoSolicitudByTipo(tipo);
-            Cuenta c = new Cuenta();
-            c.setEmpresaByEmpresaId(cliente.getEmpresaByEmpresaId());
-            c.setIban("00000000");
-            c.setSaldo(BigDecimal.valueOf(0));
-            c.setClienteByClienteId(cliente);
-            EstadoCuenta estado = this.estadoCuentaRepository.findBloq();
-            c.setEstadoCuentaByEstado(estado);
-            c.setSwift("342");
-            c.setPais("-----");
-            c.setEmpleadoByEmpleadoId(gestor);
-            this.cuentaRepository.save(c);
-            solicitud.setCuentaByCuentaId(c);
+        Empresa empresa = cliente.getEmpresaByEmpresaId();
 
-            List<Solicitud> sol = new ArrayList<Solicitud>();
-            sol.add(solicitud);
-            cliente.setSolicitudsById(sol);
-            this.solicitudRepository.save(solicitud);
-        }
+        this.clienteRepository.save(cliente);
+
+
+        if(cuentaRepository.findByEmpresa(empresa) == null)
+            {
+                Solicitud solicitud = new Solicitud();
+                solicitud.setClienteByClienteId(cliente);
+                solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
+                Empleado gestor = this.empleadoRepository.findGestor();
+                solicitud.setEmpleadoByEmpleadoId(gestor);
+                TipoSolicitud tipo = this.tipoSolicitudRepository.findSolicitarCuent();
+                solicitud.setTipoSolicitudByTipo(tipo);
+                Cuenta c = new Cuenta();
+                c.setEmpresaByEmpresaId(cliente.getEmpresaByEmpresaId());
+                c.setIban("00000000");
+                c.setSaldo(BigDecimal.valueOf(0));
+                c.setClienteByClienteId(cliente);
+                EstadoCuenta estado = this.estadoCuentaRepository.findAct();
+                c.setEstadoCuentaByEstado(estado);
+                c.setSwift("342");
+                c.setPais("-----");
+                c.setEmpleadoByEmpleadoId(gestor);
+                this.cuentaRepository.save(c);
+                solicitud.setCuentaByCuentaId(c);
+
+                List<Solicitud> sol = new ArrayList<Solicitud>();
+                sol.add(solicitud);
+                cliente.setSolicitudsById(sol);
+                this.solicitudRepository.save(solicitud);
+            }
+
+            Cuenta c = cuentaRepository.findByEmpresa(empresa);
+
+            Tipoclienterelacionado tablaIntermedia = new Tipoclienterelacionado();
+
+            TipoclienterelacionadoPK pk = new TipoclienterelacionadoPK();
+            pk.setCuentaId(c.getId());
+            pk.setClienteId(cliente.getId());
+
+            tablaIntermedia.setTipoclienterelacionadoPK(pk);
+            tablaIntermedia.setCuentaByCuentaId(c);
+            tablaIntermedia.setClienteByClienteId(cliente);
+            tablaIntermedia.setBloqueado((byte) 1);
+
+            TipoCliente tipocliente = tipoClienteRepository.findTipo(tipoCliente);
+            tablaIntermedia.setTipoClienteByTipo(tipocliente);
+
+            tipoclienterelacionadoRepository.save(tablaIntermedia);
+
     }
 
     @GetMapping("/transaccion")
-    public String doTransaccion(@RequestParam("id") Integer idcuenta, Model model){
+    public String doTransaccion(@RequestParam("id") Integer idcuenta,@RequestParam("volver") int volver, Model model){
         Transaccion transaccion = new Transaccion();
         TipoTransaccion tipo = this.tipoTransaccionRepository.findTrans();
         transaccion.setTipoTransaccionByTipo(tipo);
-        return this.pasarAOperacion(idcuenta,model,transaccion);
+        return this.pasarAOperacion(idcuenta,model,transaccion,volver);
     }
 
     @GetMapping("/cambio")
-    public String doCambio(@RequestParam("id") Integer idcuenta, Model model){
+    public String doCambio(@RequestParam("id") Integer idcuenta, Model model,@RequestParam("volver") int volver){
         Transaccion transaccion = new Transaccion();
         TipoTransaccion tipo = this.tipoTransaccionRepository.findCambio();
         transaccion.setTipoTransaccionByTipo(tipo);
-        return this.pasarAOperacion(idcuenta,model,transaccion);
+        return this.pasarAOperacion(idcuenta,model,transaccion,volver);
     }
 
-    protected String pasarAOperacion(Integer idcuenta,Model model, Transaccion transaccion){
+    protected String pasarAOperacion(Integer idcuenta,Model model, Transaccion transaccion, int volver){
         Cuenta cuenta = this.cuentaRepository.findById(idcuenta).orElse(null);
         model.addAttribute("cuenta",cuenta);
         List<Cuenta> cuentas = this.cuentaRepository.findCuentas(cuenta.getId());
         model.addAttribute("cuentas",cuentas);
         transaccion.setCuentaByCuentaOrigenId(cuenta);
         model.addAttribute("trans",transaccion);
+        model.addAttribute("volver",volver);
 
         if(transaccion.getTipoTransaccionByTipo().getTipo().equals("Pago")){
             return "transaccion";
@@ -288,11 +332,11 @@ public class EmpresaController {
     }
 
     @GetMapping("/bloquear")
-    public String bloquear(@RequestParam("idcuenta") Integer idcuenta, Model model, @RequestParam("volver") int volver){
-        Cuenta cuenta = cuentaRepository.getById(idcuenta);
-        EstadoCuenta estado = this.estadoCuentaRepository.findBloq();
-        cuenta.setEstadoCuentaByEstado(estado);
-        cuentaRepository.save(cuenta);
+    public String bloquear(@RequestParam("idcuenta") Integer idcuenta, Model model, @RequestParam("volver") int volver
+    ,@RequestParam("bloquear") int bloquear){
+        Tipoclienterelacionado tipoclienterelacionado = tipoclienterelacionadoRepository.findByCliente(bloquear);
+        tipoclienterelacionado.setBloqueado((byte) 1);
+        tipoclienterelacionadoRepository.save(tipoclienterelacionado);
         return "redirect:/empresa/?id=" + volver ;
     }
 
@@ -324,7 +368,7 @@ public class EmpresaController {
         List<Cliente> lista =  empresa.getClientesById().stream().collect(Collectors.toList());
         model.addAttribute("clientesSocios",lista);
         model.addAttribute("empresa",empresa);
-        transacciones = this.cuentaRepository.findEmpresaTrans(empresa);
+        
         model.addAttribute("transacciones",transacciones);
         model.addAttribute("filtro",filtro);
         model.addAttribute("cliente", cliente);
@@ -332,6 +376,9 @@ public class EmpresaController {
         FiltroApellido filtroApellido = new FiltroApellido();
         model.addAttribute("filtroApellido",filtroApellido);
         model.addAttribute("lista",clienteRepository.clientesSocios(empresa));
+        Tipoclienterelacionado x = tipoclienterelacionadoRepository.findByCliente(cliente.getId());
+        model.addAttribute("tablaIntermedia",x);
+        model.addAttribute("all",tipoclienterelacionadoRepository.findAll());
 
 
         return "empresa";

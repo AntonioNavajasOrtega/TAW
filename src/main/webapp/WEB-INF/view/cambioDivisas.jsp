@@ -40,6 +40,7 @@
         <form:option value="eur" label="EUR"></form:option>
         <form:option value="usd" label="USD"></form:option>
         </form:select><br/>
+        <input type="hidden" name="volver" value="${volver}">
         <form:button>Realizar</form:button>
     </form:form>
 </body>
