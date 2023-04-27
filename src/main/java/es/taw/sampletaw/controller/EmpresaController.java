@@ -77,7 +77,7 @@ public class EmpresaController {
         model.addAttribute("lista",clienteRepository.clientesSocios(empresa));
         Tipoclienterelacionado x = tipoclienterelacionadoRepository.findByCliente(cliente.getId());
         model.addAttribute("tablaIntermedia",x);
-
+        model.addAttribute("all",tipoclienterelacionadoRepository.findAll());
 
 
 
@@ -212,6 +212,7 @@ public class EmpresaController {
         model.addAttribute("lista",clienteRepository.clientesSocios(empresa));
         Tipoclienterelacionado x = tipoclienterelacionadoRepository.findByCliente(cliente.getId());
         model.addAttribute("tablaIntermedia",x);
+        model.addAttribute("all",tipoclienterelacionadoRepository.findAll());
 
         return "empresa";
     }
@@ -377,6 +378,7 @@ public class EmpresaController {
         model.addAttribute("lista",clienteRepository.clientesSocios(empresa));
         Tipoclienterelacionado x = tipoclienterelacionadoRepository.findByCliente(cliente.getId());
         model.addAttribute("tablaIntermedia",x);
+        model.addAttribute("all",tipoclienterelacionadoRepository.findAll());
 
 
         return "empresa";

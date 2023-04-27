@@ -3,7 +3,8 @@
 <%@ page import="com.mysql.cj.xdevapi.Client" %>
 <%@ page import="es.taw.sampletaw.entity.*" %>
 <%@ page import="java.util.stream.Collectors" %>
-<%@ page import="java.util.*" %><%--
+<%@ page import="java.util.*" %>
+<%@ page import="es.taw.sampletaw.dao.TipoclienterelacionadoRepository" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -21,7 +22,7 @@
     List<String> lista = (List<String>) request.getAttribute("lista");
     Tipoclienterelacionado tablaIntermedia = (Tipoclienterelacionado) request.getAttribute("tablaIntermedia");
     int tipo = tablaIntermedia.getTipoClienteByTipo().getId();
-
+    List<Tipoclienterelacionado> all = (List<Tipoclienterelacionado>) request.getAttribute("all");
 %>
 
 
@@ -184,7 +185,17 @@ Lista de clientes asociados a esta Empresa.
 
             cuenta = tablaIntermedia.getCuentaByCuentaId();
 
-            if(tablaIntermedia.getBloqueado() == 0 && clienteSocio != cliente)
+            Tipoclienterelacionado aux = tablaIntermedia;
+
+            for(Tipoclienterelacionado t : all)
+            {
+                if(t.getClienteByClienteId() == clienteSocio)
+                {
+                    aux = t;
+                }
+            }
+
+            if(aux.getBloqueado() == 0 && clienteSocio != cliente)
             {
                 str = "Bloquear";
             }
