@@ -18,6 +18,10 @@ public class Tipoclienterelacionado {
     @JoinColumn(name = "tipo", referencedColumnName = "id", nullable = false)
     private TipoCliente tipoClienteByTipo;
 
+    @Basic
+    @Column(name = "bloqueado", nullable = false)
+    private Byte bloqueado;
+
     public TipoclienterelacionadoPK getTipoclienterelacionadoPK() {
         return tipoclienterelacionadoPK;
     }
@@ -45,6 +49,14 @@ public class Tipoclienterelacionado {
         int result = tipoclienterelacionadoPK.getCuentaId();
         result = 31 * result + tipoclienterelacionadoPK.getCuentaId();;
         return result;
+    }
+
+    public Byte getBloqueado() {
+        return bloqueado;
+    }
+
+    public void setBloqueado(Byte bloqueado) {
+        this.bloqueado = bloqueado;
     }
 
     public Cliente getClienteByClienteId() {
