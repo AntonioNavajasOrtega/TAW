@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -56,9 +57,15 @@ public class EmpresaController {
 
 
     @GetMapping("/")
-    public String doListar(@RequestParam("id") Integer idcliente, Model model){
+    public String doListar(@RequestParam("id") Integer idcliente, Model model, HttpSession session){
 
         Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
+        Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
+        if(clienteSession == null || cliente.getId() != clienteSession.getId()) {
+            return  "redirect:/logout";
+        }
+
+
         List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
         model.addAttribute("cliente", cliente);
         model.addAttribute("conversaciones", conversaciones);
@@ -181,7 +188,7 @@ public class EmpresaController {
     }
 
     @PostMapping("/filtradoSocios")
-    public String filtrar(@ModelAttribute("filtroApellido") FiltroApellido filtroApellido,Model model,@RequestParam("volver")int volver)
+    public String filtrar(@ModelAttribute("filtroApellido") FiltroApellido filtroApellido,Model model,@RequestParam("volver")int volver,HttpSession session)
     {
         List<Cliente> lista;
         Empresa empresa = empresaRepository.findById(filtroApellido.getIdEmpresa()).orElse(null);
@@ -213,6 +220,11 @@ public class EmpresaController {
         Tipoclienterelacionado x = tipoclienterelacionadoRepository.findByCliente(cliente.getId());
         model.addAttribute("tablaIntermedia",x);
         model.addAttribute("all",tipoclienterelacionadoRepository.findAll());
+
+        Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
+        if(clienteSession == null || cliente.getId() != clienteSession.getId()) {
+            return  "redirect:/logout";
+        }
 
         return "empresa";
     }
@@ -341,12 +353,13 @@ public class EmpresaController {
     }
 
     @PostMapping("/filtrarop")
-    public String doFiltrar(@ModelAttribute("filtro")FiltroOperaciones filtro,Model model){
+    public String doFiltrar(@ModelAttribute("filtro")FiltroOperaciones filtro,Model model,HttpSession session){
         Integer idcliente = filtro.getClienteid();
-        return procesarFiltrado(filtro,idcliente,model);
+
+        return procesarFiltrado(filtro,idcliente,model,session);
     }
 
-    protected String procesarFiltrado(FiltroOperaciones filtro, Integer idcliente,Model model) {
+    protected String procesarFiltrado(FiltroOperaciones filtro, Integer idcliente,Model model,HttpSession session) {
         Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
         List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
         List<Transaccion> transacciones;
@@ -368,7 +381,7 @@ public class EmpresaController {
         List<Cliente> lista =  empresa.getClientesById().stream().collect(Collectors.toList());
         model.addAttribute("clientesSocios",lista);
         model.addAttribute("empresa",empresa);
-        
+
         model.addAttribute("transacciones",transacciones);
         model.addAttribute("filtro",filtro);
         model.addAttribute("cliente", cliente);
@@ -380,6 +393,11 @@ public class EmpresaController {
         model.addAttribute("tablaIntermedia",x);
         model.addAttribute("all",tipoclienterelacionadoRepository.findAll());
 
+
+        Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
+        if(clienteSession == null || cliente.getId() != clienteSession.getId()) {
+            return  "redirect:/logout";
+        }
 
         return "empresa";
     }
