@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -179,7 +180,7 @@ public class ClienteController {
         if(transaccion.getMoneda().equals("usd")){
             cuenta.setSaldo(transaccion.getCantidad().multiply(BigDecimal.valueOf(1.09708)));
         }else if(transaccion.getMoneda().equals("eur")){
-            cuenta.setSaldo(transaccion.getCantidad().divide(BigDecimal.valueOf(1.09708)));
+            cuenta.setSaldo(transaccion.getCantidad().divide(BigDecimal.valueOf(1.09708), RoundingMode.HALF_EVEN));
         }
         this.cuentaRepository.save(cuenta);
         this.transaccionRepository.save(transaccion);

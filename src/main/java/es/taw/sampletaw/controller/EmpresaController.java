@@ -210,6 +210,8 @@ public class EmpresaController {
         FiltroOperaciones filtro = new FiltroOperaciones();
         model.addAttribute("filtro",filtro);
         model.addAttribute("lista",clienteRepository.clientesSocios(empresa));
+        Tipoclienterelacionado x = tipoclienterelacionadoRepository.findByCliente(cliente.getId());
+        model.addAttribute("tablaIntermedia",x);
 
         return "empresa";
     }
@@ -262,7 +264,7 @@ public class EmpresaController {
                 c.setIban("00000000");
                 c.setSaldo(BigDecimal.valueOf(0));
                 c.setClienteByClienteId(cliente);
-                EstadoCuenta estado = this.estadoCuentaRepository.findBloq();
+                EstadoCuenta estado = this.estadoCuentaRepository.findAct();
                 c.setEstadoCuentaByEstado(estado);
                 c.setSwift("342");
                 c.setPais("-----");
@@ -287,14 +289,12 @@ public class EmpresaController {
             tablaIntermedia.setTipoclienterelacionadoPK(pk);
             tablaIntermedia.setCuentaByCuentaId(c);
             tablaIntermedia.setClienteByClienteId(cliente);
+            tablaIntermedia.setBloqueado((byte) 1);
 
             TipoCliente tipocliente = tipoClienteRepository.findTipo(tipoCliente);
             tablaIntermedia.setTipoClienteByTipo(tipocliente);
 
-
-
             tipoclienterelacionadoRepository.save(tablaIntermedia);
-
 
     }
 
@@ -332,11 +332,10 @@ public class EmpresaController {
 
     @GetMapping("/bloquear")
     public String bloquear(@RequestParam("idcuenta") Integer idcuenta, Model model, @RequestParam("volver") int volver
-    ){
-        Cuenta cuenta = cuentaRepository.getById(idcuenta);
-        EstadoCuenta estado = this.estadoCuentaRepository.findBloq();
-        cuenta.setEstadoCuentaByEstado(estado);
-        cuentaRepository.save(cuenta);
+    ,@RequestParam("bloquear") int bloquear){
+        Tipoclienterelacionado tipoclienterelacionado = tipoclienterelacionadoRepository.findByCliente(bloquear);
+        tipoclienterelacionado.setBloqueado((byte) 1);
+        tipoclienterelacionadoRepository.save(tipoclienterelacionado);
         return "redirect:/empresa/?id=" + volver ;
     }
 
@@ -376,6 +375,8 @@ public class EmpresaController {
         FiltroApellido filtroApellido = new FiltroApellido();
         model.addAttribute("filtroApellido",filtroApellido);
         model.addAttribute("lista",clienteRepository.clientesSocios(empresa));
+        Tipoclienterelacionado x = tipoclienterelacionadoRepository.findByCliente(cliente.getId());
+        model.addAttribute("tablaIntermedia",x);
 
 
         return "empresa";

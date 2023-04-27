@@ -78,9 +78,8 @@
         <td></td>
     </tr>
     <%
-        Cliente y = (Cliente) empresa.getClientesById().toArray()[0];
-       Cuenta cuenta = (Cuenta) y.getCuentasById().toArray()[0];
 
+       Cuenta cuenta = tablaIntermedia.getCuentaByCuentaId();
 
     %>
     <tr>
@@ -88,7 +87,7 @@
         <td><%=cuenta.getIban()%></td>
         <td><%= cuenta.getSaldo()%></td>
         <td><%= cuenta.getEstadoCuentaByEstado().getTipo()%></td>
-        <td><%if(!cuenta.getEstadoCuentaByEstado().getTipo().equals("Activa") ){%><a href="/empresa/solicitar?id=<%=
+        <td><%if(tablaIntermedia.getBloqueado() == 1 ){%><a href="/empresa/solicitar?id=<%=
         cuenta.getId()%>&idcliente=<%=cliente.getId()%>">Solicitar desbloqueo</a>
             <%}else{%>
             <a href="/empresa/transaccion?id=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>">Realizar transacción</a>
@@ -97,7 +96,7 @@
             if(tipo == 2)
             {
             %>
-            <a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>">Bloquear</a>
+            <a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>&bloquear=<%=cliente.getId()%>">Bloquear</a>
             <%
                 }
             %>
@@ -156,6 +155,7 @@
         <th>ID</th>
         <th>Cliente</th>
         <th>Estado</th>
+        <th>Asunto</th>
         <th>Numero de mensajes</th>
         <th>Fecha apertura</th>
         <th>Fecha cierre</th>
@@ -172,10 +172,11 @@
             if(conversacion.getAbierta()!=1){estado="Cerrada";}
         %>
         <td><%=estado%></td>
+        <td><%=conversacion.getAsunto() == null ? "" : conversacion.getAsunto()%></td>
         <td><%=conversacion.getMensajesById().size()%></td>
-        <td><%="no sé"%></td>
-        <td><%="no sé"%></td>
-        <td><a href="">Ir a la conversación</a></td>
+        <td><%=conversacion.getFechaApertura()%></td>
+        <td><%=conversacion.getFechaCierre() == null ? "---" : conversacion.getFechaCierre()%></td>
+        <td><a href="/chat/listar?idCliente=<%=cliente.getId()%>&idChat=<%=conversacion.getId()%>&soyAsistente=<%=0%>">Ir a la conversación</a></td>
     </tr>
     <%
         }
@@ -239,7 +240,7 @@ Lista de clientes asociados a esta Empresa.
 
             cuenta = tablaIntermedia.getCuentaByCuentaId();
 
-            if(!clienteSocio.equals(cliente) && cuenta.getEstadoCuentaByEstado().getId() == 1)
+            if(tablaIntermedia.getBloqueado() == 0 && clienteSocio != cliente)
             {
                 str = "Bloquear";
             }
@@ -252,7 +253,7 @@ Lista de clientes asociados a esta Empresa.
         <td><%=clienteSocio.getDireccion() %></td>
         <td><%=clienteSocio.getTelefono() %></td>
         <td><%=clienteSocio.getEmpresaByEmpresaId().getId() %></td>
-        <td><a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>"><%=str%></a></td>
+        <td><a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>&bloquear=<%=clienteSocio.getId()%>"><%=str%></a></td>
     </tr>
     <%
         }

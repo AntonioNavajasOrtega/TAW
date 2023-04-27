@@ -69,7 +69,15 @@ public class ChatController {
         this.conversacionRepository.save(conv);
         this.clienteRepository.save(conv.getClienteByCliente());
 
-        return "redirect:/cliente/?id="+conv.getClienteByCliente().getId();
+        if(conv.getClienteByCliente().getEmpresaByEmpresaId() == null)
+        {
+            return "redirect:/cliente/?id="+conv.getClienteByCliente().getId();
+        }
+        else
+        {
+            return "redirect:/empresa/?id="+conv.getClienteByCliente().getId();
+        }
+
     }
 
     @PostMapping("/enviarMensaje")

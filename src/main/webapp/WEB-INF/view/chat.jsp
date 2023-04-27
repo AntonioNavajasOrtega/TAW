@@ -46,7 +46,18 @@
             if(soyAsistente == 0){
         %>
         <button onclick="location.href='/chat/cerrar?idConversacion=<%=chat.getId()%>'">Cerrar conversacion</button>
-        <a href="/cliente/?id=<%=chat.getClienteByCliente().getId()%>">Volver al perfil</a>
+    <%if(chat.getClienteByCliente().getEmpresaByEmpresaId() == null)
+    {
+        %>
+    <a href="/cliente/?id=<%=chat.getClienteByCliente().getId()%>">Volver al perfil</a>
+    <%
+    } else { %>
+    <a href="/empresa/?id=<%=chat.getClienteByCliente().getId()%>">Volver al perfil</a>
+    <%
+    }
+    %>
+
+
         <br/>
     <%
             }else{
