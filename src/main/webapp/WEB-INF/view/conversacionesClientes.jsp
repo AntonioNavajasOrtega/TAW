@@ -1,8 +1,5 @@
-<%@ page import="es.taw.sampletaw.entity.Cliente" %>
-<%@ page import="java.util.ConcurrentModificationException" %>
-<%@ page import="es.taw.sampletaw.entity.Conversacion" %>
-<%@ page import="es.taw.sampletaw.entity.Mensaje" %>
 <%@ page import="java.util.List" %>
+<%@ page import="es.taw.sampletaw.dto.ConversacionDTO" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
@@ -14,7 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Conversacion> conversaciones = (List<Conversacion>) request.getAttribute("conversaciones");
+    List<ConversacionDTO> conversaciones = (List<ConversacionDTO>) request.getAttribute("conversaciones");
 %>
 
 <html>
@@ -30,24 +27,22 @@
         <th>Cliente</th>
         <th>Estado</th>
         <th>Asunto</th>
-        <th>Numero de mensajes</th>
         <th>Fecha apertura</th>
         <th>Fecha cierre</th>
         <th>Ver conversacion</th>
     </tr>
     <%
-        for(Conversacion conversacion : conversaciones){
+        for(ConversacionDTO conversacion : conversaciones){
     %>
     <tr>
         <td><%=conversacion.getId()%></td>
-        <td><%=conversacion.getClienteByCliente().getNombre()%></td>
+        <td><%=conversacion.getCliente().getNombre()%></td>
         <%
             String estado = "Abierta";
             if(conversacion.getAbierta()!=1){estado="Cerrada";}
         %>
         <td><%=estado%></td>
         <td><%=conversacion.getAsunto() == null ? "" : conversacion.getAsunto()%></td>
-        <td><%=conversacion.getMensajesById().size()%></td>
         <td><%=conversacion.getFechaApertura()%></td>
         <td><%=conversacion.getFechaCierre() == null ? "---" : conversacion.getFechaCierre()%></td>
         <td><a href="/chat/listar?idCliente=<%=cliente.getId()%>&idChat=<%=conversacion.getId()%>&soyAsistente=<%=0%>">Ir a la conversación</a></td>

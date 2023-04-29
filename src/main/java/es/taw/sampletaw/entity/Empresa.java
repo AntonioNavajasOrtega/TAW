@@ -1,10 +1,14 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.DTO;
+import es.taw.sampletaw.dto.EmpleadoDTO;
+import es.taw.sampletaw.dto.EmpresaDTO;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-public class Empresa {
+public class Empresa implements DTO<EmpresaDTO> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -104,4 +108,15 @@ public class Empresa {
     public void setSolicitudsById(Collection<Solicitud> solicitudsById) {
         this.solicitudsById = solicitudsById;
     }
+
+    public EmpresaDTO toDTO(){
+        EmpresaDTO dto = new EmpresaDTO();
+        dto.setId(this.id);
+        dto.setNombre(this.nombre);
+        dto.setDireccion(this.direccion);
+        dto.setTelefono(this.telefono);
+
+        return dto;
+    }
+
 }

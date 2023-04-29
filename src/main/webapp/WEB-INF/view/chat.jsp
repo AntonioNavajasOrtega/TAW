@@ -1,7 +1,7 @@
-<%@ page import="es.taw.sampletaw.entity.Cliente" %>
 <%@ page import="java.util.ConcurrentModificationException" %>
-<%@ page import="es.taw.sampletaw.entity.Conversacion" %>
-<%@ page import="es.taw.sampletaw.entity.Mensaje" %>
+<%@ page import="es.taw.sampletaw.dto.ConversacionDTO" %>
+<%@ page import="es.taw.sampletaw.dto.MensajeDTO" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
@@ -13,7 +13,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    Conversacion chat = (Conversacion) request.getAttribute("chat");
+    ConversacionDTO chat = (ConversacionDTO) request.getAttribute("chat");
+    List<MensajeDTO> mensajes = (List<MensajeDTO>) request.getAttribute("mensajes");
     Byte soyAsistente = (Byte) request.getAttribute("soyAsistente");
 %>
 
@@ -23,10 +24,10 @@
 </head>
 <body>
 
-    <h1>Chateando con <%=soyAsistente == 1 ? chat.getClienteByCliente().getNombre() : "Asistente" %></h1>
+    <h1>Chateando con <%=soyAsistente == 1 ? chat.getCliente().getNombre() : "Asistente" %></h1>
     <h3>Asunto: <%=chat.getAsunto()%></h3>
     <%
-        for(Mensaje m : chat.getMensajesById()){
+        for(MensajeDTO m : mensajes){
     %>
     <table>
         <tr>
@@ -46,13 +47,13 @@
             if(soyAsistente == 0){
         %>
         <button onclick="location.href='/chat/cerrar?idConversacion=<%=chat.getId()%>'">Cerrar conversacion</button>
-    <%if(chat.getClienteByCliente().getEmpresaByEmpresaId() == null)
+    <%if(chat.getCliente().getEmpresa() == null)
     {
         %>
-    <a href="/cliente/?id=<%=chat.getClienteByCliente().getId()%>">Volver al perfil</a>
+    <a href="/cliente/?id=<%=chat.getCliente().getId()%>">Volver al perfil</a>
     <%
     } else { %>
-    <a href="/empresa/?id=<%=chat.getClienteByCliente().getId()%>">Volver al perfil</a>
+    <a href="/empresa/?id=<%=chat.getCliente().getId()%>">Volver al perfil</a>
     <%
     }
     %>

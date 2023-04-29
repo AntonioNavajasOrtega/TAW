@@ -1,10 +1,13 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.ClienteDTO;
+import es.taw.sampletaw.dto.DTO;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-public class Cliente {
+public class Cliente implements DTO<ClienteDTO> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -197,4 +200,22 @@ public class Cliente {
     public void setTipoclienterelacionadosById(Collection<Tipoclienterelacionado> tipoclienterelacionadosById) {
         this.tipoclienterelacionadosById = tipoclienterelacionadosById;
     }
+
+    public ClienteDTO toDTO(){
+        ClienteDTO dto = new ClienteDTO();
+        dto.setId(this.id);
+        dto.setNombre(this.nombre);
+        dto.setApellido(this.apellido);
+        dto.setDireccion(this.direccion);
+        dto.setTelefono(this.telefono);
+        dto.setNif(this.nif);
+        dto.setEmail(this.email);
+        dto.setContrasena(this.contrasena);
+        if(this.empresaByEmpresaId != null){
+            dto.setEmpresa(this.empresaByEmpresaId.toDTO());
+        }
+
+        return dto;
+    }
+
 }
