@@ -1,11 +1,14 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.ConversacionDTO;
+import es.taw.sampletaw.dto.DTO;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
 
 @Entity
-public class Conversacion {
+public class Conversacion implements DTO<ConversacionDTO>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -120,5 +123,18 @@ public class Conversacion {
 
     public void setMensajesById(Collection<Mensaje> mensajesById) {
         this.mensajesById = mensajesById;
+    }
+
+    public ConversacionDTO toDTO() {
+        ConversacionDTO dto = new ConversacionDTO();
+        dto.setId(this.id);
+        dto.setAbierta(this.abierta);
+        dto.setAsunto(this.asunto);
+        dto.setFechaApertura(this.fechaApertura);
+        dto.setFechaCierre(this.fechaCierre);
+        dto.setEmpleado(this.empleadoByEmpleado.toDTO());
+        dto.setCliente(this.clienteByCliente.toDTO());
+
+        return dto;
     }
 }

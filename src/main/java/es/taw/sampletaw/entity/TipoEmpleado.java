@@ -1,11 +1,14 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.DTO;
+import es.taw.sampletaw.dto.TipoEmpleadoDTO;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
 @Table(name = "tipo_empleado", schema = "bancotaw", catalog = "")
-public class TipoEmpleado {
+public class TipoEmpleado implements DTO<TipoEmpleadoDTO> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -59,4 +62,12 @@ public class TipoEmpleado {
     public void setEmpleadosById(Collection<Empleado> empleadosById) {
         this.empleadosById = empleadosById;
     }
+
+    public TipoEmpleadoDTO toDTO(){
+        TipoEmpleadoDTO dto = new TipoEmpleadoDTO();
+        dto.setId(this.id);
+        dto.setTipo(this.tipo);
+        return dto;
+    }
+
 }

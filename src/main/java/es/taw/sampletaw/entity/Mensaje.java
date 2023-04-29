@@ -1,10 +1,13 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.DTO;
+import es.taw.sampletaw.dto.MensajeDTO;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-public class Mensaje {
+public class Mensaje implements DTO<MensajeDTO> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
@@ -116,4 +119,19 @@ public class Mensaje {
     public void setEmpleadoByReceptorEmpleado(Empleado empleadoByReceptorEmpleado) {
         this.empleadoByReceptorEmpleado = empleadoByReceptorEmpleado;
     }
+
+    public MensajeDTO toDTO(){
+        MensajeDTO dto = new MensajeDTO();
+        dto.setId(this.id);
+        dto.setFecha(this.fecha);
+        dto.setContenido(this.contenido);
+        dto.setConversacionByConversacion(this.conversacionByConversacion.toDTO());
+        dto.setClienteByEmisorCliente(this.clienteByEmisorCliente.toDTO());
+        dto.setEmpleadoByEmisorEmpleado(this.empleadoByEmisorEmpleado.toDTO());
+        dto.setClienteByReceptorCliente(this.clienteByReceptorCliente.toDTO());
+        dto.setEmpleadoByReceptorEmpleado(this.empleadoByReceptorEmpleado.toDTO());
+
+        return dto;
+    }
+
 }
