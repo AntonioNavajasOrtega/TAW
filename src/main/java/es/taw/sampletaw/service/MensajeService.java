@@ -55,7 +55,6 @@ public class MensajeService {
 
     public void guardar(MensajeDTO dto) {
         Mensaje mensaje = new Mensaje();
-        mensaje.setId(dto.getId());
         mensaje.setFecha(dto.getFecha());
         mensaje.setContenido(dto.getContenido());
         Empleado emisorEmpleado = this.empleadoRepository.findById(dto.getEmpleadoByEmisorEmpleado().getId()).orElse(null);

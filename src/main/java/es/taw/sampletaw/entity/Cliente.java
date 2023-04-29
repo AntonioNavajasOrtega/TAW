@@ -211,7 +211,9 @@ public class Cliente implements DTO<ClienteDTO> {
         dto.setNif(this.nif);
         dto.setEmail(this.email);
         dto.setContrasena(this.contrasena);
-        dto.setEmpresa(this.empresaByEmpresaId.toDTO());
+        if(this.empresaByEmpresaId != null){
+            dto.setEmpresa(this.empresaByEmpresaId.toDTO());
+        }
 
         return dto;
     }

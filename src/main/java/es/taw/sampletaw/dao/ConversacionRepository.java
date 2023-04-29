@@ -61,4 +61,7 @@ public interface ConversacionRepository extends JpaRepository<Conversacion,Integ
     @Query("select c from Conversacion c  where c.clienteByCliente.nombre like concat('%',:usu,'%') order by c.fechaApertura desc")
 
     List<Conversacion> ordenPorFechaAperturaDescYBuscaUsuario(@Param("usu")String usuario);
+
+    @Query("select c from Conversacion c where c.clienteByCliente.id = :idCliente and c.abierta = 1")
+    List<Conversacion> buscaPorUsuarioConversacionesAbiertas(@Param("idCliente") Integer idcliente);
 }

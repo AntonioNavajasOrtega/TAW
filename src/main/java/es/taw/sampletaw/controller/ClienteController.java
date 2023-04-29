@@ -1,7 +1,9 @@
 package es.taw.sampletaw.controller;
 
 import es.taw.sampletaw.dao.*;
+import es.taw.sampletaw.dto.ConversacionDTO;
 import es.taw.sampletaw.entity.*;
+import es.taw.sampletaw.service.ConversacionService;
 import es.taw.sampletaw.ui.FiltroOperaciones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -45,6 +47,9 @@ public class ClienteController {
 
     @Autowired
     protected EstadoCuentaRepository estadoCuentaRepository;
+
+    @Autowired
+    protected ConversacionService conversacionService;
 
     @GetMapping("/")
     public String doListar(@RequestParam("id") Integer idcliente, Model model,HttpSession session){
@@ -237,7 +242,7 @@ public class ClienteController {
         if(clienteSession == null || cliente.getId() != clienteSession.getId()){
             urlTo = "redirect:/logout";
         }else{
-            List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
+            List<ConversacionDTO> conversaciones = this.conversacionService.listarConversacionesAbiertasDeUnCliente(idcliente);
             if(filtro == null || (filtro.getCuentadestino().isEmpty() && filtro.getDate().isEmpty())){
                 transacciones = this.cuentaRepository.findClienteTrans(cliente.getId());
                 filtro = new FiltroOperaciones();
