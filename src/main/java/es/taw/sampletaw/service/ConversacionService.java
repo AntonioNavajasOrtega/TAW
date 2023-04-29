@@ -38,6 +38,7 @@ public class ConversacionService {
 
     }
 
+
     public void guardarOEditar(ConversacionDTO dto) {
         Conversacion conversacion;
         if(dto.getId() == null){
@@ -45,6 +46,7 @@ public class ConversacionService {
         }else{
             conversacion = this.conversacionRepository.findById(dto.getId()).orElse(null);
         }
+
         conversacion.setAbierta(dto.getAbierta());
         conversacion.setAsunto(dto.getAsunto());
         conversacion.setFechaApertura(dto.getFechaApertura());
@@ -68,6 +70,7 @@ public class ConversacionService {
         conversacionDTO.setAbierta((byte)1);
         Timestamp fechaApertura = new Timestamp(System.currentTimeMillis());
         conversacionDTO.setFechaApertura(fechaApertura);
+
         return conversacionDTO;
     }
 

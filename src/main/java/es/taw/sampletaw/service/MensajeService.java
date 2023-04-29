@@ -71,6 +71,7 @@ public class MensajeService {
             Cliente receptorCliente = this.clienteRepository.findById(dto.getClienteByReceptorCliente().getId()).orElse(null);
             mensaje.setClienteByReceptorCliente(receptorCliente);
         }
+
         this.mensajeRepository.save(mensaje);
     }
 

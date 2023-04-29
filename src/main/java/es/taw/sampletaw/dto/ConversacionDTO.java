@@ -21,6 +21,7 @@ public class ConversacionDTO implements Serializable{
   
     private ClienteDTO cliente;
 
+
     private Integer numeroMensajes;
 
     public Integer getId() {
@@ -86,4 +87,5 @@ public class ConversacionDTO implements Serializable{
     public void setNumeroMensajes(Integer numeroMensajes) {
         this.numeroMensajes = numeroMensajes;
     }
+
 }

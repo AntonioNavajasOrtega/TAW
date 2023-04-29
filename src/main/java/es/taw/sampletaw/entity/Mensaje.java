@@ -134,6 +134,7 @@ public class Mensaje implements DTO<MensajeDTO> {
             dto.setEmpleadoByReceptorEmpleado(this.empleadoByReceptorEmpleado.toDTO());
         }
 
+
         return dto;
     }
 

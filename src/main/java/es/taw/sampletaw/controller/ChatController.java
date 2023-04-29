@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+
 import java.util.List;
 
 @RequestMapping("/chat")
@@ -37,6 +38,7 @@ public class ChatController {
                                @RequestParam("soyAsistente") Byte soyAsistente , Model model){
         ConversacionDTO conversacion = this.conversacionService.buscarConversacion(idChat);
         List<MensajeDTO> mensajes = this.mensajeService.listarMensajes(conversacion);
+
         model.addAttribute("mensajes", mensajes);
         model.addAttribute("chat", conversacion);
         model.addAttribute("soyAsistente", soyAsistente);
@@ -45,7 +47,9 @@ public class ChatController {
     @GetMapping("/nuevo")
     public String crearNuevoChat(@RequestParam("idCliente") Integer idCliente,@RequestParam("asunto") String asunto, Model model){
         ConversacionDTO chat = this.conversacionService.iniciarChat(idCliente,asunto);
+
         this.conversacionService.guardarOEditar(chat);
+
 
         model.addAttribute("chat", chat);
         model.addAttribute("soyAsistente", 0);
@@ -56,7 +60,9 @@ public class ChatController {
     public String cerrarConversacion(@RequestParam("idConversacion") Integer idConversacion){
         ConversacionDTO conv = this.conversacionService.buscarConversacion(idConversacion);
         this.conversacionService.cerrarConversacion(conv);
+
         this.conversacionService.guardarOEditar(conv);
+
         if(conv.getCliente().getEmpresa() == null)
         {
             return "redirect:/cliente/?id="+conv.getCliente().getId();

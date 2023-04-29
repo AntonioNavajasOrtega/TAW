@@ -2,7 +2,7 @@ package es.taw.sampletaw.controller;
 
 import es.taw.sampletaw.dao.*;
 import es.taw.sampletaw.dto.ConversacionDTO;
-import es.taw.sampletaw.dto.MensajeDTO;
+
 import es.taw.sampletaw.entity.*;
 import es.taw.sampletaw.service.ConversacionService;
 import es.taw.sampletaw.ui.FiltroOperaciones;
