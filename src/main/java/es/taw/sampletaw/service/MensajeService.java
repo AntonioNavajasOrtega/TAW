@@ -80,9 +80,16 @@ public class MensajeService {
         return this.listaEntidadesADTO(mensajes);
     }
 
+    public List<MensajeDTO> buscarMensajesCuyoUsuarioEsEmisorOReceptor(Integer idUsuario) {
+        List<Mensaje> mensajes = this.mensajeRepository.mensajesCuyoUsuarioEsEmisorOReceptor(idUsuario);
+        return this.listaEntidadesADTO(mensajes);
+    }
+
     private List<MensajeDTO> listaEntidadesADTO(List<Mensaje> mensajes) {
         ArrayList dtos = new ArrayList<MensajeDTO>();
         mensajes.forEach((final Mensaje mensaje) -> dtos.add(mensaje.toDTO()));
         return dtos;
     }
+
+
 }

@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface MensajeRepository extends JpaRepository<Mensaje, Integer> {
 
-    @Query("select m from Mensaje m where m.clienteByEmisorCliente =: usuario or m.clienteByReceptorCliente = :usuario")
+    @Query("select m from Mensaje m where m.clienteByEmisorCliente.id =: id or m.clienteByReceptorCliente.id = :id")
 
-    List<Mensaje> mensajesCuyoUsuarioEsEmisorOReceptor(@Param("usuario") Cliente usuario);
+    List<Mensaje> mensajesCuyoUsuarioEsEmisorOReceptor(@Param("id") Integer usuario);
 
     @Query("select m from Mensaje m where m.conversacionByConversacion.id = :id")
     List<Mensaje> mensajesPorConversacion(@Param("id") Integer id);

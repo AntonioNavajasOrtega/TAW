@@ -1,9 +1,7 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page import="es.taw.sampletaw.entity.Conversacion" %>
+<%@ page import="es.taw.sampletaw.dto.MensajeDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.taw.sampletaw.entity.Cliente" %>
-<%@ page import="java.util.Collection" %>
-<%@ page import="es.taw.sampletaw.entity.Mensaje" %><%--
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%--
   Created by IntelliJ IDEA.
   User: juanj
   Date: 27/03/2023
@@ -13,7 +11,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Mensaje> mensajeList = (List<Mensaje>) request.getAttribute("mensajes");
+    List<MensajeDTO> mensajeList = (List<MensajeDTO>) request.getAttribute("mensajes");
 %>
 
 <table border="1">
@@ -22,7 +20,7 @@
     <th>Mensaje</th>
     <th>Fecha</th>
     <%
-        for(Mensaje mensaje : mensajeList){
+        for(MensajeDTO mensaje : mensajeList){
     %>
     <tr>
         <td><%=mensaje.getClienteByEmisorCliente() != null ? mensaje.getClienteByEmisorCliente().getNombre() : "Asistente"%></td>

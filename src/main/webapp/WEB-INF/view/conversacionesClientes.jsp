@@ -27,6 +27,7 @@
         <th>Cliente</th>
         <th>Estado</th>
         <th>Asunto</th>
+        <th>Numero de mensajes</th>
         <th>Fecha apertura</th>
         <th>Fecha cierre</th>
         <th>Ver conversacion</th>
@@ -43,6 +44,7 @@
         %>
         <td><%=estado%></td>
         <td><%=conversacion.getAsunto() == null ? "" : conversacion.getAsunto()%></td>
+        <td><%=conversacion.getNumeroMensajes()%></td>
         <td><%=conversacion.getFechaApertura()%></td>
         <td><%=conversacion.getFechaCierre() == null ? "---" : conversacion.getFechaCierre()%></td>
         <td><a href="/chat/listar?idCliente=<%=cliente.getId()%>&idChat=<%=conversacion.getId()%>&soyAsistente=<%=0%>">Ir a la conversación</a></td>

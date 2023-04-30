@@ -24,8 +24,6 @@ public class ChatController {
     protected ClienteService clienteService;
 
     @Autowired
-    protected EmpleadoService empleadoService;
-    @Autowired
     protected ConversacionService conversacionService;
 
     @Autowired

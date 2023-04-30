@@ -15,4 +15,7 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
     @Query("select distinct c.apellido from Cliente c where c.empresaByEmpresaId = :empresa")
     public List<String> clientesSocios(Empresa empresa);
+
+    @Query("select c from Cliente c where c.mensajesById.size > 0")
+    List<Cliente> buscarClientesConMensajes();
 }
