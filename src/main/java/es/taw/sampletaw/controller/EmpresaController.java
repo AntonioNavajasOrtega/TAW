@@ -1,7 +1,9 @@
 package es.taw.sampletaw.controller;
 
 import es.taw.sampletaw.dao.*;
+import es.taw.sampletaw.dto.ConversacionDTO;
 import es.taw.sampletaw.entity.*;
+import es.taw.sampletaw.service.ConversacionService;
 import es.taw.sampletaw.ui.FiltroApellido;
 import es.taw.sampletaw.ui.FiltroOperaciones;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +57,9 @@ public class EmpresaController {
     @Autowired
     protected  TipoClienteRepository tipoClienteRepository;
 
+    @Autowired
+    protected ConversacionService conversacionService;
+
 
     @GetMapping("/")
     public String doListar(@RequestParam("id") Integer idcliente, Model model, HttpSession session){
@@ -66,7 +71,7 @@ public class EmpresaController {
         }
 
 
-        List<Conversacion> conversaciones = cliente.getConversacionsById().stream().filter(conversacion -> conversacion.getAbierta()==1).collect(Collectors.toList());
+        List<ConversacionDTO> conversaciones = this.conversacionService.listarConversacionesAbiertasDeUnCliente(idcliente);
         model.addAttribute("cliente", cliente);
         model.addAttribute("conversaciones", conversaciones);
         Empresa empresa = cliente.getEmpresaByEmpresaId();
