@@ -73,9 +73,17 @@ public class ClienteService {
     }
 
     public void guardar(ClienteDTO cliente) {
-        Cliente cliente1 = new Cliente();
+        Cliente cliente1;
+        if(cliente.getId() == null)
+        {
+             cliente1 = new Cliente();
+        }
+        else
+        {
+            cliente1 = this.clienteRepository.findById(cliente.getId()).orElse(null);
+        }
+
         cliente1.setApellido(cliente.getApellido());
-        cliente1.setId(cliente.getId());
         cliente1.setNombre(cliente.getNombre());
         cliente1.setDireccion(cliente.getDireccion());
         cliente1.setTelefono(cliente.getTelefono());
@@ -99,6 +107,7 @@ public class ClienteService {
         cliente1.setTipoclienterelacionadosById(lista);
 
         clienteRepository.save(cliente1);
+        cliente.setId(cliente1.getId());
     }
 
     public List<ClienteDTO> listarClientesPorEmpresaFiltroApellido(FiltroApellido filtroApellido) {

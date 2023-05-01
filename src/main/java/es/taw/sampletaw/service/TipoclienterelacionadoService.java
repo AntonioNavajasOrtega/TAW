@@ -49,6 +49,8 @@ public class TipoclienterelacionadoService {
     public void guardar(TipoclienterelacionadoDTO tipoclienterelacionado,int cuentaid, int clienteid) {
         Tipoclienterelacionado tipoclienterelacionado1 = new Tipoclienterelacionado();
 
+
+
         tipoclienterelacionado1.setBloqueado(tipoclienterelacionado.getBloqueado());
         tipoclienterelacionado1.setTipoClienteByTipo(tipoClienteRepository.findTipo(tipoclienterelacionado.getTipo().getTipo()));
         tipoclienterelacionado1.setCuentaByCuentaId(cuentaRepository.findById(cuentaid).orElse(null));

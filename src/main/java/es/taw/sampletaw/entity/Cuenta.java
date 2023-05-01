@@ -186,7 +186,15 @@ public class Cuenta {
         dto.setSwift(this.getSwift());
         dto.setClienteByClienteId(this.getClienteByClienteId().toDTO());
         dto.setEmpleadoByEmpleadoId(this.getEmpleadoByEmpleadoId().toDTO());
-        dto.setEmpresaByEmpresaId(this.getEmpresaByEmpresaId().toDTO());
+        if(getEmpresaByEmpresaId() == null)
+        {
+            dto.setEmpresaByEmpresaId(null);
+        }
+        else
+        {
+            dto.setEmpresaByEmpresaId(this.getEmpresaByEmpresaId().toDTO());
+        }
+
         dto.setEstadoCuentaByEstado(this.getEstadoCuentaByEstado().toDTO());
 
         return dto;

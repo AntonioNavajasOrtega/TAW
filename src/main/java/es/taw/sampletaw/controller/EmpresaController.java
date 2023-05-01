@@ -183,8 +183,10 @@ public class EmpresaController {
     }
 
     @GetMapping("/guardarClienteEditado")
-    public String guardarClienteEditado(@ModelAttribute("cliente") ClienteDTO cliente)
+    public String guardarClienteEditado(@ModelAttribute("cliente") ClienteDTO cliente,
+                                        @RequestParam("idempresa") int id)
     {
+        cliente.setEmpresa(empresaService.buscarPorId(id));
         clienteService.guardar(cliente);
         return "redirect:/empresa/?id=" + cliente.getId();
     }
@@ -268,6 +270,7 @@ public class EmpresaController {
                 TipoSolicitudDTO tipo = tipoSolicitudService.solicitarCuenta();
                 solicitud.setTipoSolicitudByTipo(tipo);
                 CuentaDTO c = new CuentaDTO();
+                solicitud.setEmpresaByEmpresaId(empresa);
 
                 c.setEmpresaByEmpresaId(cliente.getEmpresa());
 

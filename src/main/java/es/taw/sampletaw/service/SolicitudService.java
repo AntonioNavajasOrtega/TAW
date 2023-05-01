@@ -28,14 +28,21 @@ public class SolicitudService {
     protected TipoSolicitudRepository tipoSolicitudRepository;
 
     public void guardar(SolicitudDTO solicitud) {
-        Solicitud s = new Solicitud();
+        Solicitud s;
+        if(solicitud.getId() == null)
+        {
+            s = new Solicitud();
+        }
+        else {
+            s = solicitudRepository.findById(solicitud.getId()).orElse(null);
+        }
 
         s.setId(solicitud.getId());
         s.setFecha(solicitud.getFecha());
         s.setClienteByClienteId(clienteRepository.findById(solicitud.getClienteByClienteId().getId()).orElse(null));
         s.setEmpleadoByEmpleadoId(empleadoRepository.findGestor());
         s.setCuentaByCuentaId(cuentaRepository.findById(solicitud.getCuentaByCuentaId().getId()).orElse(null));
-        s.setEmpresaByEmpresaId(empresaRepository.findById(solicitud.getId()).orElse(null));
+        s.setEmpresaByEmpresaId(empresaRepository.findById(solicitud.getEmpresaByEmpresaId().getId()).orElse(null));
         s.setTipoSolicitudByTipo(tipoSolicitudRepository.findById(solicitud.getTipoSolicitudByTipo().getId()).orElse(null));
 
 

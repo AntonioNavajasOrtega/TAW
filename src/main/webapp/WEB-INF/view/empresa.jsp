@@ -190,13 +190,13 @@ Lista de clientes asociados a esta Empresa.
 
             for(TipoclienterelacionadoDTO t : all)
             {
-                if(t.getCliente() == clienteSocio)
+                if(t.getCliente().getId() == clienteSocio.getId())
                 {
                     aux = t;
                 }
             }
 
-            if(aux.getBloqueado() == 0 && clienteSocio != cliente)
+            if(aux.getBloqueado() == 0 && clienteSocio.getId() != cliente.getId())
             {
                 str = "Bloquear";
             }

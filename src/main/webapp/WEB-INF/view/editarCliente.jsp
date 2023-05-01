@@ -39,7 +39,8 @@
     Teléfono: <form:input path="telefono" size="12"></form:input> <br/>
     Contraseña: <form:password path="contrasena" size="50"></form:password> <br/>
     <form:hidden path="id"></form:hidden>
-    <form:hidden path="empresaByEmpresaId"></form:hidden>
+
+    <input type="hidden" name="idempresa" value="<%=empresa.getId()%>">
     <form:button>Guardar</form:button>
 
 

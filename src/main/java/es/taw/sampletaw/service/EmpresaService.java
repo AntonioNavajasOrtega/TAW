@@ -30,21 +30,26 @@ public class EmpresaService {
     protected CuentaRepository cuentaRepository;
 
     public void guardar(EmpresaDTO empresa) {
-        Empresa empresa1 = new Empresa();
-        empresa1.setId(empresa.getId());
+        Empresa empresa1;
+
+        if(empresa.getId() == null)
+        {
+            empresa1 = new Empresa();
+        }
+        else
+        {
+            empresa1 = empresaRepository.findById(empresa.getId()).orElse(null);
+        }
+
         empresa1.setDireccion(empresa.getDireccion());
         empresa1.setNombre(empresa.getNombre());
         empresa1.setTelefono(empresa.getTelefono());
-        empresa1.setSolicitudsById(solicitudRepository.findByEmpresa(empresa.getId()));
-        empresa1.setClientesById(clienteRepository.findByEmpresa(empresa1.getId()));
-        List<Cuenta> list = new ArrayList<>();
-        list.add(cuentaRepository.findByEmpresa(empresa1.getId()));
-        empresa1.setCuentasById(list);
 
         empresaRepository.save(empresa1);
+        empresa.setId(empresa1.getId());
     }
 
     public EmpresaDTO buscarPorId(int idempresa) {
-        return empresaRepository.findById(idempresa).get().toDTO();
+        return empresaRepository.findById(idempresa).orElse(null).toDTO();
     }
 }

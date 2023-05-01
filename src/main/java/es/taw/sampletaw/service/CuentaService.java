@@ -39,7 +39,15 @@ public class CuentaService {
 
 
     public CuentaDTO buscarPorEmpresa(EmpresaDTO empresa) {
-        return  cuentaRepository.findByEmpresa(empresa.getId()).toDTO();
+        if(cuentaRepository.findByEmpresa(empresa.getId()) == null)
+        {
+            return null;
+        }
+        else
+        {
+            return  cuentaRepository.findByEmpresa(empresa.getId()).toDTO();
+        }
+
     }
     public List<TransaccionDTO> buscarEmpresaTrans(EmpresaDTO empresa) {
 
@@ -67,20 +75,29 @@ public class CuentaService {
     }
 
     public void guardar(CuentaDTO c) {
-        Cuenta cuenta = new Cuenta();
+        Cuenta cuenta;
+        if(c.getId() == null)
+        {
+            cuenta = new Cuenta();
+        }
+        else
+        {
+            cuenta = cuentaRepository.findById(c.getId()).orElse(null);
+        }
 
         cuenta.setSaldo(c.getSaldo());
-        cuenta.setId(c.getId());
+
         cuenta.setIban(c.getIban());
         cuenta.setPais(c.getPais());
         cuenta.setSwift(c.getSwift());
 
-        cuenta.setClienteByClienteId(clienteRepository.findById(c.getId()).orElse(null));
+        cuenta.setClienteByClienteId(clienteRepository.findById(c.getClienteByClienteId().getId()).orElse(null));
         cuenta.setEstadoCuentaByEstado(estadoCuentaRepository.findById(c.getEstadoCuentaByEstado().getId()).orElse(null));
         cuenta.setEmpleadoByEmpleadoId(empleadoRepository.findById(c.getEmpleadoByEmpleadoId().getId()).orElse(null));
         cuenta.setEmpresaByEmpresaId(empresaRepository.findById(c.getEmpresaByEmpresaId().getId()).orElse(null));
 
         cuentaRepository.save(cuenta);
+        c.setId(cuenta.getId());
     }
 
     public List<TransaccionDTO> findClienteTrans(ClienteDTO cliente) {
