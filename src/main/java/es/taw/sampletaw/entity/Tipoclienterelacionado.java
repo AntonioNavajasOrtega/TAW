@@ -1,5 +1,7 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.TipoclienterelacionadoDTO;
+
 import javax.persistence.*;
 
 @Entity
@@ -82,4 +84,17 @@ public class Tipoclienterelacionado {
     public void setTipoClienteByTipo(TipoCliente tipoClienteByTipo) {
         this.tipoClienteByTipo = tipoClienteByTipo;
     }
+
+    public TipoclienterelacionadoDTO toDTO(){
+        TipoclienterelacionadoDTO dto = new TipoclienterelacionadoDTO();
+        dto.setCliente(this.clienteByClienteId.toDTO());
+        dto.setBloqueado(this.getBloqueado());
+        dto.setTipo(this.tipoClienteByTipo.toDTO());
+        dto.setCuenta(this.cuentaByCuentaId.toDTO());
+
+
+        return dto;
+    }
+
+
 }

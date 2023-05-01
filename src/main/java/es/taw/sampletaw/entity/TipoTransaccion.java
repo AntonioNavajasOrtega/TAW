@@ -1,5 +1,8 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.TipoClienteDTO;
+import es.taw.sampletaw.dto.TipoTransaccionDTO;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -58,5 +61,14 @@ public class TipoTransaccion {
 
     public void setTransaccionsById(Collection<Transaccion> transaccionsById) {
         this.transaccionsById = transaccionsById;
+    }
+
+    public TipoTransaccionDTO toDTO(){
+        TipoTransaccionDTO dto = new TipoTransaccionDTO();
+        dto.setId(this.getId());
+        dto.setTipo(this.getTipo());
+
+
+        return dto;
     }
 }

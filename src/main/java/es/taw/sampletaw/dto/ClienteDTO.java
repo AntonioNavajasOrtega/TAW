@@ -1,6 +1,8 @@
 package es.taw.sampletaw.dto;
 
 
+import es.taw.sampletaw.entity.Cliente;
+
 import java.io.Serializable;
 
 public class ClienteDTO implements Serializable {
@@ -94,4 +96,6 @@ public class ClienteDTO implements Serializable {
     public void setEmpresa(EmpresaDTO empresa) {
         this.empresa = empresa;
     }
+
+
 }

@@ -1,5 +1,8 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.TipoclienterelacionadoDTO;
+import es.taw.sampletaw.dto.TransaccionDTO;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -107,5 +110,18 @@ public class Transaccion {
 
     public void setCuentaByCuentaDestinoId(Cuenta cuentaByCuentaDestinoId) {
         this.cuentaByCuentaDestinoId = cuentaByCuentaDestinoId;
+    }
+
+    public TransaccionDTO toDTO(){
+      TransaccionDTO dto = new TransaccionDTO();
+        dto.setCantidad(this.getCantidad());
+        dto.setId(this.getId());
+        dto.setFecha(this.getFecha());
+        dto.setMoneda(this.getMoneda());
+        dto.setCuentaByCuentaDestinoId(this.getCuentaByCuentaDestinoId().toDTO());
+        dto.setCuentaByCuentaOrigenId(this.getCuentaByCuentaOrigenId().toDTO());
+        dto.setTipoTransaccionByTipo(this.getTipoTransaccionByTipo().toDTO());
+
+        return dto;
     }
 }

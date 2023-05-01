@@ -1,5 +1,8 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.CuentaDTO;
+import es.taw.sampletaw.dto.TipoclienterelacionadoDTO;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -171,5 +174,21 @@ public class Cuenta {
 
     public void setTransaccionsById_0(Collection<Transaccion> transaccionsById_0) {
         this.transaccionsById_0 = transaccionsById_0;
+    }
+
+    public CuentaDTO toDTO(){
+        CuentaDTO dto = new CuentaDTO();
+
+        dto.setId(this.getId());
+        dto.setIban(this.getIban());
+        dto.setPais(this.getPais());
+        dto.setSaldo(this.getSaldo());
+        dto.setSwift(this.getSwift());
+        dto.setClienteByClienteId(this.getClienteByClienteId().toDTO());
+        dto.setEmpleadoByEmpleadoId(this.getEmpleadoByEmpleadoId().toDTO());
+        dto.setEmpresaByEmpresaId(this.getEmpresaByEmpresaId().toDTO());
+        dto.setEstadoCuentaByEstado(this.getEstadoCuentaByEstado().toDTO());
+
+        return dto;
     }
 }

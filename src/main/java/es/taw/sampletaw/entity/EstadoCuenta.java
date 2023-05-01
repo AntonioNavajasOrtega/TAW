@@ -1,5 +1,8 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.ClienteDTO;
+import es.taw.sampletaw.dto.EstadoCuentaDTO;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -59,4 +62,14 @@ public class EstadoCuenta {
     public void setCuentasById(Collection<Cuenta> cuentasById) {
         this.cuentasById = cuentasById;
     }
+
+    public EstadoCuentaDTO toDTO(){
+        EstadoCuentaDTO dto = new EstadoCuentaDTO();
+        dto.setId(this.getId());
+        dto.setTipo(this.getTipo());
+
+        return dto;
+    }
+
+
 }

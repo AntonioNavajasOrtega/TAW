@@ -3,10 +3,11 @@
 <%@ page import="com.mysql.cj.xdevapi.Client" %>
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.sampletaw.entity.Empresa" %>
+<%@ page import="es.taw.sampletaw.dto.EmpresaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    Empresa empresa = (Empresa) request.getAttribute("empresaID");
+    EmpresaDTO empresa = (EmpresaDTO) request.getAttribute("empresaID");
 %>
 
 <html>

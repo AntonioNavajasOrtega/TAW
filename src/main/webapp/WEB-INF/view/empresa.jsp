@@ -4,7 +4,8 @@
 <%@ page import="es.taw.sampletaw.entity.*" %>
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page import="java.util.*" %>
-<%@ page import="es.taw.sampletaw.dao.TipoclienterelacionadoRepository" %><%--
+<%@ page import="es.taw.sampletaw.dao.TipoclienterelacionadoRepository" %>
+<%@ page import="es.taw.sampletaw.dto.*" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -15,14 +16,14 @@
 
 
 <%
-    Cliente cliente = (Cliente) request.getAttribute("cliente");
-    Empresa empresa = (Empresa) request.getAttribute("empresa");
-    List<Cliente> listaSocios = (List<Cliente>) request.getAttribute("clientesSocios");
-    List<Transaccion> transacciones = (List<Transaccion>) request.getAttribute("transacciones");
+    ClienteDTO cliente = (ClienteDTO) request.getAttribute("cliente");
+    EmpresaDTO empresa = (EmpresaDTO) request.getAttribute("empresa");
+    List<ClienteDTO> listaSocios = (List<ClienteDTO>) request.getAttribute("clientesSocios");
+    List<TransaccionDTO> transacciones = (List<TransaccionDTO>) request.getAttribute("transacciones");
     List<String> lista = (List<String>) request.getAttribute("lista");
-    Tipoclienterelacionado tablaIntermedia = (Tipoclienterelacionado) request.getAttribute("tablaIntermedia");
-    int tipo = tablaIntermedia.getTipoClienteByTipo().getId();
-    List<Tipoclienterelacionado> all = (List<Tipoclienterelacionado>) request.getAttribute("all");
+    TipoclienterelacionadoDTO tablaIntermedia = (TipoclienterelacionadoDTO) request.getAttribute("tablaIntermedia");
+    int tipo = tablaIntermedia.getTipo().getId();
+    List<TipoclienterelacionadoDTO> all = (List<TipoclienterelacionadoDTO>) request.getAttribute("all");
 %>
 
 
@@ -51,7 +52,7 @@
         <td><%=cliente.getEmail() %></td>
         <td><%=cliente.getDireccion() %></td>
         <td><%=cliente.getTelefono() %></td>
-        <td><%=cliente.getEmpresaByEmpresaId().getId() %></td>
+        <td><%=cliente.getEmpresa().getNombre()%></td>
     </tr>
 </table>
 <%
@@ -79,7 +80,7 @@
     </tr>
     <%
 
-       Cuenta cuenta = tablaIntermedia.getCuentaByCuentaId();
+       CuentaDTO cuenta = tablaIntermedia.getCuenta();
 
     %>
     <tr>
@@ -130,7 +131,7 @@
         <td>Destino</td>
     </tr>
     <%
-        for(Transaccion transaccion : transacciones){
+        for(TransaccionDTO transaccion : transacciones){
     %>
     <tr>
         <td><%=transaccion.getTipoTransaccionByTipo().getTipo()%></td>
@@ -180,16 +181,16 @@ Lista de clientes asociados a esta Empresa.
         <th>CUENTA</th>
     </tr>
     <%
-        for(Cliente clienteSocio : listaSocios){
+        for(ClienteDTO clienteSocio : listaSocios){
             String str = "";
 
-            cuenta = tablaIntermedia.getCuentaByCuentaId();
+            cuenta = tablaIntermedia.getCuenta();
 
-            Tipoclienterelacionado aux = tablaIntermedia;
+            TipoclienterelacionadoDTO aux = tablaIntermedia;
 
-            for(Tipoclienterelacionado t : all)
+            for(TipoclienterelacionadoDTO t : all)
             {
-                if(t.getClienteByClienteId() == clienteSocio)
+                if(t.getCliente() == clienteSocio)
                 {
                     aux = t;
                 }
@@ -207,7 +208,7 @@ Lista de clientes asociados a esta Empresa.
         <td><%=clienteSocio.getEmail() %></td>
         <td><%=clienteSocio.getDireccion() %></td>
         <td><%=clienteSocio.getTelefono() %></td>
-        <td><%=clienteSocio.getEmpresaByEmpresaId().getId() %></td>
+        <td><%=clienteSocio.getEmpresa().getNombre() %></td>
         <td><a href="/empresa/bloquear/?idcuenta=<%=cuenta.getId()%>&volver=<%=cliente.getId()%>&bloquear=<%=clienteSocio.getId()%>"><%=str%></a></td>
     </tr>
     <%

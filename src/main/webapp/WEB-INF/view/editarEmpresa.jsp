@@ -1,8 +1,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.sampletaw.entity.Empresa" %>
 <%@ page import="es.taw.sampletaw.entity.Cliente" %>
+<%@ page import="es.taw.sampletaw.dto.ClienteDTO" %>
 <%
-    Cliente cliente = (Cliente) request.getAttribute("cliente");
+    ClienteDTO cliente = (ClienteDTO) request.getAttribute("cliente");
 
 %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

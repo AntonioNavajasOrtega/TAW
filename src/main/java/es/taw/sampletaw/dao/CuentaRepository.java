@@ -30,6 +30,6 @@ public interface CuentaRepository extends JpaRepository<Cuenta,Integer> {
     @Query("select t from Transaccion t where (t.cuentaByCuentaDestinoId in(select c from Cuenta c where c.empresaByEmpresaId = :empresa) and t.cantidad > 0) or (t.cuentaByCuentaOrigenId in(select c from Cuenta c where c.empresaByEmpresaId = :empresa) and t.cantidad < 0)")
     List<Transaccion> findEmpresaTrans(Empresa empresa);
 
-    @Query("select e from Cuenta e where e.empresaByEmpresaId = :empresa")
-    Cuenta findByEmpresa(Empresa empresa);
+    @Query("select e from Cuenta e where e.empresaByEmpresaId.id = :id")
+    Cuenta findByEmpresa(int id);
 }

@@ -1,5 +1,8 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.EstadoCuentaDTO;
+import es.taw.sampletaw.dto.TipoClienteDTO;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -58,5 +61,13 @@ public class TipoCliente {
 
     public void setTipoclienterelacionadosById(Collection<Tipoclienterelacionado> tipoclienterelacionadosById) {
         this.tipoclienterelacionadosById = tipoclienterelacionadosById;
+    }
+
+    public TipoClienteDTO toDTO(){
+        TipoClienteDTO dto = new TipoClienteDTO();
+        dto.setId(this.getId());
+        dto.setTipo(this.getTipo());
+
+        return dto;
     }
 }
