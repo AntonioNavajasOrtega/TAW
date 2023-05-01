@@ -1,6 +1,7 @@
 package es.taw.sampletaw.controller;
 import es.taw.sampletaw.dao.ClienteRepository;
 import es.taw.sampletaw.dao.EmpleadoRepository;
+import es.taw.sampletaw.dto.ClienteDTO;
 import es.taw.sampletaw.dto.EmpleadoDTO;
 import es.taw.sampletaw.entity.Cliente;
 import es.taw.sampletaw.entity.Empleado;
@@ -37,7 +38,7 @@ public class LoginController {
                                 Model model, HttpSession session) {
 
         String urlTo = "redirect:/cliente/";
-        Cliente cliente = this.clienteRepository.autenticar(email, contrasena);
+        ClienteDTO cliente = this.loginService.autenticarCliente(email,contrasena);
         EmpleadoDTO asistente = this.loginService.autenticar(email, contrasena);
         if (cliente == null && asistente == null) {
             model.addAttribute("error", "Credenciales incorrectas");
@@ -50,7 +51,7 @@ public class LoginController {
 
         } else{
             session.setAttribute("clienteSession",cliente);
-            if(cliente.getEmpresaByEmpresaId() == null)
+            if(cliente.getEmpresa() == null)
             {
                 urlTo += "?id=" + cliente.getId();
             }

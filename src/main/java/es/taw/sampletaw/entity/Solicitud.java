@@ -1,5 +1,8 @@
 package es.taw.sampletaw.entity;
 
+import es.taw.sampletaw.dto.MensajeDTO;
+import es.taw.sampletaw.dto.SolicitudDTO;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -102,5 +105,18 @@ public class Solicitud {
 
     public void setEmpresaByEmpresaId(Empresa empresaByEmpresaId) {
         this.empresaByEmpresaId = empresaByEmpresaId;
+    }
+
+    public SolicitudDTO toDTO(){
+        SolicitudDTO dto = new SolicitudDTO();
+        dto.setId(this.getId());
+        dto.setFecha(this.getFecha());
+        dto.setClienteByClienteId(this.getClienteByClienteId().toDTO());
+        dto.setCuentaByCuentaId(this.getCuentaByCuentaId().toDTO());
+        dto.setTipoSolicitudByTipo(this.getTipoSolicitudByTipo().toDTO());
+        dto.setEmpresaByEmpresaId(this.getEmpresaByEmpresaId().toDTO());
+        dto.setEmpleadoByEmpleadoId(this.getEmpleadoByEmpleadoId().toDTO());
+
+        return dto;
     }
 }

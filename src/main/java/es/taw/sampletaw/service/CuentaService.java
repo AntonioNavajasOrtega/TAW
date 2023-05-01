@@ -1,9 +1,7 @@
 package es.taw.sampletaw.service;
 
-import es.taw.sampletaw.dao.CuentaRepository;
-import es.taw.sampletaw.dao.EmpresaRepository;
+import es.taw.sampletaw.dao.*;
 import es.taw.sampletaw.dto.*;
-import es.taw.sampletaw.entity.Cliente;
 import es.taw.sampletaw.entity.Cuenta;
 import es.taw.sampletaw.entity.Transaccion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,25 @@ public class CuentaService {
 
     @Autowired
     protected EmpresaRepository empresaRepository;
+
+    @Autowired
+    protected ClienteRepository clienteRepository;
+
+    @Autowired
+    protected EmpleadoRepository empleadoRepository;
+
+    @Autowired
+    protected TipoClienteRepository tipoClienteRepository;
+
+    @Autowired
+    protected SolicitudRepository solicitudRepository;
+
+    @Autowired
+    protected TransaccionRepository transaccionRepository;
+
+    @Autowired
+    protected EstadoCuentaRepository estadoCuentaRepository;
+
 
     public CuentaDTO buscarPorEmpresa(EmpresaDTO empresa) {
         return  cuentaRepository.findByEmpresa(empresa.getId()).toDTO();
@@ -47,5 +64,38 @@ public class CuentaService {
         ArrayList dtos = new ArrayList<>();
         cuentas.forEach((final Cuenta cuenta) -> dtos.add(cuenta.toDTO()));
         return dtos;
+    }
+
+    public void guardar(CuentaDTO c) {
+        Cuenta cuenta = new Cuenta();
+
+        cuenta.setSaldo(c.getSaldo());
+        cuenta.setId(c.getId());
+        cuenta.setIban(c.getIban());
+        cuenta.setPais(c.getPais());
+        cuenta.setSwift(c.getSwift());
+
+        cuenta.setClienteByClienteId(clienteRepository.findById(c.getId()).orElse(null));
+        cuenta.setEstadoCuentaByEstado(estadoCuentaRepository.findById(c.getEstadoCuentaByEstado().getId()).orElse(null));
+        cuenta.setEmpleadoByEmpleadoId(empleadoRepository.findById(c.getEmpleadoByEmpleadoId().getId()).orElse(null));
+        cuenta.setEmpresaByEmpresaId(empresaRepository.findById(c.getEmpresaByEmpresaId().getId()).orElse(null));
+
+        cuentaRepository.save(cuenta);
+    }
+
+    public List<TransaccionDTO> findClienteTrans(ClienteDTO cliente) {
+       return listaTransaccionADTO(this.cuentaRepository.findClienteTrans(cliente.getId()));
+    }
+
+    public List<TransaccionDTO> findDateTrans(ClienteDTO cliente) {
+        return listaTransaccionADTO( this.cuentaRepository.findDateTrans(cliente.getId()));
+    }
+
+    public List<TransaccionDTO> findDestTrans(ClienteDTO cliente) {
+        return listaTransaccionADTO( this.cuentaRepository.findDestTrans(cliente.getId()));
+    }
+
+    public List<TransaccionDTO> findDestDateTrans(ClienteDTO cliente) {
+        return listaTransaccionADTO(this.cuentaRepository.findDestDateTrans(cliente.getId()));
     }
 }

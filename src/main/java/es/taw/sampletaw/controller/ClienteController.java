@@ -3,6 +3,7 @@ package es.taw.sampletaw.controller;
 import es.taw.sampletaw.dao.*;
 import es.taw.sampletaw.dto.ConversacionDTO;
 
+import es.taw.sampletaw.dto.TransaccionDTO;
 import es.taw.sampletaw.entity.*;
 import es.taw.sampletaw.service.ConversacionService;
 import es.taw.sampletaw.ui.FiltroOperaciones;
@@ -138,12 +139,12 @@ public class ClienteController {
     }
 
     @PostMapping("/realizar")
-    public String doRealizar(@ModelAttribute("trans") Transaccion transaccion
+    public String doRealizar(@ModelAttribute("trans") TransaccionDTO transaccionDTO
     ,@RequestParam("volver") int volver){
         Timestamp date = new Timestamp(System.currentTimeMillis());
+         Transaccion transaccion = this.transaccionRepository.findById(transaccionDTO.getId()).orElse(null);
         Cuenta orig = this.cuentaRepository.getById(transaccion.getCuentaByCuentaOrigenId().getId());
         Cuenta dest = this.cuentaRepository.getById(transaccion.getCuentaByCuentaDestinoId().getId());
-
         Transaccion transaccion1 = new Transaccion();
         transaccion.setFecha(date);
         transaccion1.setFecha(date);
@@ -172,8 +173,11 @@ public class ClienteController {
     }
 
     @PostMapping("/cambiarmoneda")
-    public String doCambiarMoneda(@ModelAttribute("trans") Transaccion transaccion
+    public String doCambiarMoneda(@ModelAttribute("trans") TransaccionDTO transaccionDTO
             ,@RequestParam("volver") int volver){
+
+        Transaccion transaccion = this.transaccionRepository.findById(transaccionDTO.getId()).orElse(null);
+
         Cuenta cuenta = this.cuentaRepository.getById(transaccion.getCuentaByCuentaOrigenId().getId());
 
 

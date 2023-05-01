@@ -65,7 +65,7 @@ public class EmpresaController {
     public String doListar(@RequestParam("id") Integer idcliente, Model model, HttpSession session){
 
         ClienteDTO cliente = this.clienteService.buscarCliente(idcliente);
-        Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
+        ClienteDTO clienteSession = (ClienteDTO) session.getAttribute("clienteSession");
         if(clienteSession == null || cliente.getId() != clienteSession.getId()) {
             return  "redirect:/logout";
         }
@@ -206,7 +206,7 @@ public class EmpresaController {
 
         ClienteDTO cliente = this.clienteService.buscarCliente(volver);
 
-        Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
+        ClienteDTO clienteSession = (ClienteDTO) session.getAttribute("clienteSession");
         if(clienteSession == null || cliente.getId() != clienteSession.getId()) {
             return  "redirect:/logout";
         }
@@ -234,27 +234,21 @@ public class EmpresaController {
     @GetMapping("/solicitar")
     public String doSolicitar(@RequestParam("id") Integer idcuenta,Model model
             , @RequestParam("idcliente") Integer id){
-        Cuenta cuenta = cuentaService.buscarPorIdCuenta(idcuenta;
+        CuentaDTO cuenta = cuentaService.buscarPorIdCuenta(idcuenta);
         ClienteDTO cliente = this.clienteService.buscarCliente(id);
-        Empleado empleado = cuenta.getEmpleadoByEmpleadoId();
+        EmpresaDTO empresa = cliente.getEmpresa();
         TipoSolicitudDTO tipo =tipoSolicitudService.activar();
 
         Timestamp date = new Timestamp(System.currentTimeMillis());
-        Solicitud solicitud = new Solicitud();
+        SolicitudDTO solicitud = new SolicitudDTO();
         solicitud.setClienteByClienteId(cliente);
         solicitud.setFecha(date);
         solicitud.setTipoSolicitudByTipo(tipo);
         solicitud.setCuentaByCuentaId(cuenta);
-        solicitud.setEmpleadoByEmpleadoId(empleado);
+        solicitud.setEmpresaByEmpresaId(empresa);
 
-        cuenta.getSolicitudsById().add(solicitud);
-        cliente.getSolicitudsById().add(solicitud);
-        empleado.getSolicitudsById().add(solicitud);
+        this.solicitudService.guardar(solicitud);
 
-        this.clienteRepository.save(cliente);
-        this.cuentaRepository.save(cuenta);
-        this.empleadoRepository.save(empleado);
-        this.solicitudRepository.save(solicitud);
         return "redirect:/empresa/?id=" + cliente.getId();
     }
 
@@ -266,39 +260,38 @@ public class EmpresaController {
 
         if(cuentaService.buscarPorEmpresa(empresa) == null)
             {
-                Solicitud solicitud = new Solicitud();
+                SolicitudDTO solicitud = new SolicitudDTO();
                 solicitud.setClienteByClienteId(cliente);
                 solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
-                Empleado gestor = this.empleadoRepository.findGestor();
+                EmpleadoDTO gestor = empleadoService.buscarGestor();
                 solicitud.setEmpleadoByEmpleadoId(gestor);
-                TipoSolicitud tipo = this.tipoSolicitudRepository.findSolicitarCuent();
+                TipoSolicitudDTO tipo = tipoSolicitudService.solicitarCuenta();
                 solicitud.setTipoSolicitudByTipo(tipo);
-                Cuenta c = new Cuenta();
-                c.setEmpresaByEmpresaId(cliente.getEmpresaByEmpresaId());
+                CuentaDTO c = new CuentaDTO();
+
+                c.setEmpresaByEmpresaId(cliente.getEmpresa());
+
                 c.setIban("00000000");
                 c.setSaldo(BigDecimal.valueOf(0));
                 c.setClienteByClienteId(cliente);
-                EstadoCuenta estado = this.estadoCuentaRepository.findAct();
+                EstadoCuentaDTO estado = estadoCuentaService.bloqueada();
                 c.setEstadoCuentaByEstado(estado);
                 c.setSwift("342");
                 c.setPais("-----");
                 c.setEmpleadoByEmpleadoId(gestor);
-                this.cuentaRepository.save(c);
+                c.setEmpresaByEmpresaId(empresa);
+
+                cuentaService.guardar(c);
+
                 solicitud.setCuentaByCuentaId(c);
 
-                List<Solicitud> sol = new ArrayList<Solicitud>();
-                sol.add(solicitud);
-                cliente.setSolicitudsById(sol);
-                this.solicitudRepository.save(solicitud);
+
+                solicitudService.guardar(solicitud);
             }
 
             CuentaDTO c = cuentaService.buscarPorEmpresa(empresa);
 
             TipoclienterelacionadoDTO tablaIntermedia = new TipoclienterelacionadoDTO();
-
-            TipoclienterelacionadoPK pk = new TipoclienterelacionadoPK();
-            pk.setCuentaId(c.getId());
-            pk.setClienteId(cliente.getId());
 
            tablaIntermedia.setCuenta(c);
            tablaIntermedia.setCliente(cliente);
@@ -367,19 +360,19 @@ public class EmpresaController {
 
 
         if(filtro == null || (filtro.getCuentadestino().isEmpty() && filtro.getDate().isEmpty())){
-            transacciones = this.cuentaRepository.findClienteTrans(cliente.getId());
+            transacciones = cuentaService.findClienteTrans(cliente);
             filtro = new FiltroOperaciones();
         }else{
             if(filtro.getCuentadestino().isEmpty()){
-                transacciones = this.cuentaRepository.findDateTrans(cliente.getId());
+                transacciones = cuentaService.findDateTrans(cliente);
             }else if(filtro.getDate().isEmpty()){
-                transacciones = this.cuentaRepository.findDestTrans(cliente.getId());
+                transacciones = cuentaService.findDestTrans(cliente);
             }else{
-                transacciones = this.cuentaRepository.findDestDateTrans(cliente.getId());
+                transacciones = cuentaService.findDestDateTrans(cliente);
             }
         }
 
-        Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
+        ClienteDTO clienteSession = (ClienteDTO) session.getAttribute("clienteSession");
         if(clienteSession == null || cliente.getId() != clienteSession.getId()) {
             return  "redirect:/logout";
         }

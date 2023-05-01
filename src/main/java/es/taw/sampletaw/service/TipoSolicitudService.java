@@ -14,4 +14,8 @@ public class TipoSolicitudService {
     public TipoSolicitudDTO activar() {
         return tipoSolicitudRepository.findActivar().toDTO();
     }
+
+    public TipoSolicitudDTO solicitarCuenta() {
+       return this.tipoSolicitudRepository.findSolicitarCuent().toDTO();
+    }
 }

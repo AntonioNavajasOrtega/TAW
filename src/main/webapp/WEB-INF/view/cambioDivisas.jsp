@@ -4,7 +4,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ConcurrentModificationException" %>
 <%@ page import="java.util.Collection" %>
-<%@ page import="es.taw.sampletaw.entity.*" %><%--
+<%@ page import="es.taw.sampletaw.entity.*" %>
+<%@ page import="es.taw.sampletaw.dto.CuentaDTO" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -14,7 +15,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    List<Cuenta> cuentas = (List<Cuenta>) request.getAttribute("cuentas");
+    List<CuentaDTO> cuentas = (List<CuentaDTO>) request.getAttribute("cuentas");
 %>
 
 
