@@ -54,7 +54,7 @@ public class AsistenteController {
         EmpleadoDTO asistente = (EmpleadoDTO) session.getAttribute("asistente");
 
         if (asistente == null) {
-            urlTo = "login";
+            urlTo = "redirect:/logout";
         } else {
             if (filtro == null || filtro.getFechaApertura().isEmpty() && filtro.getUsuario().isEmpty() && filtro.getNumeroMensajes().isEmpty()) {
                 conversaciones = this.conversacionService.listarConversaciones();
@@ -75,9 +75,17 @@ public class AsistenteController {
 
     @GetMapping("/mensajesUsuario")
     public String doListarMensajesIntercambiados(@RequestParam("idUsuario") Integer idCliente, Model model, HttpSession session){
-        List<MensajeDTO> mensajeList = this.mensajeService.buscarMensajesCuyoUsuarioEsEmisorOReceptor(idCliente);
-        model.addAttribute("mensajes", mensajeList);
-        return "mensajes";
+        String urlTo;
+        EmpleadoDTO asistente = (EmpleadoDTO) session.getAttribute("asistente");
+        if(asistente == null){
+            urlTo = "redirect:/logout";
+        }else{
+            List<MensajeDTO> mensajeList = this.mensajeService.buscarMensajesCuyoUsuarioEsEmisorOReceptor(idCliente);
+            model.addAttribute("mensajes", mensajeList);
+            urlTo = "mensajes";
+        }
+
+        return urlTo;
     }
 
 

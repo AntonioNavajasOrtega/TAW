@@ -1,5 +1,6 @@
 <%@ page import="es.taw.sampletaw.dto.MensajeDTO" %>
 <%@ page import="java.util.List" %>
+<%@ page import="es.taw.sampletaw.dto.EmpleadoDTO" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.

@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.sampletaw.dto.ClienteDTO" %>
 <%@ page import="es.taw.sampletaw.dto.ConversacionDTO" %>
+<%@ page import="es.taw.sampletaw.dto.EmpleadoDTO" %>
 
 
 <%--
@@ -12,6 +13,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 
 <%
     List<ClienteDTO> usuarios = (List<ClienteDTO>) request.getAttribute("usuarios");

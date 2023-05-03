@@ -5,7 +5,6 @@ import es.taw.sampletaw.dto.ConversacionDTO;
 import es.taw.sampletaw.dto.EmpleadoDTO;
 import es.taw.sampletaw.dto.MensajeDTO;
 import es.taw.sampletaw.service.*;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RequestMapping("/chat")
@@ -33,42 +33,67 @@ public class ChatController {
 
     @GetMapping("/listar")
     public String doListarChat(@RequestParam("idChat") Integer idChat,
-                               @RequestParam("soyAsistente") Byte soyAsistente , Model model){
-        ConversacionDTO conversacion = this.conversacionService.buscarConversacion(idChat);
-        List<MensajeDTO> mensajes = this.mensajeService.listarMensajes(conversacion);
+                               @RequestParam("soyAsistente") Byte soyAsistente , Model model, HttpSession session){
 
-        model.addAttribute("mensajes", mensajes);
-        model.addAttribute("chat", conversacion);
-        model.addAttribute("soyAsistente", soyAsistente);
-        return "chat";
+        String urlTo;
+        EmpleadoDTO asistenteSession = (EmpleadoDTO) session.getAttribute("asistente");
+        ClienteDTO clienteSession = (ClienteDTO) session.getAttribute("clienteSession");
+        ConversacionDTO conversacion = this.conversacionService.buscarConversacion(idChat);
+        if (soyAsistente == 1 && asistenteSession == null) {
+            urlTo = "redirect:/logout";
+        } else if (soyAsistente == 0 && (clienteSession == null || clienteSession.getId() != conversacion.getCliente().getId())){
+            urlTo = "redirect:/logout";
+        } else {
+            List<MensajeDTO> mensajes = this.mensajeService.listarMensajes(conversacion);
+            model.addAttribute("mensajes", mensajes);
+            model.addAttribute("chat", conversacion);
+            model.addAttribute("soyAsistente", soyAsistente);
+            urlTo = "chat";
+        }
+
+        return urlTo;
     }
     @GetMapping("/nuevo")
-    public String crearNuevoChat(@RequestParam("idCliente") Integer idCliente,@RequestParam("asunto") String asunto, Model model){
-        ConversacionDTO chat = this.conversacionService.iniciarChat(idCliente,asunto);
+    public String crearNuevoChat(@RequestParam("idCliente") Integer idCliente,@RequestParam("asunto") String asunto, Model model, HttpSession session){
+        String urlTo;
+        ClienteDTO clienteSession = (ClienteDTO) session.getAttribute("clienteSession");
+        if(clienteSession==null || clienteSession.getId()!=idCliente){
+            urlTo = "redirect:/logout";
+        }else{
+            ConversacionDTO chat = this.conversacionService.iniciarChat(idCliente,asunto);
+            this.conversacionService.guardarOEditar(chat);
 
-        this.conversacionService.guardarOEditar(chat);
-
-
-        model.addAttribute("chat", chat);
-        model.addAttribute("soyAsistente", 0);
-        return "redirect:/chat/listar?idChat=" + chat.getId() + "&soyAsistente=" + 0;
+            model.addAttribute("chat", chat);
+            model.addAttribute("soyAsistente", 0);
+            urlTo = "redirect:/chat/listar?idChat=" + chat.getId() + "&soyAsistente=" + 0;
+        }
+        return urlTo;
     }
 
     @GetMapping("/cerrar")
-    public String cerrarConversacion(@RequestParam("idConversacion") Integer idConversacion){
+    public String cerrarConversacion(@RequestParam("idConversacion") Integer idConversacion, HttpSession session){
+        String urlTo;
+        ClienteDTO clienteSession = (ClienteDTO) session.getAttribute("clienteSession");
         ConversacionDTO conv = this.conversacionService.buscarConversacion(idConversacion);
-        this.conversacionService.cerrarConversacion(conv);
 
-        this.conversacionService.guardarOEditar(conv);
+        if(clienteSession==null || clienteSession.getId()!=conv.getCliente().getId()){
+            urlTo = "redirect:/logout";
+        }else{
+            this.conversacionService.cerrarConversacion(conv);
 
-        if(conv.getCliente().getEmpresa() == null)
-        {
-            return "redirect:/cliente/?id="+conv.getCliente().getId();
+            this.conversacionService.guardarOEditar(conv);
+            if(conv.getCliente().getEmpresa() == null)
+            {
+                urlTo = "redirect:/cliente/?id="+conv.getCliente().getId();
+            }
+            else
+            {
+                urlTo = "redirect:/empresa/?id="+conv.getCliente().getId();
+            }
+
         }
-        else
-        {
-            return "redirect:/empresa/?id="+conv.getCliente().getId();
-        }
+
+        return  urlTo;
 
     }
 

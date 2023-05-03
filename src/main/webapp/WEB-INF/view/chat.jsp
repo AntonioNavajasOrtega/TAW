@@ -1,7 +1,8 @@
-<%@ page import="java.util.ConcurrentModificationException" %>
 <%@ page import="es.taw.sampletaw.dto.ConversacionDTO" %>
 <%@ page import="es.taw.sampletaw.dto.MensajeDTO" %>
 <%@ page import="java.util.List" %>
+<%@ page import="es.taw.sampletaw.dto.EmpleadoDTO" %>
+<%@ page import="es.taw.sampletaw.dto.ClienteDTO" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%--
   Created by IntelliJ IDEA.
@@ -12,10 +13,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+
 <%
     ConversacionDTO chat = (ConversacionDTO) request.getAttribute("chat");
-    List<MensajeDTO> mensajes = (List<MensajeDTO>) request.getAttribute("mensajes");
     Byte soyAsistente = (Byte) request.getAttribute("soyAsistente");
+    List<MensajeDTO> mensajes = (List<MensajeDTO>) request.getAttribute("mensajes");
 %>
 
 <html>
@@ -24,7 +26,8 @@
 </head>
 <body>
 
-    <h1>Chateando con <%=soyAsistente == 1 ? chat.getCliente().getNombre() : "Asistente" %></h1>
+
+    <h1> <%=chat.getAbierta()==1 ? "Chateando con" : "Chat cerrado por"%>  <%=soyAsistente == 1 ? chat.getCliente().getNombre() : "Asistente" %></h1>
     <h3>Asunto: <%=chat.getAsunto()%></h3>
     <%
         for(MensajeDTO m : mensajes){
@@ -38,36 +41,38 @@
         }
     %>
 
+    <%
+        if (chat.getAbierta()!=0){
+    %>
     <form method="post" action="/chat/enviarMensaje">
         <input type="hidden" name="soyAsistente" value="<%=soyAsistente%>">
         <input type="hidden" name="idChat" value="<%=chat.getId()%>">
         <input type="text" name="mensaje"> <button>Enviar mensaje</button> <br/>
     </form>
+    <%
+        }
+    %>
         <%
             if(soyAsistente == 0){
         %>
         <button onclick="location.href='/chat/cerrar?idConversacion=<%=chat.getId()%>'">Cerrar conversacion</button>
-    <%if(chat.getCliente().getEmpresa() == null)
-    {
+        <%
+            if(chat.getCliente().getEmpresa() == null) {
         %>
-    <a href="/cliente/?id=<%=chat.getCliente().getId()%>">Volver al perfil</a>
-    <%
-    } else { %>
-    <a href="/empresa/?id=<%=chat.getCliente().getId()%>">Volver al perfil</a>
-    <%
-    }
-    %>
-
-
-        <br/>
-    <%
-            }else{
+            <a href="/cliente/?id=<%=chat.getCliente().getId()%>">Volver al perfil</a>
+        <%
+            } else {
         %>
-    <a href="/asistente/">Volver al perfil</a>
-
-    <%
+            <a href="/empresa/?id=<%=chat.getCliente().getId()%>">Volver al perfil</a>
+        <%
             }
         %>
+        <br/>
+        <%
+            }else{
+        %>
+            <a href="/asistente/">Volver al perfil</a>
+        <%}%>
 
 </body>
 </html>
