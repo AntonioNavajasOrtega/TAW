@@ -249,7 +249,7 @@ public class EmpresaController {
         solicitud.setCuentaByCuentaId(cuenta);
         solicitud.setEmpresaByEmpresaId(empresa);
 
-        this.solicitudService.guardar(solicitud);
+        this.solicitudService.guardar(solicitud,cliente,cuenta,null);
 
         return "redirect:/empresa/?id=" + cliente.getId();
     }
@@ -289,7 +289,7 @@ public class EmpresaController {
                 solicitud.setCuentaByCuentaId(c);
 
 
-                solicitudService.guardar(solicitud);
+                solicitudService.guardar(solicitud,cliente,c,gestor);
             }
 
             CuentaDTO c = cuentaService.buscarPorEmpresa(empresa);

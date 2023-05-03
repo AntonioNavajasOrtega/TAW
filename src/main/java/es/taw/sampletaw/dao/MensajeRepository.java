@@ -16,4 +16,10 @@ public interface MensajeRepository extends JpaRepository<Mensaje, Integer> {
 
     @Query("select m from Mensaje m where m.conversacionByConversacion.id = :id")
     List<Mensaje> mensajesPorConversacion(@Param("id") Integer id);
+
+    @Query("select m from Mensaje m where m.empleadoByEmisorEmpleado.id = :id")
+    List<Mensaje> mensajesEmpleadoEmisor(@Param("id") Integer id);
+
+    @Query("select m from Mensaje m where m.empleadoByReceptorEmpleado.id = :id")
+    List<Mensaje> mensajesEmpleadoReceptor(@Param("id") Integer id);
 }

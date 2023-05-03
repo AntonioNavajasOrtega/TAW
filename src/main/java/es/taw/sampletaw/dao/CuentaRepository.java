@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface CuentaRepository extends JpaRepository<Cuenta,Integer> {
@@ -32,4 +33,13 @@ public interface CuentaRepository extends JpaRepository<Cuenta,Integer> {
 
     @Query("select e from Cuenta e where e.empresaByEmpresaId.id = :id")
     Cuenta findByEmpresa(int id);
+
+    @Query("select c from Cuenta c where c.clienteByClienteId.id = :id")
+    List<Cuenta> findByCliente(@Param("id") Integer id);
+
+    @Query("select c from Cuenta c where c.empleadoByEmpleadoId.id = :id")
+    List<Cuenta> cuentasEmpleado(@Param("id") Integer id);
+
+    @Query("select c from Cuenta c where c.clienteByClienteId.id = :id")
+    List<Cuenta> cuentasCliente(Integer id);
 }

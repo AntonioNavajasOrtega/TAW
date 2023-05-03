@@ -2,6 +2,7 @@ package es.taw.sampletaw.service;
 
 import es.taw.sampletaw.dao.*;
 import es.taw.sampletaw.dto.ClienteDTO;
+import es.taw.sampletaw.dto.CuentaDTO;
 import es.taw.sampletaw.dto.EmpresaDTO;
 import es.taw.sampletaw.dto.MensajeDTO;
 import es.taw.sampletaw.entity.*;
@@ -91,20 +92,22 @@ public class ClienteService {
         cliente1.setEmail(cliente.getEmail());
         cliente1.setNif(cliente.getNif());
 
-        cliente1.setEmpresaByEmpresaId(empresaRepository.getById(cliente.getEmpresa().getId()));
         cliente1.setConversacionsById(conversacionRepository.buscaPorUsuarioConversacionesAbiertas(cliente.getId()));
 
-        List<Cuenta> list = new ArrayList<>();
-        list.add(cuentaRepository.findByEmpresa(cliente.getEmpresa().getId())); // Esto es porque solo tiene una cuenta
+        List<Cuenta> list =cuentaRepository.findByCliente(cliente.getId());
+        if(cliente.getEmpresa() != null){
+            cliente1.setEmpresaByEmpresaId(empresaRepository.findById(cliente.getEmpresa().getId()).orElse(null));
+            list.add(cuentaRepository.findByEmpresa(cliente.getEmpresa().getId()));
+            cliente1.setSolicitudsById(solicitudRepository.findByEmpresa(cliente.getEmpresa().getId()));
+            List<Tipoclienterelacionado> lista = new ArrayList<>();
+            lista.add(tipoclienterelacionadoRepository.findByCliente(cliente.getId()));
+            cliente1.setTipoclienterelacionadosById(lista);
+        }
+
         cliente1.setCuentasById(list);
 
 
         cliente1.setMensajesById(mensajeRepository.mensajesCuyoUsuarioEsEmisorOReceptor(cliente.getId()));
-        cliente1.setSolicitudsById(solicitudRepository.findByEmpresa(cliente.getEmpresa().getId()));
-
-        List<Tipoclienterelacionado> lista = new ArrayList<>();
-        lista.add(tipoclienterelacionadoRepository.findByCliente(cliente.getId()));
-        cliente1.setTipoclienterelacionadosById(lista);
 
         clienteRepository.save(cliente1);
         cliente.setId(cliente1.getId());

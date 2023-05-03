@@ -7,7 +7,10 @@
 <%@ page import="es.taw.sampletaw.entity.Conversacion" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="es.taw.sampletaw.entity.Transaccion" %>
-<%@ page import="java.math.BigDecimal" %><%--
+<%@ page import="java.math.BigDecimal" %>
+<%@ page import="es.taw.sampletaw.dto.ClienteDTO" %>
+<%@ page import="es.taw.sampletaw.dto.TransaccionDTO" %>
+<%@ page import="es.taw.sampletaw.dto.CuentaDTO" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -17,7 +20,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
-    Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
+    ClienteDTO clienteSession = (ClienteDTO) session.getAttribute("clienteSession");
     if (clienteSession == null) {
         System.out.println("CLIENTE ES NULL ---------------------------------------------------------");
         %> 
@@ -26,8 +29,9 @@
 <%
     }
     System.out.println("CLIENTE NO ES NULL ---------------------------------------------------------");
-    Cliente cliente = (Cliente) request.getAttribute("cliente");
-    List<Transaccion> transacciones = (List<Transaccion>) request.getAttribute("transacciones");
+    ClienteDTO cliente = (ClienteDTO) request.getAttribute("cliente");
+    List<TransaccionDTO> transacciones = (List<TransaccionDTO>) request.getAttribute("transacciones");
+    List<CuentaDTO> cuentas = (List<CuentaDTO>) request.getAttribute("cuentas");
 %>
 
 
@@ -72,7 +76,7 @@
         <td></td>
     </tr>
     <%
-        for (Cuenta cuenta: cliente.getCuentasById()) {
+        for (CuentaDTO cuenta: cuentas) {
     %>
     <tr>
         <td><%= cuenta.getId()%></td>
@@ -112,7 +116,7 @@
         <td>Destino</td>
     </tr>
     <%
-        for(Transaccion transaccion : transacciones){
+        for(TransaccionDTO transaccion : transacciones){
     %>
     <tr>
         <td><%=transaccion.getTipoTransaccionByTipo().getTipo()%></td>
