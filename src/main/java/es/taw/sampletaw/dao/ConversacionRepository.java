@@ -64,4 +64,7 @@ public interface ConversacionRepository extends JpaRepository<Conversacion,Integ
 
     @Query("select c from Conversacion c where c.clienteByCliente.id = :idCliente and c.abierta = 1")
     List<Conversacion> buscaPorUsuarioConversacionesAbiertas(@Param("idCliente") Integer idcliente);
+
+    @Query("select c from Conversacion c where c.empleadoByEmpleado.id = :id")
+    List<Conversacion> buscaPorEmpleado(@Param("id") Integer id);
 }

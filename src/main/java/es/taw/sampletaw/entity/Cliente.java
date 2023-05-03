@@ -1,10 +1,12 @@
 package es.taw.sampletaw.entity;
 
 import es.taw.sampletaw.dto.ClienteDTO;
+import es.taw.sampletaw.dto.CuentaDTO;
 import es.taw.sampletaw.dto.DTO;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 public class Cliente implements DTO<ClienteDTO> {

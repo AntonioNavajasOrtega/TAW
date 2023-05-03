@@ -5,6 +5,7 @@ import es.taw.sampletaw.dto.ClienteDTO;
 import es.taw.sampletaw.dto.EmpleadoDTO;
 import es.taw.sampletaw.entity.Cliente;
 import es.taw.sampletaw.entity.Empleado;
+import es.taw.sampletaw.service.ClienteService;
 import es.taw.sampletaw.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpSession;
 public class LoginController {
 
     @Autowired
-    protected ClienteRepository clienteRepository;
+    protected ClienteService clienteService;
 
     @Autowired
     protected EmpleadoRepository empleadoRepository;

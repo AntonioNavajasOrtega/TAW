@@ -1,11 +1,10 @@
 package es.taw.sampletaw.controller;
 
 import es.taw.sampletaw.dao.*;
-import es.taw.sampletaw.dto.ConversacionDTO;
+import es.taw.sampletaw.dto.*;
 
-import es.taw.sampletaw.dto.TransaccionDTO;
 import es.taw.sampletaw.entity.*;
-import es.taw.sampletaw.service.ConversacionService;
+import es.taw.sampletaw.service.*;
 import es.taw.sampletaw.ui.FiltroOperaciones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -27,28 +26,28 @@ import java.util.stream.Collectors;
 public class ClienteController {
 
     @Autowired
-    protected ClienteRepository clienteRepository;
+    protected ClienteService clienteService;
 
     @Autowired
-    protected CuentaRepository cuentaRepository;
+    protected CuentaService cuentaService;
 
     @Autowired
-    protected TipoTransaccionRepository tipoTransaccionRepository;
+    protected TipoTransaccionService tipoTransaccionService;
 
     @Autowired
-    protected TransaccionRepository transaccionRepository;
+    protected TransaccionService transaccionService;
 
     @Autowired
-    protected SolicitudRepository solicitudRepository;
+    protected SolicitudService solicitudService;
 
     @Autowired
-    protected EmpleadoRepository empleadoRepository;
+    protected EmpleadoService empleadoService;
 
     @Autowired
-    protected TipoSolicitudRepository tipoSolicitudRepository;
+    protected TipoSolicitudService tipoSolicitudService;
 
     @Autowired
-    protected EstadoCuentaRepository estadoCuentaRepository;
+    protected EstadoCuentaService estadoCuentaService;
 
     @Autowired
     protected ConversacionService conversacionService;
@@ -60,56 +59,55 @@ public class ClienteController {
 
     @GetMapping("/nuevo")
     public String doNuevo (Model model) {
-        return this.mostrarEditarONuevo(new Cliente(), model);
+        return this.mostrarEditarONuevo(new ClienteDTO(), model);
     }
 
-    private String mostrarEditarONuevo(Cliente cliente, Model model) {
+    private String mostrarEditarONuevo(ClienteDTO cliente, Model model) {
         model.addAttribute("cliente",cliente);
         return "registroCliente";
     }
 
     @PostMapping("/guardar")
-    public String doGuardar(@ModelAttribute("cliente") Cliente cliente){
-        if(cliente.getCuentasById() == null){
-            this.clienteRepository.save(cliente);
-            Solicitud solicitud = new Solicitud();
+    public String doGuardar(@ModelAttribute("cliente") ClienteDTO cliente){
+        if(this.cuentaService.listarCuentasCliente(cliente.getId()) == null){
+            this.clienteService.guardar(cliente);
+            SolicitudDTO solicitud = new SolicitudDTO();
             solicitud.setClienteByClienteId(cliente);
             solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
-            Empleado gestor = this.empleadoRepository.findGestor();
+            EmpleadoDTO gestor = this.empleadoService.buscarGestor();
             solicitud.setEmpleadoByEmpleadoId(gestor);
-            TipoSolicitud tipo = this.tipoSolicitudRepository.findSolicitarCuent();
+            TipoSolicitudDTO tipo = this.tipoSolicitudService.solicitarCuenta();
             solicitud.setTipoSolicitudByTipo(tipo);
-            Cuenta c = new Cuenta();
+            CuentaDTO c = new CuentaDTO();
             c.setIban("00000000");
             c.setSaldo(BigDecimal.valueOf(0));
             c.setClienteByClienteId(cliente);
-            EstadoCuenta estado = this.estadoCuentaRepository.findBloq();
+            EstadoCuentaDTO estado = this.estadoCuentaService.bloqueada();
             c.setEstadoCuentaByEstado(estado);
             c.setSwift("342");
             c.setPais("-----");
             c.setEmpleadoByEmpleadoId(gestor);
-            this.cuentaRepository.save(c);
+            this.cuentaService.guardar(c);
             solicitud.setCuentaByCuentaId(c);
 
-            List<Solicitud> sol = new ArrayList<Solicitud>();
+            List<SolicitudDTO> sol = new ArrayList<SolicitudDTO>();
             sol.add(solicitud);
-            cliente.setSolicitudsById(sol);
-            this.solicitudRepository.save(solicitud);
+            this.solicitudService.guardar(solicitud,cliente,null,gestor);
         }
-        this.clienteRepository.save(cliente);
+        this.clienteService.guardar(cliente);
         return "redirect:/cliente/?id=" + cliente.getId();
     }
 
     @GetMapping("/editar")
     public String doEditar(@RequestParam("id") Integer idcliente,Model modelo){
-        Cliente cliente = this.clienteRepository.findById(idcliente).orElse(null);
+        ClienteDTO cliente = this.clienteService.buscarCliente(idcliente);
         return this.mostrarEditarONuevo(cliente,modelo);
     }
 
-    protected String pasarAOperacion(Integer idcuenta,Model model, Transaccion transaccion){
-        Cuenta cuenta = this.cuentaRepository.findById(idcuenta).orElse(null);
+    protected String pasarAOperacion(Integer idcuenta,Model model, TransaccionDTO transaccion){
+        CuentaDTO cuenta = this.cuentaService.buscarPorIdCuenta(idcuenta);
         model.addAttribute("cuenta",cuenta);
-        List<Cuenta> cuentas = this.cuentaRepository.findCuentas(cuenta.getId());
+        List<CuentaDTO> cuentas = this.cuentaService.buscarCuentas(cuenta.getId());
         model.addAttribute("cuentas",cuentas);
         transaccion.setCuentaByCuentaOrigenId(cuenta);
         model.addAttribute("trans",transaccion);
@@ -124,16 +122,16 @@ public class ClienteController {
 
     @GetMapping("/transaccion")
     public String doTransaccion(@RequestParam("id") Integer idcuenta, Model model){
-        Transaccion transaccion = new Transaccion();
-        TipoTransaccion tipo = this.tipoTransaccionRepository.findTrans();
+        TransaccionDTO transaccion = new TransaccionDTO();
+        TipoTransaccionDTO tipo = this.tipoTransaccionService.transaccion();
         transaccion.setTipoTransaccionByTipo(tipo);
         return this.pasarAOperacion(idcuenta,model,transaccion);
     }
 
     @GetMapping("/cambio")
     public String doCambio(@RequestParam("id") Integer idcuenta, Model model){
-        Transaccion transaccion = new Transaccion();
-        TipoTransaccion tipo = this.tipoTransaccionRepository.findCambio();
+        TransaccionDTO transaccion = new TransaccionDTO();
+        TipoTransaccionDTO tipo = this.tipoTransaccionService.cambio();
         transaccion.setTipoTransaccionByTipo(tipo);
         return this.pasarAOperacion(idcuenta,model,transaccion);
     }
@@ -142,10 +140,10 @@ public class ClienteController {
     public String doRealizar(@ModelAttribute("trans") TransaccionDTO transaccionDTO
     ,@RequestParam("volver") int volver){
         Timestamp date = new Timestamp(System.currentTimeMillis());
-         Transaccion transaccion = this.transaccionRepository.findById(transaccionDTO.getId()).orElse(null);
-        Cuenta orig = this.cuentaRepository.getById(transaccion.getCuentaByCuentaOrigenId().getId());
-        Cuenta dest = this.cuentaRepository.getById(transaccion.getCuentaByCuentaDestinoId().getId());
-        Transaccion transaccion1 = new Transaccion();
+        TransaccionDTO transaccion = this.transaccionService.buscarPorIdTransaccion(transaccionDTO.getId());
+        CuentaDTO orig = this.cuentaService.buscarPorIdCuenta(transaccion.getCuentaByCuentaOrigenId().getId());
+        CuentaDTO dest = this.cuentaService.buscarPorIdCuenta(transaccion.getCuentaByCuentaDestinoId().getId());
+        TransaccionDTO transaccion1 = new TransaccionDTO();
         transaccion.setFecha(date);
         transaccion1.setFecha(date);
         transaccion1.setCantidad(transaccion.getCantidad().negate());
@@ -157,11 +155,11 @@ public class ClienteController {
         dest.getTransaccionsById().add(transaccion);
         orig.setSaldo(orig.getSaldo().subtract(transaccion.getCantidad()));
         dest.setSaldo(dest.getSaldo().add(transaccion.getCantidad()));
-        this.cuentaRepository.save(orig);
-        this.cuentaRepository.save(dest);
-        this.transaccionRepository.save(transaccion);
-        this.transaccionRepository.save(transaccion1);
-        if(orig.getClienteByClienteId().getEmpresaByEmpresaId() == null)
+        this.cuentaService.guardar(orig);
+        this.cuentaService.guardar(dest);
+        this.transaccionService.guardar(transaccion);
+        this.transaccionService.guardar(transaccion1);
+        if(orig.getClienteByClienteId().getEmpresa() == null)
         {
             return "redirect:/cliente/?id=" + orig.getClienteByClienteId().getId();
         }
@@ -176,9 +174,9 @@ public class ClienteController {
     public String doCambiarMoneda(@ModelAttribute("trans") TransaccionDTO transaccionDTO
             ,@RequestParam("volver") int volver){
 
-        Transaccion transaccion = this.transaccionRepository.findById(transaccionDTO.getId()).orElse(null);
+        TransaccionDTO transaccion = this.transaccionService.buscarPorIdTransaccion(transaccionDTO.getId());
 
-        Cuenta cuenta = this.cuentaRepository.getById(transaccion.getCuentaByCuentaOrigenId().getId());
+        CuentaDTO cuenta = this.cuentaService.buscarPorIdCuenta(transaccion.getCuentaByCuentaOrigenId().getId());
 
 
         Timestamp date = new Timestamp(System.currentTimeMillis());
@@ -193,9 +191,9 @@ public class ClienteController {
         }else if(transaccion.getMoneda().equals("eur")){
             cuenta.setSaldo(transaccion.getCantidad().divide(BigDecimal.valueOf(1.09708), RoundingMode.HALF_EVEN));
         }
-        this.cuentaRepository.save(cuenta);
-        this.transaccionRepository.save(transaccion);
-        if(cuenta.getClienteByClienteId().getEmpresaByEmpresaId() == null)
+        this.cuentaService.guardar(cuenta);
+        this.transaccionService.guardar(transaccion);
+        if(cuenta.getClienteByClienteId().getEmpresa() == null)
         {
             return "redirect:/cliente/?id=" + cuenta.getClienteByClienteId().getId();
         }else
@@ -207,27 +205,20 @@ public class ClienteController {
 
     @GetMapping("/solicitar")
     public String doSolicitar(@RequestParam("id") Integer idcuenta,Model model){
-        Cuenta cuenta = this.cuentaRepository.findById(idcuenta).orElse(null);
-        Cliente cliente = cuenta.getClienteByClienteId();
-        Empleado empleado = cuenta.getEmpleadoByEmpleadoId();
-        TipoSolicitud tipo = this.tipoSolicitudRepository.findActivar();
+        CuentaDTO cuenta = this.cuentaService.buscarPorIdCuenta(idcuenta);
+        ClienteDTO cliente = cuenta.getClienteByClienteId();
+        EmpleadoDTO empleado = cuenta.getEmpleadoByEmpleadoId();
+        TipoSolicitudDTO tipo = this.tipoSolicitudService.activar();
 
         Timestamp date = new Timestamp(System.currentTimeMillis());
-        Solicitud solicitud = new Solicitud();
+        SolicitudDTO solicitud = new SolicitudDTO();
         solicitud.setClienteByClienteId(cliente);
         solicitud.setFecha(date);
         solicitud.setTipoSolicitudByTipo(tipo);
         solicitud.setCuentaByCuentaId(cuenta);
         solicitud.setEmpleadoByEmpleadoId(empleado);
 
-        cuenta.getSolicitudsById().add(solicitud);
-        cliente.getSolicitudsById().add(solicitud);
-        empleado.getSolicitudsById().add(solicitud);
-
-        this.clienteRepository.save(cliente);
-        this.cuentaRepository.save(cuenta);
-        this.empleadoRepository.save(empleado);
-        this.solicitudRepository.save(solicitud);
+        this.solicitudService.guardar(solicitud,cliente,cuenta,empleado);
         return "redirect:/cliente/?id=" + cliente.getId();
     }
 
@@ -239,29 +230,31 @@ public class ClienteController {
     }
 
     protected String procesarFiltrado(FiltroOperaciones filtro, Integer idcliente,Model model,HttpSession session) {
-        Cliente cliente = this.clienteRepository.getById(idcliente);
-        Cliente clienteSession = (Cliente) session.getAttribute("clienteSession");
-        List<Transaccion> transacciones;
+        ClienteDTO cliente = this.clienteService.buscarCliente(idcliente);
+        ClienteDTO clienteSession = (ClienteDTO) session.getAttribute("clienteSession");
+        List<TransaccionDTO> transacciones;
 
         String urlTo = "cliente";
         if(clienteSession == null || cliente.getId() != clienteSession.getId()){
             urlTo = "redirect:/logout";
         }else{
             List<ConversacionDTO> conversaciones = this.conversacionService.listarConversacionesAbiertasDeUnCliente(idcliente);
+            List<CuentaDTO> cuentas = this.cuentaService.listarCuentasCliente(cliente.getId());
             if(filtro == null || (filtro.getCuentadestino().isEmpty() && filtro.getDate().isEmpty())){
-                transacciones = this.cuentaRepository.findClienteTrans(cliente.getId());
+                transacciones = this.cuentaService.findClienteTrans(cliente);
                 filtro = new FiltroOperaciones();
             }else{
                 if(filtro.getCuentadestino().isEmpty()){
-                    transacciones = this.cuentaRepository.findDateTrans(cliente.getId());
+                    transacciones = this.cuentaService.findDateTrans(cliente);
                 }else if(filtro.getDate().isEmpty()){
-                    transacciones = this.cuentaRepository.findDestTrans(cliente.getId());
+                    transacciones = this.cuentaService.findDestTrans(cliente);
                 }else{
-                    transacciones = this.cuentaRepository.findDestDateTrans(cliente.getId());
+                    transacciones = this.cuentaService.findDestDateTrans(cliente);
                 }
             }
             model.addAttribute("transacciones",transacciones);
             model.addAttribute("conversaciones", conversaciones);
+            model.addAttribute("cuentas", cuentas);
         }
 
         model.addAttribute("filtro",filtro);

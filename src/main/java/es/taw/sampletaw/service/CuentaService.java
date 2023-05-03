@@ -2,6 +2,7 @@ package es.taw.sampletaw.service;
 
 import es.taw.sampletaw.dao.*;
 import es.taw.sampletaw.dto.*;
+import es.taw.sampletaw.entity.Cliente;
 import es.taw.sampletaw.entity.Cuenta;
 import es.taw.sampletaw.entity.Transaccion;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,5 +115,9 @@ public class CuentaService {
 
     public List<TransaccionDTO> findDestDateTrans(ClienteDTO cliente) {
         return listaTransaccionADTO(this.cuentaRepository.findDestDateTrans(cliente.getId()));
+    }
+
+    public List<CuentaDTO> listarCuentasCliente(Integer idcliente){
+        return this.listaCuentasADTO(this.cuentaRepository.cuentasCliente(idcliente));
     }
 }

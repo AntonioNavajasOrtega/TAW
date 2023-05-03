@@ -9,10 +9,13 @@ import java.util.List;
 
 public interface TipoclienterelacionadoRepository extends JpaRepository<Tipoclienterelacionado,Integer> {
 
-    @Query("select e from Tipoclienterelacionado e where e.clienteByClienteId.id = :id")
+    @Query("select t from Tipoclienterelacionado t where t.clienteByClienteId.id = :id")
     Tipoclienterelacionado findByCliente(Integer id);
 
     @Query("select e from Tipoclienterelacionado e where e.clienteByClienteId.empresaByEmpresaId.id = :id")
     List<Tipoclienterelacionado> findByEmpresa(Integer id);
+
+    @Query("select t from Tipoclienterelacionado t where t.tipoClienteByTipo.tipo = 'Propietario'")
+    Tipoclienterelacionado findPropietario();
 
 }

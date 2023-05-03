@@ -4,6 +4,7 @@ import es.taw.sampletaw.entity.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Collection;
 
 public class CuentaDTO implements Serializable {
 
@@ -16,6 +17,26 @@ public class CuentaDTO implements Serializable {
     private ClienteDTO clienteByClienteId;
     private EmpleadoDTO empleadoByEmpleadoId;
     private EmpresaDTO empresaByEmpresaId;
+
+    private Collection<TransaccionDTO> transaccionsById;
+
+    private Collection<TransaccionDTO> transaccionsById_0;
+
+    public Collection<TransaccionDTO> getTransaccionsById() {
+        return transaccionsById;
+    }
+
+    public void setTransaccionsById(Collection<TransaccionDTO> transaccionsById) {
+        this.transaccionsById = transaccionsById;
+    }
+
+    public Collection<TransaccionDTO> getTransaccionsById_0() {
+        return transaccionsById_0;
+    }
+
+    public void setTransaccionsById_0(Collection<TransaccionDTO> transaccionsById_0) {
+        this.transaccionsById_0 = transaccionsById_0;
+    }
 
     public Integer getId() {
         return id;

@@ -2,8 +2,11 @@ package es.taw.sampletaw.dto;
 
 
 import es.taw.sampletaw.entity.Cliente;
+import es.taw.sampletaw.entity.Cuenta;
+import es.taw.sampletaw.entity.Solicitud;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 public class ClienteDTO implements Serializable {
 
@@ -24,7 +27,6 @@ public class ClienteDTO implements Serializable {
     private String contrasena;
 
     private EmpresaDTO empresa;
-
     public Integer getId() {
         return id;
     }
