@@ -4,10 +4,7 @@ import es.taw.sampletaw.dao.ClienteRepository;
 import es.taw.sampletaw.dao.CuentaRepository;
 import es.taw.sampletaw.dao.TipoClienteRepository;
 import es.taw.sampletaw.dao.TipoclienterelacionadoRepository;
-import es.taw.sampletaw.dto.ClienteDTO;
-import es.taw.sampletaw.dto.CuentaDTO;
-import es.taw.sampletaw.dto.MensajeDTO;
-import es.taw.sampletaw.dto.TipoclienterelacionadoDTO;
+import es.taw.sampletaw.dto.*;
 import es.taw.sampletaw.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,5 +62,14 @@ public class TipoclienterelacionadoService {
 
 
         tipoclienterelacionadoRepository.save(tipoclienterelacionado1);
+    }
+
+    public TipoclienterelacionadoDTO crear(CuentaDTO c, ClienteDTO cliente, TipoClienteDTO tipocliente) {
+        TipoclienterelacionadoDTO tablaIntermedia = new TipoclienterelacionadoDTO();
+        tablaIntermedia.setCuenta(c);
+        tablaIntermedia.setCliente(cliente);
+        tablaIntermedia.setBloqueado((byte) 1);
+        tablaIntermedia.setTipo(tipocliente);
+        return tablaIntermedia;
     }
 }

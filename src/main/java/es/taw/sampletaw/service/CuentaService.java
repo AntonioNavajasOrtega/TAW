@@ -8,6 +8,7 @@ import es.taw.sampletaw.entity.Transaccion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +38,12 @@ public class CuentaService {
 
     @Autowired
     protected EstadoCuentaRepository estadoCuentaRepository;
+
+    @Autowired
+    protected  EmpleadoService empleadoService;
+
+    @Autowired
+    protected EstadoCuentaService estadoCuentaService;
 
 
     public CuentaDTO buscarPorEmpresa(EmpresaDTO empresa) {
@@ -123,5 +130,21 @@ public class CuentaService {
 
     public List<CuentaDTO> listarCuentasCliente(Integer idcliente){
         return this.listaCuentasADTO(this.cuentaRepository.cuentasCliente(idcliente));
+    }
+
+    public CuentaDTO crearCuentaBloqueada(ClienteDTO cliente) {
+        CuentaDTO c = new CuentaDTO();
+        EmpleadoDTO gestor = empleadoService.buscarGestor();
+
+        c.setIban("00000000");
+        c.setSaldo(BigDecimal.valueOf(0));
+        c.setClienteByClienteId(cliente);
+        EstadoCuentaDTO estado = estadoCuentaService.bloqueada();
+        c.setEstadoCuentaByEstado(estado);
+        c.setSwift("342");
+        c.setPais("-----");
+        c.setEmpleadoByEmpleadoId(gestor);
+        c.setEmpresaByEmpresaId(cliente.getEmpresa());
+        return  c;
     }
 }

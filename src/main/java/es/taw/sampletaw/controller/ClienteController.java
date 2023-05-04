@@ -158,16 +158,27 @@ public class ClienteController {
         transaccion1.setCuentaByCuentaDestinoId(dest);
         transaccion1.setTipoTransaccionByTipo(transaccion.getTipoTransaccionByTipo());
 
-        List<TransaccionDTO> list1 = new ArrayList<>();
-        list1.add(transaccion);
-        dest.setTransaccionsById(list1);
+        if(dest.getTransaccionsById() == null)
+        {
+            List<TransaccionDTO> list1 = new ArrayList<>();
+            list1.add(transaccion);
+            dest.setTransaccionsById(list1);
+        }
+        else {
+            dest.getTransaccionsById().add(transaccion);
+        }
 
-        List<TransaccionDTO> list2 = new ArrayList<>();
-        list2.add(transaccion1);
-        orig.setTransaccionsById(list2);
+        if(orig.getTransaccionsById() == null)
+        {
+            List<TransaccionDTO> list2 = new ArrayList<>();
+            list2.add(transaccion1);
+            orig.setTransaccionsById(list2);
+        }
+        else {
+            orig.getTransaccionsById().add(transaccion1);
+        }
 
-        // orig.getTransaccionsById().add(transaccion1);
-       // dest.getTransaccionsById().add(transaccion);
+
         orig.setSaldo(orig.getSaldo().subtract(transaccion.getCantidad()));
         dest.setSaldo(dest.getSaldo().add(transaccion.getCantidad()));
         this.cuentaService.guardar(orig);
@@ -187,9 +198,16 @@ public class ClienteController {
 
     @PostMapping("/cambiarmoneda")
     public String doCambiarMoneda(@ModelAttribute("trans") TransaccionDTO transaccionDTO
-            ,@RequestParam("volver") int volver){
+            ,@RequestParam("volver") int volver,@RequestParam("cuentaByCuentaOrigenId1") int origenID
+            ,@RequestParam("cuentaByCuentaDestinoId1") int destinoID){
 
-        TransaccionDTO transaccion = this.transaccionService.buscarPorIdTransaccion(transaccionDTO.getId());
+        TransaccionDTO transaccion = transaccionDTO;
+        TipoTransaccionDTO tipo = tipoTransaccionService.cambio();
+        CuentaDTO destino = cuentaService.buscarPorIdCuenta(destinoID);
+        CuentaDTO origen = cuentaService.buscarPorIdCuenta(origenID);
+        transaccion.setTipoTransaccionByTipo(tipo);
+        transaccion.setCuentaByCuentaDestinoId(destino);
+        transaccion.setCuentaByCuentaOrigenId(origen);
 
         CuentaDTO cuenta = this.cuentaService.buscarPorIdCuenta(transaccion.getCuentaByCuentaOrigenId().getId());
 
@@ -199,8 +217,19 @@ public class ClienteController {
         transaccion.setCantidad(cuenta.getSaldo());
         transaccion.setCuentaByCuentaDestinoId(cuenta);
 
+        if(cuenta.getTransaccionsById() == null)
+        {
+            List<TransaccionDTO> list1 = new ArrayList<>();
+            list1.add(transaccion);
+            cuenta.setTransaccionsById(list1);
+        }
+        else
+        {
+            cuenta.getTransaccionsById().add(transaccion);
+        }
 
-        cuenta.getTransaccionsById().add(transaccion);
+
+
         if(transaccion.getMoneda().equals("usd")){
             cuenta.setSaldo(transaccion.getCantidad().multiply(BigDecimal.valueOf(1.09708)));
         }else if(transaccion.getMoneda().equals("eur")){

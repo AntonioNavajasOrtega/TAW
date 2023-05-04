@@ -90,8 +90,6 @@ public class EmpresaController {
         model.addAttribute("tablaIntermedia",x);
         model.addAttribute("all",tipoclienterelacionadoService.listarTodos());
 
-
-
         return "empresa";
     }
 
@@ -240,69 +238,28 @@ public class EmpresaController {
         ClienteDTO cliente = this.clienteService.buscarCliente(id);
         EmpresaDTO empresa = cliente.getEmpresa();
         TipoSolicitudDTO tipo =tipoSolicitudService.activar();
-
-        Timestamp date = new Timestamp(System.currentTimeMillis());
-        SolicitudDTO solicitud = new SolicitudDTO();
-        solicitud.setClienteByClienteId(cliente);
-        solicitud.setFecha(date);
-        solicitud.setTipoSolicitudByTipo(tipo);
-        solicitud.setCuentaByCuentaId(cuenta);
-        solicitud.setEmpresaByEmpresaId(empresa);
-
-        this.solicitudService.guardar(solicitud,cliente,cuenta,null);
-
+        SolicitudDTO solicitud = solicitudService.crear(cliente,tipo,cuenta,empresa);
+        this.solicitudService.guardar(solicitud,cliente,cuenta,solicitud.getEmpleadoByEmpleadoId());
         return "redirect:/empresa/?id=" + cliente.getId();
     }
 
     private void asociarCuenta(ClienteDTO cliente, String tipoCliente)
     {
         EmpresaDTO empresa = cliente.getEmpresa();
-
         clienteService.guardar(cliente);
-
         if(cuentaService.buscarPorEmpresa(empresa) == null)
             {
-                SolicitudDTO solicitud = new SolicitudDTO();
-                solicitud.setClienteByClienteId(cliente);
-                solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
-                EmpleadoDTO gestor = empleadoService.buscarGestor();
-                solicitud.setEmpleadoByEmpleadoId(gestor);
                 TipoSolicitudDTO tipo = tipoSolicitudService.solicitarCuenta();
-                solicitud.setTipoSolicitudByTipo(tipo);
-                CuentaDTO c = new CuentaDTO();
-                solicitud.setEmpresaByEmpresaId(empresa);
-
-                c.setEmpresaByEmpresaId(cliente.getEmpresa());
-
-                c.setIban("00000000");
-                c.setSaldo(BigDecimal.valueOf(0));
-                c.setClienteByClienteId(cliente);
-                EstadoCuentaDTO estado = estadoCuentaService.bloqueada();
-                c.setEstadoCuentaByEstado(estado);
-                c.setSwift("342");
-                c.setPais("-----");
-                c.setEmpleadoByEmpleadoId(gestor);
-                c.setEmpresaByEmpresaId(empresa);
-
+                CuentaDTO c = cuentaService.crearCuentaBloqueada(cliente);
                 cuentaService.guardar(c);
-
-                solicitud.setCuentaByCuentaId(c);
-
-
-                solicitudService.guardar(solicitud,cliente,c,gestor);
+                SolicitudDTO solicitud = solicitudService.crear(cliente,tipo,c,empresa);
+                solicitudService.guardar(solicitud,cliente,c,solicitud.getEmpleadoByEmpleadoId());
             }
-
             CuentaDTO c = cuentaService.buscarPorEmpresa(empresa);
 
-            TipoclienterelacionadoDTO tablaIntermedia = new TipoclienterelacionadoDTO();
+        TipoClienteDTO tipocliente = tipoClienteService.buscarTipo(tipoCliente);
 
-           tablaIntermedia.setCuenta(c);
-           tablaIntermedia.setCliente(cliente);
-
-            tablaIntermedia.setBloqueado((byte) 1);
-
-            TipoClienteDTO tipocliente = tipoClienteService.buscarTipo(tipoCliente);
-            tablaIntermedia.setTipo(tipocliente);
+            TipoclienterelacionadoDTO tablaIntermedia = tipoclienterelacionadoService.crear(c,cliente,tipocliente);
 
             tipoclienterelacionadoService.guardar(tablaIntermedia,c.getId(),cliente.getId());
 
@@ -397,7 +354,6 @@ public class EmpresaController {
         TipoclienterelacionadoDTO x = tipoclienterelacionadoService.buscarPorCliente(cliente);
         model.addAttribute("tablaIntermedia",x);
         model.addAttribute("all",tipoclienterelacionadoService.listarTodos());
-
 
         return "empresa";
     }

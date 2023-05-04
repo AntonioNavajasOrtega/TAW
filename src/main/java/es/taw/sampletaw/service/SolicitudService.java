@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,9 @@ public class SolicitudService {
 
     @Autowired
     protected EstadoCuentaRepository estadoCuentaRepository;
+
+    @Autowired
+    protected EmpleadoService empleadoService;
 
     public void guardar(SolicitudDTO solicitud, ClienteDTO clienteDTO, CuentaDTO cuentaDTO, EmpleadoDTO empleadoDTO) {
         Cliente cliente = this.clienteRepository.findById(clienteDTO.getId()).orElse(null);
@@ -90,5 +94,18 @@ public class SolicitudService {
 
     public List<SolicitudDTO> solicitudCliente(Integer idcliente){
         return this.listaSolicitudADTO(this.solicitudRepository.findSolicitudCliente(idcliente));
+    }
+
+    public SolicitudDTO crear(ClienteDTO cliente, TipoSolicitudDTO tipo, CuentaDTO cuenta, EmpresaDTO empresa) {
+        Timestamp date = new Timestamp(System.currentTimeMillis());
+        EmpleadoDTO gestor = empleadoService.buscarGestor();
+        SolicitudDTO solicitud = new SolicitudDTO();
+        solicitud.setClienteByClienteId(cliente);
+        solicitud.setFecha(date);
+        solicitud.setTipoSolicitudByTipo(tipo);
+        solicitud.setCuentaByCuentaId(cuenta);
+        solicitud.setEmpresaByEmpresaId(empresa);
+        solicitud.setEmpleadoByEmpleadoId(gestor);
+        return  solicitud;
     }
 }

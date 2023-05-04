@@ -5,7 +5,8 @@
 <%@ page import="java.util.ConcurrentModificationException" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="es.taw.sampletaw.entity.*" %>
-<%@ page import="es.taw.sampletaw.dto.CuentaDTO" %><%--
+<%@ page import="es.taw.sampletaw.dto.CuentaDTO" %>
+<%@ page import="es.taw.sampletaw.dto.TransaccionDTO" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -16,6 +17,7 @@
 
 <%
     List<CuentaDTO> cuentas = (List<CuentaDTO>) request.getAttribute("cuentas");
+    TransaccionDTO trans = (TransaccionDTO) request.getAttribute("trans");
 %>
 
 
@@ -32,9 +34,8 @@
     <h1>Información de operación</h1>
     <form:form action="/cliente/cambiarmoneda" method="post" modelAttribute="trans">
         <form:hidden path="id"></form:hidden>
-        <form:hidden path="cuentaByCuentaOrigenId"></form:hidden>
-        <form:hidden path="tipoTransaccionByTipo"></form:hidden>
-        <form:hidden path="cuentaByCuentaDestinoId"></form:hidden>
+        <input type="hidden" name="cuentaByCuentaOrigenId1" value="<%=trans.getCuentaByCuentaOrigenId().getId()%>">
+        <input type="hidden" name="cuentaByCuentaDestinoId1" value="<%=trans.getCuentaByCuentaOrigenId().getId()%>">
         <form:hidden path="cantidad"></form:hidden>
         Monedas: <form:select path="moneda">
         <form:option value="" label=""></form:option>
