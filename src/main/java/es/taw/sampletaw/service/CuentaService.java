@@ -95,7 +95,11 @@ public class CuentaService {
         cuenta.setClienteByClienteId(clienteRepository.findById(c.getClienteByClienteId().getId()).orElse(null));
         cuenta.setEstadoCuentaByEstado(estadoCuentaRepository.findById(c.getEstadoCuentaByEstado().getId()).orElse(null));
         cuenta.setEmpleadoByEmpleadoId(empleadoRepository.findById(c.getEmpleadoByEmpleadoId().getId()).orElse(null));
-        cuenta.setEmpresaByEmpresaId(empresaRepository.findById(c.getEmpresaByEmpresaId().getId()).orElse(null));
+        if(c.getEmpresaByEmpresaId() != null)
+        {
+            cuenta.setEmpresaByEmpresaId(empresaRepository.findById(c.getEmpresaByEmpresaId().getId()).orElse(null));
+        }
+
 
         cuentaRepository.save(cuenta);
         c.setId(cuenta.getId());

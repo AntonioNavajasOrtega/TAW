@@ -136,11 +136,18 @@ public class ClienteController {
         return this.pasarAOperacion(idcuenta,model,transaccion);
     }
 
-    @PostMapping("/realizar")
+    @GetMapping("/realizar")
     public String doRealizar(@ModelAttribute("trans") TransaccionDTO transaccionDTO
-    ,@RequestParam("volver") int volver){
+    ,@RequestParam("volver") int volver,@RequestParam("cuentaByCuentaOrigenId1") int origenID
+    ,@RequestParam("cuentaByCuentaDestinoId1") int destinoID){
         Timestamp date = new Timestamp(System.currentTimeMillis());
-        TransaccionDTO transaccion = this.transaccionService.buscarPorIdTransaccion(transaccionDTO.getId());
+        TransaccionDTO transaccion = transaccionDTO;
+        TipoTransaccionDTO tipo = tipoTransaccionService.transaccion();
+        CuentaDTO destino = cuentaService.buscarPorIdCuenta(destinoID);
+        CuentaDTO origen = cuentaService.buscarPorIdCuenta(origenID);
+        transaccion.setTipoTransaccionByTipo(tipo);
+        transaccion.setCuentaByCuentaDestinoId(destino);
+        transaccion.setCuentaByCuentaOrigenId(origen);
         CuentaDTO orig = this.cuentaService.buscarPorIdCuenta(transaccion.getCuentaByCuentaOrigenId().getId());
         CuentaDTO dest = this.cuentaService.buscarPorIdCuenta(transaccion.getCuentaByCuentaDestinoId().getId());
         TransaccionDTO transaccion1 = new TransaccionDTO();
@@ -151,8 +158,16 @@ public class ClienteController {
         transaccion1.setCuentaByCuentaDestinoId(dest);
         transaccion1.setTipoTransaccionByTipo(transaccion.getTipoTransaccionByTipo());
 
-        orig.getTransaccionsById().add(transaccion1);
-        dest.getTransaccionsById().add(transaccion);
+        List<TransaccionDTO> list1 = new ArrayList<>();
+        list1.add(transaccion);
+        dest.setTransaccionsById(list1);
+
+        List<TransaccionDTO> list2 = new ArrayList<>();
+        list2.add(transaccion1);
+        orig.setTransaccionsById(list2);
+
+        // orig.getTransaccionsById().add(transaccion1);
+       // dest.getTransaccionsById().add(transaccion);
         orig.setSaldo(orig.getSaldo().subtract(transaccion.getCantidad()));
         dest.setSaldo(dest.getSaldo().add(transaccion.getCantidad()));
         this.cuentaService.guardar(orig);

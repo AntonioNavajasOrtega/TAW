@@ -48,6 +48,7 @@ public class SolicitudService {
         if(cuentaDTO.getIban() == "00000000"){
             cuenta = new Cuenta();
             cuenta.setSaldo(cuentaDTO.getSaldo());
+            cuenta.setIban(cuentaDTO.getIban());
             cuenta.setClienteByClienteId(cliente);
             EstadoCuenta estado = this.estadoCuentaRepository.findBloq();
             cuenta.setEstadoCuentaByEstado(estado);

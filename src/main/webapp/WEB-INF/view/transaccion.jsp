@@ -5,7 +5,8 @@
 <%@ page import="java.util.ConcurrentModificationException" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="es.taw.sampletaw.entity.*" %>
-<%@ page import="es.taw.sampletaw.dto.CuentaDTO" %><%--
+<%@ page import="es.taw.sampletaw.dto.CuentaDTO" %>
+<%@ page import="es.taw.sampletaw.dto.TransaccionDTO" %><%--
   Created by IntelliJ IDEA.
   User: guzman
   Date: 11/5/22
@@ -16,6 +17,7 @@
 
 <%
     List<CuentaDTO> cuentas = (List<CuentaDTO>) request.getAttribute("cuentas");
+    TransaccionDTO trans = (TransaccionDTO) request.getAttribute("trans");
 %>
 
 
@@ -30,13 +32,23 @@
 <body>
 
     <h1>Información de operación</h1>
-    <form:form action="/cliente/realizar" method="post" modelAttribute="trans">
+    <form:form action="/cliente/realizar" method="get" modelAttribute="trans">
         <form:hidden path="id"></form:hidden>
-        <form:hidden path="cuentaByCuentaOrigenId"></form:hidden>
-        <form:hidden path="tipoTransaccionByTipo"></form:hidden>
-        Cuenta Destino: <form:select path="cuentaByCuentaDestinoId">
-        <form:options items="${cuentas}" itemLabel="iban"></form:options>
-    </form:select><br/>
+        <input type="hidden" name="cuentaByCuentaOrigenId1" value="<%=trans.getCuentaByCuentaOrigenId().getId()%>">
+
+
+    Cuenta Destino : <select name="cuentaByCuentaDestinoId1" >
+        <%
+                for(CuentaDTO c : cuentas)
+                    {
+
+        %>
+            <option value="<%=c.getId()%>"><%=c.getIban()%></option>
+        <%
+                    }
+        %>
+    </select>
+    </br>
         Cantidad:<form:input path="cantidad"></form:input><br/>
         <input type="hidden" name="volver" value="${volver}">
         <form:button>Realizar</form:button>
