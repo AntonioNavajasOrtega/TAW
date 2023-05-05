@@ -69,30 +69,9 @@ public class ClienteController {
 
     @PostMapping("/guardar")
     public String doGuardar(@ModelAttribute("cliente") ClienteDTO cliente){
-        if(this.cuentaService.listarCuentasCliente(cliente.getId()) == null){
+        if(cliente.getId() == null){
             this.clienteService.guardar(cliente);
-            SolicitudDTO solicitud = new SolicitudDTO();
-            solicitud.setClienteByClienteId(cliente);
-            solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
-            EmpleadoDTO gestor = this.empleadoService.buscarGestor();
-            solicitud.setEmpleadoByEmpleadoId(gestor);
-            TipoSolicitudDTO tipo = this.tipoSolicitudService.solicitarCuenta();
-            solicitud.setTipoSolicitudByTipo(tipo);
-            CuentaDTO c = new CuentaDTO();
-            c.setIban("00000000");
-            c.setSaldo(BigDecimal.valueOf(0));
-            c.setClienteByClienteId(cliente);
-            EstadoCuentaDTO estado = this.estadoCuentaService.bloqueada();
-            c.setEstadoCuentaByEstado(estado);
-            c.setSwift("342");
-            c.setPais("-----");
-            c.setEmpleadoByEmpleadoId(gestor);
-            this.cuentaService.guardar(c);
-            solicitud.setCuentaByCuentaId(c);
-
-            List<SolicitudDTO> sol = new ArrayList<SolicitudDTO>();
-            sol.add(solicitud);
-            this.solicitudService.guardar(solicitud,cliente,null,gestor);
+            this.solicitudService.solicitudPrimeraCuenta(cliente);
         }
         this.clienteService.guardar(cliente);
         return "redirect:/cliente/?id=" + cliente.getId();
@@ -123,16 +102,14 @@ public class ClienteController {
     @GetMapping("/transaccion")
     public String doTransaccion(@RequestParam("id") Integer idcuenta, Model model){
         TransaccionDTO transaccion = new TransaccionDTO();
-        TipoTransaccionDTO tipo = this.tipoTransaccionService.transaccion();
-        transaccion.setTipoTransaccionByTipo(tipo);
+        this.transaccionService.crearTrans(transaccion);
         return this.pasarAOperacion(idcuenta,model,transaccion);
     }
 
     @GetMapping("/cambio")
     public String doCambio(@RequestParam("id") Integer idcuenta, Model model){
         TransaccionDTO transaccion = new TransaccionDTO();
-        TipoTransaccionDTO tipo = this.tipoTransaccionService.cambio();
-        transaccion.setTipoTransaccionByTipo(tipo);
+        this.transaccionService.crearCamb(transaccion);
         return this.pasarAOperacion(idcuenta,model,transaccion);
     }
 
@@ -140,47 +117,13 @@ public class ClienteController {
     public String doRealizar(@ModelAttribute("trans") TransaccionDTO transaccionDTO
     ,@RequestParam("volver") int volver,@RequestParam("cuentaByCuentaOrigenId1") int origenID
     ,@RequestParam("cuentaByCuentaDestinoId1") int destinoID){
-        Timestamp date = new Timestamp(System.currentTimeMillis());
         TransaccionDTO transaccion = transaccionDTO;
-        TipoTransaccionDTO tipo = tipoTransaccionService.transaccion();
-        CuentaDTO destino = cuentaService.buscarPorIdCuenta(destinoID);
-        CuentaDTO origen = cuentaService.buscarPorIdCuenta(origenID);
-        transaccion.setTipoTransaccionByTipo(tipo);
-        transaccion.setCuentaByCuentaDestinoId(destino);
-        transaccion.setCuentaByCuentaOrigenId(origen);
+        this.transaccionService.doRealizar(transaccion,origenID,destinoID);
         CuentaDTO orig = this.cuentaService.buscarPorIdCuenta(transaccion.getCuentaByCuentaOrigenId().getId());
         CuentaDTO dest = this.cuentaService.buscarPorIdCuenta(transaccion.getCuentaByCuentaDestinoId().getId());
         TransaccionDTO transaccion1 = new TransaccionDTO();
-        transaccion.setFecha(date);
-        transaccion1.setFecha(date);
-        transaccion1.setCantidad(transaccion.getCantidad().negate());
-        transaccion1.setCuentaByCuentaOrigenId(orig);
-        transaccion1.setCuentaByCuentaDestinoId(dest);
-        transaccion1.setTipoTransaccionByTipo(transaccion.getTipoTransaccionByTipo());
+        this.transaccionService.doTerminarRealizar(transaccion,transaccion1,orig,dest);
 
-        if(dest.getTransaccionsById() == null)
-        {
-            List<TransaccionDTO> list1 = new ArrayList<>();
-            list1.add(transaccion);
-            dest.setTransaccionsById(list1);
-        }
-        else {
-            dest.getTransaccionsById().add(transaccion);
-        }
-
-        if(orig.getTransaccionsById() == null)
-        {
-            List<TransaccionDTO> list2 = new ArrayList<>();
-            list2.add(transaccion1);
-            orig.setTransaccionsById(list2);
-        }
-        else {
-            orig.getTransaccionsById().add(transaccion1);
-        }
-
-
-        orig.setSaldo(orig.getSaldo().subtract(transaccion.getCantidad()));
-        dest.setSaldo(dest.getSaldo().add(transaccion.getCantidad()));
         this.cuentaService.guardar(orig);
         this.cuentaService.guardar(dest);
         this.transaccionService.guardar(transaccion);
@@ -202,39 +145,11 @@ public class ClienteController {
             ,@RequestParam("cuentaByCuentaDestinoId1") int destinoID){
 
         TransaccionDTO transaccion = transaccionDTO;
-        TipoTransaccionDTO tipo = tipoTransaccionService.cambio();
-        CuentaDTO destino = cuentaService.buscarPorIdCuenta(destinoID);
-        CuentaDTO origen = cuentaService.buscarPorIdCuenta(origenID);
-        transaccion.setTipoTransaccionByTipo(tipo);
-        transaccion.setCuentaByCuentaDestinoId(destino);
-        transaccion.setCuentaByCuentaOrigenId(origen);
+        this.transaccionService.doCambiarMoneda(transaccion,origenID,destinoID);
 
         CuentaDTO cuenta = this.cuentaService.buscarPorIdCuenta(transaccion.getCuentaByCuentaOrigenId().getId());
+        this.transaccionService.doTerminarCambioMoneda(transaccion,cuenta);
 
-
-        Timestamp date = new Timestamp(System.currentTimeMillis());
-        transaccion.setFecha(date);
-        transaccion.setCantidad(cuenta.getSaldo());
-        transaccion.setCuentaByCuentaDestinoId(cuenta);
-
-        if(cuenta.getTransaccionsById() == null)
-        {
-            List<TransaccionDTO> list1 = new ArrayList<>();
-            list1.add(transaccion);
-            cuenta.setTransaccionsById(list1);
-        }
-        else
-        {
-            cuenta.getTransaccionsById().add(transaccion);
-        }
-
-
-
-        if(transaccion.getMoneda().equals("usd")){
-            cuenta.setSaldo(transaccion.getCantidad().multiply(BigDecimal.valueOf(1.09708)));
-        }else if(transaccion.getMoneda().equals("eur")){
-            cuenta.setSaldo(transaccion.getCantidad().divide(BigDecimal.valueOf(1.09708), RoundingMode.HALF_EVEN));
-        }
         this.cuentaService.guardar(cuenta);
         this.transaccionService.guardar(transaccion);
         if(cuenta.getClienteByClienteId().getEmpresa() == null)
@@ -250,20 +165,8 @@ public class ClienteController {
     @GetMapping("/solicitar")
     public String doSolicitar(@RequestParam("id") Integer idcuenta,Model model){
         CuentaDTO cuenta = this.cuentaService.buscarPorIdCuenta(idcuenta);
-        ClienteDTO cliente = cuenta.getClienteByClienteId();
-        EmpleadoDTO empleado = cuenta.getEmpleadoByEmpleadoId();
-        TipoSolicitudDTO tipo = this.tipoSolicitudService.activar();
-
-        Timestamp date = new Timestamp(System.currentTimeMillis());
-        SolicitudDTO solicitud = new SolicitudDTO();
-        solicitud.setClienteByClienteId(cliente);
-        solicitud.setFecha(date);
-        solicitud.setTipoSolicitudByTipo(tipo);
-        solicitud.setCuentaByCuentaId(cuenta);
-        solicitud.setEmpleadoByEmpleadoId(empleado);
-
-        this.solicitudService.guardar(solicitud,cliente,cuenta,empleado);
-        return "redirect:/cliente/?id=" + cliente.getId();
+        this.solicitudService.doSolicitar(cuenta);
+        return "redirect:/cliente/?id=" + cuenta.getClienteByClienteId().getId();
     }
 
     @PostMapping("/filtrarop")

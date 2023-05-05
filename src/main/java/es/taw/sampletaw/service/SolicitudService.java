@@ -35,9 +35,6 @@ public class SolicitudService {
     @Autowired
     protected EstadoCuentaRepository estadoCuentaRepository;
 
-    @Autowired
-    protected EmpleadoService empleadoService;
-
     public void guardar(SolicitudDTO solicitud, ClienteDTO clienteDTO, CuentaDTO cuentaDTO, EmpleadoDTO empleadoDTO) {
         Cliente cliente = this.clienteRepository.findById(clienteDTO.getId()).orElse(null);
         Empleado empleado;
@@ -49,7 +46,7 @@ public class SolicitudService {
             empleado = this.empleadoRepository.findById(empleadoDTO.getId()).orElse(null);
         }
 
-        if(cuentaDTO.getIban() == "00000000"){
+        if(cuentaDTO.getIban().equals("00000000")){
             cuenta = new Cuenta();
             cuenta.setSaldo(cuentaDTO.getSaldo());
             cuenta.setIban(cuentaDTO.getIban());
@@ -77,8 +74,11 @@ public class SolicitudService {
         s.setClienteByClienteId(cliente);
         s.setEmpleadoByEmpleadoId(empleado);
         s.setCuentaByCuentaId(cuenta);
-        s.setEmpresaByEmpresaId(empresaRepository.findById(solicitud.getEmpresaByEmpresaId().getId()).orElse(null));
+        if(cliente.getEmpresaByEmpresaId() != null){
+            s.setEmpresaByEmpresaId(empresaRepository.findById(solicitud.getEmpresaByEmpresaId().getId()).orElse(null));
+        }
         s.setTipoSolicitudByTipo(tipoSolicitudRepository.findById(solicitud.getTipoSolicitudByTipo().getId()).orElse(null));
+        empleado.getSolicitudsById().add(s);
 
         clienteRepository.save(cliente);
         cuentaRepository.save(cuenta);
@@ -98,7 +98,7 @@ public class SolicitudService {
 
     public SolicitudDTO crear(ClienteDTO cliente, TipoSolicitudDTO tipo, CuentaDTO cuenta, EmpresaDTO empresa) {
         Timestamp date = new Timestamp(System.currentTimeMillis());
-        EmpleadoDTO gestor = empleadoService.buscarGestor();
+        EmpleadoDTO gestor = this.empleadoRepository.findGestor().toDTO();
         SolicitudDTO solicitud = new SolicitudDTO();
         solicitud.setClienteByClienteId(cliente);
         solicitud.setFecha(date);
@@ -107,5 +107,45 @@ public class SolicitudService {
         solicitud.setEmpresaByEmpresaId(empresa);
         solicitud.setEmpleadoByEmpleadoId(gestor);
         return  solicitud;
+    }
+
+    public void solicitudPrimeraCuenta(ClienteDTO cliente){
+        SolicitudDTO solicitud = new SolicitudDTO();
+        solicitud.setClienteByClienteId(cliente);
+        solicitud.setFecha(new Timestamp(System.currentTimeMillis()));
+        EmpleadoDTO gestor = this.empleadoRepository.findGestor().toDTO();
+        solicitud.setEmpleadoByEmpleadoId(gestor);
+        TipoSolicitudDTO tipo = this.tipoSolicitudRepository.findSolicitarCuent().toDTO();
+        solicitud.setTipoSolicitudByTipo(tipo);
+        CuentaDTO c = new CuentaDTO();
+        c.setIban("00000000");
+        c.setSaldo(BigDecimal.valueOf(0));
+        c.setClienteByClienteId(cliente);
+        EstadoCuentaDTO estado = this.estadoCuentaRepository.findBloq().toDTO();
+        c.setEstadoCuentaByEstado(estado);
+        c.setSwift("342");
+        c.setPais("-----");
+        c.setEmpleadoByEmpleadoId(gestor);
+        solicitud.setCuentaByCuentaId(c);
+
+        List<SolicitudDTO> sol = new ArrayList<SolicitudDTO>();
+        sol.add(solicitud);
+        this.guardar(solicitud,cliente,c,gestor);
+    }
+
+    public void doSolicitar(CuentaDTO cuenta){
+        ClienteDTO cliente = cuenta.getClienteByClienteId();
+        EmpleadoDTO empleado = cuenta.getEmpleadoByEmpleadoId();
+        TipoSolicitudDTO tipo = this.tipoSolicitudRepository.findActivar().toDTO();
+
+        Timestamp date = new Timestamp(System.currentTimeMillis());
+        SolicitudDTO solicitud = new SolicitudDTO();
+        solicitud.setClienteByClienteId(cliente);
+        solicitud.setFecha(date);
+        solicitud.setTipoSolicitudByTipo(tipo);
+        solicitud.setCuentaByCuentaId(cuenta);
+        solicitud.setEmpleadoByEmpleadoId(empleado);
+
+        this.guardar(solicitud,cliente,cuenta,empleado);
     }
 }
