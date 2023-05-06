@@ -8,8 +8,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 import java.util.List;
 
-/*
-    @author Javier Serrano Contreras 70%
+/**
+ * @author Javier Serrano Contreras 70%
  */
 public interface SolicitudRepository extends JpaRepository<Solicitud,Integer> {
 

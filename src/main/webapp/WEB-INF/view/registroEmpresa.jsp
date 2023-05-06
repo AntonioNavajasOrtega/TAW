@@ -1,5 +1,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.sampletaw.entity.Empresa" %>
+
+<%--Autor: Juan José Torres--%>
+
 <%--
   Created by IntelliJ IDEA.
   User: juanj
@@ -15,7 +18,6 @@
 <body>
 
 <h1>Formulario de registro de una empresa</h1>
-
 
 <form:form action="/empresa/guardar" modelAttribute="empresa" method="get">
     <h3>Datos de la empresa:</h3>

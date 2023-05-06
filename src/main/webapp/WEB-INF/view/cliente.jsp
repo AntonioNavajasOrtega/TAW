@@ -10,13 +10,8 @@
 <%@ page import="java.math.BigDecimal" %>
 <%@ page import="es.taw.sampletaw.dto.ClienteDTO" %>
 <%@ page import="es.taw.sampletaw.dto.TransaccionDTO" %>
-<%@ page import="es.taw.sampletaw.dto.CuentaDTO" %><%--
-  Created by IntelliJ IDEA.
-  User: guzman
-  Date: 11/5/22
-  Time: 11:39
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="es.taw.sampletaw.dto.CuentaDTO" %>
+
 <%--
     Autor: Javier Serrano Contreras 60%
 --%>

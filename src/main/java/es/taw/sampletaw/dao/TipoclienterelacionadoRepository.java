@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-/*
-    @author Javier Serrano Contreras 30%
+/**
+ * @author Javier Serrano Contreras 30%
  */
 public interface TipoclienterelacionadoRepository extends JpaRepository<Tipoclienterelacionado,Integer> {
 

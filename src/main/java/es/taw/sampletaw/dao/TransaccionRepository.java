@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-/*
-    @author Javier Serrano Contreras 100%
+/**
+ * @author Javier Serrano Contreras 100%
  */
 public interface TransaccionRepository extends JpaRepository<Transaccion,Integer> {
 }

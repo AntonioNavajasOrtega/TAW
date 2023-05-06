@@ -1,5 +1,8 @@
 package es.taw.sampletaw.ui;
 
+/**
+ * @author Juan José Torres
+ */
 public class FiltroAsistente {
 
     private String usuario;

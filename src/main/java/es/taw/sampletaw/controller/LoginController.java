@@ -13,14 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 /**
- *
  * @author Juan José Torres 10%
+ * @author Javier Serrano Contreras 20%
  */
 
-
-/*
-    @author Javier Serrano Contreras 20%
- */
 @Controller
 public class LoginController {
 

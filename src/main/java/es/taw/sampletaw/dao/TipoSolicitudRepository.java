@@ -4,8 +4,8 @@ import es.taw.sampletaw.entity.TipoSolicitud;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-/*
-    @author Javier Serrano Contreras 100%
+/**
+ * @author Javier Serrano Contreras 100%
  */
 public interface TipoSolicitudRepository extends JpaRepository<TipoSolicitud,Integer> {
 

@@ -1,8 +1,5 @@
 package es.taw.sampletaw.dto;
 
-
-
-
 import java.io.Serializable;
 
 /**

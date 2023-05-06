@@ -10,12 +10,8 @@ import org.springframework.data.repository.query.Param;
  * @author Javier Serrano 50%
  */
 
-
 import java.util.List;
 
-/*
-    @author Javier Serrano Contreras 40%
- */
 public interface MensajeRepository extends JpaRepository<Mensaje, Integer> {
 
     @Query("select m from Mensaje m where m.clienteByEmisorCliente.id =: id or m.clienteByReceptorCliente.id = :id")

@@ -17,8 +17,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-    @author Javier Serrano Contreras 80%
+/**
+ * @author Javier Serrano Contreras 80%
  */
 @Service
 public class TransaccionService {

@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-    @author Javier Serrano Contreras 40%
+/**
+ * @author Javier Serrano Contreras 40%
  */
 @Service
 public class CuentaService {

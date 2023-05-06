@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Juan José Torres 50%
- * @author
  */
 
 @Service

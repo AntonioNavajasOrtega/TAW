@@ -21,8 +21,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/*
-    @author Javier Serrano Contreras 80%
+/**
+ * @author Javier Serrano Contreras 80%
  */
 @RequestMapping("/cliente")
 @Controller

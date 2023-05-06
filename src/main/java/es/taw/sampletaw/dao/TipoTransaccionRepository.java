@@ -4,8 +4,8 @@ import es.taw.sampletaw.entity.TipoTransaccion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-/*
-    @author Javier Serrano Contreras 100%
+/**
+ * @author Javier Serrano Contreras 100%
  */
 public interface TipoTransaccionRepository extends JpaRepository<TipoTransaccion,Integer> {
 
