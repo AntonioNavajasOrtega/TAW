@@ -11,6 +11,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 import java.util.List;
 
+/*
+ @author Javier Serrano Contreras 80%
+ */
 public interface CuentaRepository extends JpaRepository<Cuenta,Integer> {
 
     @Query("select c from Cuenta c where c.id != :id")

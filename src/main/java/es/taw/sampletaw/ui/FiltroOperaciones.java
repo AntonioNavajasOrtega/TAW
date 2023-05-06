@@ -2,6 +2,9 @@ package es.taw.sampletaw.ui;
 
 import java.sql.Timestamp;
 
+/*
+    @author Javier Serrano Contreras 100%
+ */
 public class FiltroOperaciones {
     Integer clienteid;
     String date;

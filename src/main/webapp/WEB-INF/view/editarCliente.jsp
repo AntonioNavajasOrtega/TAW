@@ -5,7 +5,9 @@
 <%@ page import="es.taw.sampletaw.entity.Empresa" %>
 <%@ page import="es.taw.sampletaw.dto.EmpresaDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%--
+    Autor: Javier Serrano Contreras 60%
+--%>
 <%
     EmpresaDTO empresa = (EmpresaDTO) request.getAttribute("empresaID");
 %>

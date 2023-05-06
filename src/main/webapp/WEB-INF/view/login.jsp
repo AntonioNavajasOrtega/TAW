@@ -1,6 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--
+    Autor: Javier Serrano Contreras 90%
+--%>
 <html>
 <head>
     <title>Autenticación</title>
