@@ -5,7 +5,6 @@ import es.taw.sampletaw.dto.ClienteDTO;
 import es.taw.sampletaw.dto.ConversacionDTO;
 import es.taw.sampletaw.dto.EmpleadoDTO;
 import es.taw.sampletaw.dto.MensajeDTO;
-import es.taw.sampletaw.service.AsistenteService;
 import es.taw.sampletaw.service.ClienteService;
 import es.taw.sampletaw.service.ConversacionService;
 import es.taw.sampletaw.service.MensajeService;
@@ -28,8 +27,6 @@ import java.util.List;
 public class AsistenteController {
 
 
-    @Autowired
-    protected AsistenteService asistenteService;
 
     @Autowired
     protected ConversacionService conversacionService;
