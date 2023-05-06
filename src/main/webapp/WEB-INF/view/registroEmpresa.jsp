@@ -1,15 +1,10 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.sampletaw.entity.Empresa" %>
 
-<%--Autor: Juan José Torres--%>
-
-<%--
-  Created by IntelliJ IDEA.
-  User: juanj
-  Date: 20/03/2023
-  Time: 11:48
-  To change this template use File | Settings | File Templates.
+<%--Autor: Juan José Torres 60%
+           Antonio Navajas Ortega 60%
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
