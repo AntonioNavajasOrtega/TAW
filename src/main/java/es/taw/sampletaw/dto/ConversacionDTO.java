@@ -3,6 +3,9 @@ package es.taw.sampletaw.dto;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+/**
+ * @author Juan José Torres
+ */
 
 
 public class ConversacionDTO implements Serializable{

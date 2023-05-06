@@ -13,6 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ * @author Juan José Torres 40%
+ */
+
 @Service
 public class ClienteService {
 

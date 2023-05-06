@@ -1,12 +1,13 @@
 package es.taw.sampletaw.dto;
 
-import es.taw.sampletaw.entity.Cliente;
-import es.taw.sampletaw.entity.Conversacion;
-import es.taw.sampletaw.entity.Empleado;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+
+/**
+ * @author Juan José Torres
+ */
+
 
 public class MensajeDTO implements Serializable {
 

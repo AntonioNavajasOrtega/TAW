@@ -4,14 +4,8 @@
 <%@ page import="es.taw.sampletaw.dto.ConversacionDTO" %>
 <%@ page import="es.taw.sampletaw.dto.EmpleadoDTO" %>
 
+//Autor: Juan José Torres
 
-<%--
-  Created by IntelliJ IDEA.
-  User: juanj
-  Date: 27/03/2023
-  Time: 14:18
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 

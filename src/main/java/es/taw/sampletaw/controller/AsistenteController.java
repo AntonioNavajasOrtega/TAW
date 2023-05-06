@@ -1,13 +1,10 @@
 package es.taw.sampletaw.controller;
 
-import es.taw.sampletaw.dao.ClienteRepository;
-import es.taw.sampletaw.dao.ConversacionRepository;
-import es.taw.sampletaw.dao.MensajeRepository;
+
 import es.taw.sampletaw.dto.ClienteDTO;
 import es.taw.sampletaw.dto.ConversacionDTO;
 import es.taw.sampletaw.dto.EmpleadoDTO;
 import es.taw.sampletaw.dto.MensajeDTO;
-import es.taw.sampletaw.entity.Mensaje;
 import es.taw.sampletaw.service.AsistenteService;
 import es.taw.sampletaw.service.ClienteService;
 import es.taw.sampletaw.service.ConversacionService;
@@ -20,6 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+
+/**
+ * @author Juan José Torres
+ */
+
 
 @RequestMapping("/asistente")
 @Controller

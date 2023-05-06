@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * @author Juan José Torres
+ */
+
 @RequestMapping("/chat")
 @Controller
 public class ChatController {

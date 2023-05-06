@@ -8,6 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * @author Juan José Torres 1 query solamente
+ */
+
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
     @Query("select a from Cliente a where a.email = :email and a.contrasena = :contrasena")

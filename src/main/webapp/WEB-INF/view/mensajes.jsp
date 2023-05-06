@@ -2,13 +2,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.sampletaw.dto.EmpleadoDTO" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: juanj
-  Date: 27/03/2023
-  Time: 14:18
-  To change this template use File | Settings | File Templates.
---%>
+
+//Autor: Juan José Torres
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%

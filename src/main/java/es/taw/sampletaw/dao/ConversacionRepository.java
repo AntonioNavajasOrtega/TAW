@@ -7,6 +7,10 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * @author Juan José Torres 90%
+ */
+
 public interface ConversacionRepository extends JpaRepository<Conversacion,Integer> {
 
 

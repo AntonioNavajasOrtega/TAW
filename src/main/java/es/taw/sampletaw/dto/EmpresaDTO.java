@@ -2,6 +2,9 @@ package es.taw.sampletaw.dto;
 
 
 import java.io.Serializable;
+/**
+ * @author Juan José Torres
+ */
 
 public class EmpresaDTO implements Serializable {
 

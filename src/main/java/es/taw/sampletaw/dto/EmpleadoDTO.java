@@ -1,13 +1,12 @@
 package es.taw.sampletaw.dto;
 
-import es.taw.sampletaw.entity.Conversacion;
-import es.taw.sampletaw.entity.Cuenta;
-import es.taw.sampletaw.entity.Mensaje;
-import es.taw.sampletaw.entity.Solicitud;
-
 import java.io.Serializable;
 import java.util.Collection;
 
+/**
+ * @author Juan José Torres 50%
+ *
+ */
 
 public class EmpleadoDTO implements Serializable {
 
