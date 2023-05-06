@@ -6,7 +6,9 @@ import es.taw.sampletaw.entity.Cuenta;
 import es.taw.sampletaw.entity.TipoCliente;
 
 import java.io.Serializable;
-
+/**
+ * @author Antonio Navajas Ortega
+ */
 public class TipoclienterelacionadoDTO implements Serializable {
 
     private ClienteDTO cliente;

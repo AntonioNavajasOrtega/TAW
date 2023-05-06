@@ -2,7 +2,8 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%--
-    Autor: Javier Serrano Contreras 90%
+    Autor: Javier Serrano Contreras 20%
+            Antonio Navajas Ortega 80%
 --%>
 <html>
 <head>

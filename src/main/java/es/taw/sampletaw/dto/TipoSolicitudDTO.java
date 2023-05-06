@@ -1,5 +1,7 @@
 package es.taw.sampletaw.dto;
-
+/**
+ * @author Antonio Navajas Ortega
+ */
 public class TipoSolicitudDTO {
     private Integer id;
     private String tipo;

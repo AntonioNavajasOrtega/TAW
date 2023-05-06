@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * @author Juan José Torres 1 query solamente
+ * @author Antonio Navajas 4 query
  */
 
 public interface ClienteRepository extends JpaRepository<Cliente, Integer> {

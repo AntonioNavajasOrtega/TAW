@@ -5,15 +5,13 @@
 <%@ page import="java.util.stream.Collectors" %>
 <%@ page import="java.util.*" %>
 <%@ page import="es.taw.sampletaw.dao.TipoclienterelacionadoRepository" %>
-<%@ page import="es.taw.sampletaw.dto.*" %><%--
-  Created by IntelliJ IDEA.
-  User: guzman
-  Date: 11/5/22
-  Time: 11:39
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="es.taw.sampletaw.dto.*" %>
 
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--
+    Autor: Javier Serrano Contreras 30%
+            Antonio Navajas Ortega  70%
+--%>
 
 <%
     ClienteDTO cliente = (ClienteDTO) request.getAttribute("cliente");
@@ -36,7 +34,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<h1>Bienvenido <%= cliente.getNombre() %></h1>
+<h1>Bienvenido <%= cliente.getNombre() %></h1> <p><a href="/logout">Salir</a></p>
 <table border="1">
     <tr>
         <th>NOMBRE</th>

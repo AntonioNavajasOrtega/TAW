@@ -5,6 +5,9 @@ import es.taw.sampletaw.dto.EstadoCuentaDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Antonio Navajas Ortega
+ */
 @Service
 public class EstadoCuentaService {
 

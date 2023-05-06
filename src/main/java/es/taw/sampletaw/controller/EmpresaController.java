@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
-
+/**
+ * @author Javier Serrano Contreras 30%
+ *  @author Antonio Navajas Ortega 70%
+ */
 @Controller
 @RequestMapping("/empresa")
 public class EmpresaController {

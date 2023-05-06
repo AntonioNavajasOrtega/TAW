@@ -13,7 +13,8 @@
 <%@ page import="es.taw.sampletaw.dto.CuentaDTO" %>
 
 <%--
-    Autor: Javier Serrano Contreras 60%
+    Autor: Javier Serrano Contreras 90%
+            Antonio Navajas Ortega  10%
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 

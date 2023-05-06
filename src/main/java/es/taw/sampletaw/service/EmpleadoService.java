@@ -12,6 +12,7 @@ import java.util.Collection;
 
 /**
  * @author Javier Serrano Contreras 60%
+ * @author Antonio Navajas Ortega 40%
  */
 @Service
 public class EmpleadoService {

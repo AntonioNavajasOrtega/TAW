@@ -4,7 +4,9 @@ import es.taw.sampletaw.dao.TipoClienteRepository;
 import es.taw.sampletaw.dto.TipoClienteDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+/**
+ * @author Antonio Navajas Ortega
+ */
 @Service
 public class TipoClienteService {
 

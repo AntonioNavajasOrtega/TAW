@@ -6,6 +6,12 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 
+
+/**
+ * @author Antonio Navajas Ortega 80 %
+ * @author Javier Serrano Contreras 20 %
+ */
+
 public class CuentaDTO implements Serializable {
 
     private Integer id;

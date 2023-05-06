@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * @author Javier Serrano Contreras 30%
+ * @author Antonio Navajas Ortega 70%
  */
 public interface TipoclienterelacionadoRepository extends JpaRepository<Tipoclienterelacionado,Integer> {
 

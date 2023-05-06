@@ -5,7 +5,9 @@ import es.taw.sampletaw.dto.TipoSolicitudDTO;
 import es.taw.sampletaw.entity.TipoSolicitud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+/**
+ * @author Antonio Navajas Ortega
+ */
 @Service
 public class TipoSolicitudService {
 

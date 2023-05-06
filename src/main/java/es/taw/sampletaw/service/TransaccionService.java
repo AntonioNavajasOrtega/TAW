@@ -19,6 +19,7 @@ import java.util.List;
 
 /**
  * @author Javier Serrano Contreras 80%
+ * @author Antonio Navajas Ortega 20%
  */
 @Service
 public class TransaccionService {

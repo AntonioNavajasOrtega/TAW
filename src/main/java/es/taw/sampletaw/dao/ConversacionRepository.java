@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * @author Juan José Torres 90%
+ * @author Javi Serrano Contreras 10%
  */
 
 public interface ConversacionRepository extends JpaRepository<Conversacion,Integer> {

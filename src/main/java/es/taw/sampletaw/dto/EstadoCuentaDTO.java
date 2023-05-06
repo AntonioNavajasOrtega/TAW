@@ -2,6 +2,10 @@ package es.taw.sampletaw.dto;
 
 import java.io.Serializable;
 
+/**
+ * @author Antonio Navajas Ortega
+ */
+
 public class EstadoCuentaDTO  implements Serializable {
     private Integer id;
     private String tipo;

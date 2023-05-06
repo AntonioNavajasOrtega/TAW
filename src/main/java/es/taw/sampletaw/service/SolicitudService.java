@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * @author Javier Serrano Contreras 75%
+ * @author Antonio Navajas Ortega 25%
  */
 @Service
 public class SolicitudService {

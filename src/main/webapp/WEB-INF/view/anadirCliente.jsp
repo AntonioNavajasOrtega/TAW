@@ -7,6 +7,10 @@
 <%@ page import="es.taw.sampletaw.dto.ClienteDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<%--
+    Autor: Antonio Navajas Ortega
+--%>
+
 <%
     EmpresaDTO empresa = (EmpresaDTO) request.getAttribute("empresa");
     ClienteDTO cliente = (ClienteDTO) request.getAttribute("volver");
@@ -18,20 +22,7 @@
 </head>
 <body>
 <h3>Datos del cliente a autorizar:</h3>
-<%--
-<form:form action="/empresa/guardarCliente?id=<%=empresa.getId() %>" modelAttribute="cliente" method="get">
-    <form:hidden path="id"/>
-    Nombre: <form:input path="nombre" size="50" maxlength="50" /><br/>
-    Apellido: <form:input path="apellido" size="50" maxlength="50" /><br/>
-    Email: <form:input path="email" size="50"  maxlength="50"/> <br/>
-    Dirección: <form:input path="direccion"  size="100" maxlength="100" />
-    Teléfono: <form:input type="telefono" path="telefono" maxlength="12" size="12" /><br/>
-    Contraseña: <form:input path="contrasena" size="50" maxlength="50" /><br/>
 
-    <form:button>Guardar</form:button>
-
-</form:form>
---%>
 <form:form modelAttribute="cliente" method="get" action="/empresa/guardarCliente2">
     <form:hidden path="id"/>
     Nombre: <form:input path="nombre" size="50" maxlength="50" /><br/>

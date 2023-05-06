@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * @author Javier Serrano Contreras 70%
+ * @author Antonio Navajas Ortega 30%
  */
 public interface CuentaRepository extends JpaRepository<Cuenta,Integer> {
 

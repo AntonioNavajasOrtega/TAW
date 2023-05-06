@@ -1,13 +1,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page import="es.taw.sampletaw.entity.Cliente" %>
 <%@ page import="com.mysql.cj.xdevapi.Client" %>
-<%@ page import="java.util.List" %><%--
-  Created by IntelliJ IDEA.
-  User: guzman
-  Date: 11/5/22
-  Time: 11:39
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="java.util.List" %>
+
 <%--
     Autor: Javier Serrano Contreras
 --%>

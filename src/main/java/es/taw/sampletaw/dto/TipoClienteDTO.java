@@ -1,7 +1,9 @@
 package es.taw.sampletaw.dto;
 
 import es.taw.sampletaw.entity.TipoCliente;
-
+/**
+ * @author Antonio Navajas Ortega
+ */
 public class TipoClienteDTO {
     private Integer id;
     private String tipo;

@@ -10,6 +10,7 @@
 
 <%--
     Autor: Javier Serrano Contreras 60%
+           Antonio Navajas Ortega 40%
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 

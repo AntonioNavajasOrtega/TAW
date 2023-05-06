@@ -1,5 +1,7 @@
 package es.taw.sampletaw.dto;
-
+/**
+ * @author Antonio Navajas Ortega
+ */
 public class TipoTransaccionDTO {
 
     private Integer id;

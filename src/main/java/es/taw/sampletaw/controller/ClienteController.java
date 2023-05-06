@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author Javier Serrano Contreras 80%
+ *  @author Antonio Navajas Ortega 20%
  */
 @RequestMapping("/cliente")
 @Controller

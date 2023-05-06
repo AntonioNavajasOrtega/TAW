@@ -5,7 +5,9 @@ import es.taw.sampletaw.entity.TipoTransaccion;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-
+/**
+ * @author Antonio Navajas Ortega
+ */
 public class TransaccionDTO {
     private Integer id;
     private BigDecimal cantidad;

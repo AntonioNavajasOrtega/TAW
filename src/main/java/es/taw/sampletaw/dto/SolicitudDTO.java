@@ -3,7 +3,9 @@ package es.taw.sampletaw.dto;
 import es.taw.sampletaw.entity.*;
 
 import java.sql.Timestamp;
-
+/**
+ * @author Antonio Navajas Ortega
+ */
 public class SolicitudDTO {
     private Integer id;
     private Timestamp fecha;

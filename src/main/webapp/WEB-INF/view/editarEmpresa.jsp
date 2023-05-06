@@ -2,6 +2,9 @@
 <%@ page import="es.taw.sampletaw.entity.Empresa" %>
 <%@ page import="es.taw.sampletaw.entity.Cliente" %>
 <%@ page import="es.taw.sampletaw.dto.ClienteDTO" %>
+<%--
+    Autor: Antonio Navajas Ortega
+--%>
 <%
     ClienteDTO cliente = (ClienteDTO) request.getAttribute("cliente");
 
