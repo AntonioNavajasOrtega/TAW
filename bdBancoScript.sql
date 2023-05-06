@@ -22,7 +22,7 @@ CREATE TABLE tipo_cliente(
     id INT PRIMARY KEY,    
     tipo VARCHAR(15)
 );
-INSERT INTO tipo_cliente (id, tipo) VALUES (1, 'Propietario'), (2,'Socio');
+INSERT INTO tipo_cliente (id, tipo) VALUES (1, 'Propietario'), (2,'Socio'), (3,'Autorizado');
 INSERT INTO estado_cuenta (id,tipo) VALUES (1, 'Activa'), (2,'Bloqueada');
 INSERT INTO tipo_transaccion (id,tipo) VALUES (1, 'Cambio'), (2,'Pago');
 INSERT INTO tipo_solicitud (id,tipo) VALUES (1, 'Alta'), (2,'Activacion');
@@ -143,14 +143,12 @@ CREATE TABLE mensaje(
     FOREIGN KEY (conversacion) REFERENCES conversacion(id)
 );
 
-insert into cliente (nombre,apellido,direccion,telefono,nif,email,contrasena,empresa_id) values ('juanjo', 'torres', 'calle calañas, malaga', 657726317, '77429357A', 'jjtp@uma.es', '123abc', null);
-insert into empresa (nombre,direccion,telefono) values ('prueba.sl', 'poligono guadalhorce', '952 13 90 88');
-insert into cliente (nombre,apellido,direccion,telefono,nif,email,contrasena,empresa_id) values ('javi', 'serrano', 'malaga pto de la torre', 65387951,'77854239Y' , 'javiserranop@uma.es', '123abc', 1);
 insert into empleado (nombre_usuario, contrasena, tipo) values ('gestorUsuario', 'gestorPassword', 1);
 insert into empleado (nombre_usuario, contrasena, tipo) values ('asistenteUsuario', 'asistentePassword', 2);
-insert into cuenta (iban, saldo, estado, swift, pais, cliente_id, empleado_id, empresa_id) values ('3242423434', 1000.32, 1, '342', 'ESPAÑA', 1,1,1);
-insert into solicitud(tipo,fecha,empleado_id, cuenta_id, cliente_id,empresa_id) values (1,default,1,1,1,1);
-
+insert into cliente (nombre,apellido,direccion,telefono,nif,email,contrasena,empresa_id) values ('juanjo', 'torres', 'calle calañas, malaga', 657786925, '77429357A','jjtp@uma.es', '123abc', null);
+insert into cuenta (iban, saldo, estado, swift, pais, cliente_id, empleado_id, empresa_id) values ('3242423434', 1000.32, 1, '342', 'ESPAÑA', 1,1,null);
+insert into cliente (nombre,apellido,direccion,telefono,nif,email,contrasena,empresa_id) values ('Almudena', 'arrabal', 'calle Cervantes, malaga', 656738117, '77429377J','almu@gmail.com', '12345', null);
+insert into cuenta (iban, saldo, estado, swift, pais, cliente_id, empleado_id, empresa_id) values ('54663554636', 1000.32, 1, '342', 'ESPAÑA', 3,1,null);
 
 
 
