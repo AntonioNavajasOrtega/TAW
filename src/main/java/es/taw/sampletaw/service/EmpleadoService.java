@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
+/**
+ * @author Javier Serrano Contreras 60%
+ */
 @Service
 public class EmpleadoService {
 

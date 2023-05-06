@@ -8,6 +8,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 import java.util.List;
 
+/*
+    @author Javier Serrano Contreras 70%
+ */
 public interface SolicitudRepository extends JpaRepository<Solicitud,Integer> {
 
     @Query("select e from Solicitud e where e.empresaByEmpresaId.id = :id")

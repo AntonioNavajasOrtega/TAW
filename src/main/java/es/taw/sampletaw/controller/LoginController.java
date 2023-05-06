@@ -18,6 +18,9 @@ import javax.servlet.http.HttpSession;
  */
 
 
+/*
+    @author Javier Serrano Contreras 20%
+ */
 @Controller
 public class LoginController {
 

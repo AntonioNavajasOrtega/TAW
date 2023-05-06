@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+/*
+    @author Javier Serrano Contreras 30%
+ */
 public interface TipoclienterelacionadoRepository extends JpaRepository<Tipoclienterelacionado,Integer> {
 
     @Query("select t from Tipoclienterelacionado t where t.clienteByClienteId.id = :id")
