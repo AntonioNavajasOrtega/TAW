@@ -2,9 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="es.taw.sampletaw.dto.ClienteDTO" %>
 <%@ page import="es.taw.sampletaw.dto.ConversacionDTO" %>
-<%@ page import="es.taw.sampletaw.dto.EmpleadoDTO" %>
 
-//Autor: Juan José Torres
+<%--Autor: Juan José Torres--%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 

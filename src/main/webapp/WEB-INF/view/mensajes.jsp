@@ -1,9 +1,8 @@
 <%@ page import="es.taw.sampletaw.dto.MensajeDTO" %>
 <%@ page import="java.util.List" %>
-<%@ page import="es.taw.sampletaw.dto.EmpleadoDTO" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-//Autor: Juan José Torres
+<%--Autor: Juan José Torres--%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 

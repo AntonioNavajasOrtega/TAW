@@ -2,7 +2,7 @@
 <%@ page import="es.taw.sampletaw.dto.ConversacionDTO" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-//Autor: Juan José Torres
+<%--Autor: Juan José Torres--%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
