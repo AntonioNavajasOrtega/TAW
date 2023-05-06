@@ -11,8 +11,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 import java.util.List;
 
-/*
- @author Javier Serrano Contreras 80%
+/**
+ * @author Javier Serrano Contreras 70%
  */
 public interface CuentaRepository extends JpaRepository<Cuenta,Integer> {
 

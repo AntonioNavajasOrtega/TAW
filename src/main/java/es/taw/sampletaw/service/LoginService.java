@@ -9,6 +9,10 @@ import es.taw.sampletaw.entity.Empleado;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Juan José Torres 50%
+ * @author
+ */
 
 @Service
 public class LoginService {

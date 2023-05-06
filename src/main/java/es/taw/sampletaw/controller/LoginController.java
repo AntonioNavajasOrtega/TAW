@@ -1,10 +1,7 @@
 package es.taw.sampletaw.controller;
-import es.taw.sampletaw.dao.ClienteRepository;
 import es.taw.sampletaw.dao.EmpleadoRepository;
 import es.taw.sampletaw.dto.ClienteDTO;
 import es.taw.sampletaw.dto.EmpleadoDTO;
-import es.taw.sampletaw.entity.Cliente;
-import es.taw.sampletaw.entity.Empleado;
 import es.taw.sampletaw.service.ClienteService;
 import es.taw.sampletaw.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +12,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
+/**
+ *
+ * @author Juan José Torres 10%
+ */
+
 
 /*
     @author Javier Serrano Contreras 20%

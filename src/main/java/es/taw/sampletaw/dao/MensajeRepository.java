@@ -1,10 +1,15 @@
 package es.taw.sampletaw.dao;
 
-import es.taw.sampletaw.entity.Cliente;
 import es.taw.sampletaw.entity.Mensaje;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+/**
+ * @author Juan José Torres 50%
+ * @author Javier Serrano 50%
+ */
+
 
 import java.util.List;
 
