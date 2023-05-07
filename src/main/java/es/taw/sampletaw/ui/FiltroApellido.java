@@ -1,5 +1,8 @@
 package es.taw.sampletaw.ui;
 
+/**
+ * @author Antonio Navajas Ortega
+ */
 public class FiltroApellido {
 
     private String apellido;

@@ -6,13 +6,8 @@
 <%@ page import="java.util.Collection" %>
 <%@ page import="es.taw.sampletaw.entity.*" %>
 <%@ page import="es.taw.sampletaw.dto.CuentaDTO" %>
-<%@ page import="es.taw.sampletaw.dto.TransaccionDTO" %><%--
-  Created by IntelliJ IDEA.
-  User: guzman
-  Date: 11/5/22
-  Time: 11:39
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="es.taw.sampletaw.dto.TransaccionDTO" %>
+
 <%--
     Autor: Javier Serrano Contreras 60%
            Antonio Navajas Ortega 40%
