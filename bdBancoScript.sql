@@ -148,12 +148,12 @@ insert into empleado (nombre_usuario, contrasena, tipo) values ('asistenteUsuari
 insert into cliente (nombre,apellido,direccion,telefono,nif,email,contrasena,empresa_id) values ('juanjo', 'torres', 'calle calañas, malaga', 657786925, '77429357A','jjtp@uma.es', '123abc', null);
 insert into cuenta (iban, saldo, estado, swift, pais, cliente_id, empleado_id, empresa_id) values ('3242423434', 1000.32, 1, '342', 'ESPAÑA', 1,1,null);
 insert into cliente (nombre,apellido,direccion,telefono,nif,email,contrasena,empresa_id) values ('Almudena', 'arrabal', 'calle Cervantes, malaga', 656738117, '77429377J','almu@gmail.com', '12345', null);
-insert into cuenta (iban, saldo, estado, swift, pais, cliente_id, empleado_id, empresa_id) values ('54663554636', 1000.32, 1, '342', 'ESPAÑA', 3,1,null);
+insert into cuenta (iban, saldo, estado, swift, pais, cliente_id, empleado_id, empresa_id) values ('54663554636', 1000.32, 1, '342', 'ESPAÑA', 2,1,null);
 
 insert into empresa (nombre, direccion, telefono) values ('Microsoft', 'Calle Falsa 123', '123456789');
 insert into cliente (nombre,apellido,direccion,telefono,nif,email,contrasena,empresa_id) values ('antonio', 'navajas', 'calle rodeo, malaga', 1234892736, '27445357A','email@uma.es', '123456', 1);
 insert into cliente (nombre,apellido,direccion,telefono,nif,email,contrasena,empresa_id) values ('jose', 'heredero', 'calle zapato, malaga', 952380922, '13329358B','china@uma.es', 'abcdef', 1);
-insert into cuenta (iban, saldo, estado, swift, pais, cliente_id, empleado_id, empresa_id) values ('7282683489', 2500, 1, '342', 'ESPAÑA', null,1,1);
+insert into cuenta (iban, saldo, estado, swift, pais, cliente_id, empleado_id, empresa_id) values ('7282683489', 2500, 1, '342', 'ESPAÑA', 3,1,1);
 insert into TipoClienteRelacionado (cliente_id, cuenta_id, tipo, bloqueado) values (3, 3, 2, 0);
 insert into TipoClienteRelacionado (cliente_id, cuenta_id, tipo, bloqueado) values (4, 3, 3, 0);
 
